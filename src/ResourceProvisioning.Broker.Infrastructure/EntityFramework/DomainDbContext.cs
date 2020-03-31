@@ -17,7 +17,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		public virtual DbSet<Context> Contexts { get; set; }
 
-		public virtual DbSet<ContextResource> Resources { get; set; }
+		public virtual DbSet<Resource> Resources { get; set; }
 
 		public virtual DbSet<ContextStatus> ContextStatus { get; set; }
 

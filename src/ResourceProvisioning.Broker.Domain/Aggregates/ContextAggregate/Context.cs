@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
 		// Using a private collection field, better for DDD Aggregate's encapsulation
 		// so ContextResources cannot be added from "outside the AggregateRoot" directly to the collection,
 		// but only through the method ContextAggrergateRoot.AddResource() which includes behaviour.
-		private List<ContextResource> _contextResources;
+		private List<Resource> _contextResources;
 
 		public DesiredState TargetState { get; private set; }
 		
@@ -29,11 +29,11 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
 
 		public Guid OwnerId { get; private set; }
 
-		public IEnumerable<ContextResource> ContextResources => _contextResources.AsReadOnly();
+		public IEnumerable<Resource> ContextResources => _contextResources.AsReadOnly();
 
 		protected Context() : base()
 		{
-			_contextResources = new List<ContextResource>();
+			_contextResources = new List<Resource>();
 		}
 
 		public Context(Guid employeeId, string employeeName, string employeeEmail, Guid? ownerId = null) : this()
@@ -55,7 +55,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
 
 			if (existingResource == null)
 			{        
-				var resource = new ContextResource(resourceId, comment);
+				var resource = new Resource(resourceId, comment);
 
 				var validationResult = resource.Validate(new ValidationContext(resource));
 

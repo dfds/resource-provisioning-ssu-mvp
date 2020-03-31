@@ -5,9 +5,9 @@ using ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class ContextResourceEntityTypeConfiguration : IEntityTypeConfiguration<ContextResource>
+	class ContextResourceEntityTypeConfiguration : IEntityTypeConfiguration<Resource>
 	{
-		public void Configure(EntityTypeBuilder<ContextResource> ContextItemConfiguration)
+		public void Configure(EntityTypeBuilder<Resource> ContextItemConfiguration)
 		{
 			ContextItemConfiguration.ToTable("ContextDetails", DomainDbContext.DEFAULT_SCHEMA);
 			ContextItemConfiguration.HasKey(o => o.Id);

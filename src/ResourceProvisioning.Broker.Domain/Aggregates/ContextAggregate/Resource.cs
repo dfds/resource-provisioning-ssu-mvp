@@ -5,17 +5,17 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
 {
-	public class ContextResource : BaseEntity<Guid>
+	public class Resource : BaseEntity<Guid>
 	{			   
 		public Guid ResourceId { get; private set; }
 
 		public string Comment { get; private set; }
 
-		protected ContextResource() : base()
+		protected Resource() : base()
 		{
 		}
 
-		public ContextResource(Guid resourceId, string comment) : this()
+		public Resource(Guid resourceId, string comment) : this()
 		{
 			ResourceId = resourceId;
 			Comment = comment;
