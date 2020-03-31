@@ -10,11 +10,11 @@ using ResourceProvisioning.Broker.Exceptions;
 namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
 {
 	public class Context : BaseEntity<Guid>, IAggregateRoot
-	{		
+	{
 		// DDD Patterns comment:
 		// Using a private collection field, better for DDD Aggregate's encapsulation
-		// so OrderDetails cannot be added from "outside the AggregateRoot" directly to the collection,
-		// but only through the method OrderAggrergateRoot.AddOrderDetail() which includes behaviour.
+		// so ContextResources cannot be added from "outside the AggregateRoot" directly to the collection,
+		// but only through the method ContextAggrergateRoot.AddResource() which includes behaviour.
 		private List<ContextResource> _contextResources;
 
 		public DesiredState TargetState { get; private set; }
