@@ -21,7 +21,7 @@ This repository contains the complete source code for the ResourceProvisioning p
 
 ## Dependencies
 
-The following is non-exhustive list of the various dependencies that is utilized in the OMSK repository:
+The following is non-exhustive list of the various dependencies that is utilized in the repository:
 
 * [AutoMapper](https://automapper.readthedocs.io/en/latest/Getting-started.html)
 * [Mediatr](https://github.com/jbogard/MediatR/wiki)
