@@ -7,9 +7,9 @@ namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 {
 	public class RequestManager : IRequestManager
 	{
-		private readonly DomainDbContext _context;
+		private readonly DomainContext _context;
 
-		public RequestManager(DomainDbContext context)
+		public RequestManager(DomainContext context)
 		{
 			_context = context ?? throw new ArgumentNullException(nameof(context));
 		}

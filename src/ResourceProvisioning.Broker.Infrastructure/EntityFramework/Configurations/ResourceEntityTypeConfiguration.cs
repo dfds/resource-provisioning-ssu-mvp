@@ -9,7 +9,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<Resource> ContextItemConfiguration)
 		{
-			ContextItemConfiguration.ToTable("Resources", DomainDbContext.DEFAULT_SCHEMA);
+			ContextItemConfiguration.ToTable("Resources", DomainContext.DEFAULT_SCHEMA);
 			ContextItemConfiguration.HasKey(o => o.Id);
 			ContextItemConfiguration.Ignore(b => b.DomainEvents);
 			ContextItemConfiguration.Property<Guid>("EnvironmentId").IsRequired();

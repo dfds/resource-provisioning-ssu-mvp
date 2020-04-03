@@ -11,9 +11,9 @@ using ResourceProvisioning.Broker.Repository;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 {
-	public class EnvironmentRepository : BaseRepository<DomainDbContext, Domain.Aggregates.EnvironmentAggregate.Environment>, IEnvironmentRepository
+	public class EnvironmentRepository : BaseRepository<DomainContext, Domain.Aggregates.EnvironmentAggregate.Environment>, IEnvironmentRepository
 	{
-		public EnvironmentRepository(DomainDbContext context) : base(context)
+		public EnvironmentRepository(DomainContext context) : base(context)
 		{
 
 		}

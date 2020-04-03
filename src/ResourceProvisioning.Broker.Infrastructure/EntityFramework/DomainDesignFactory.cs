@@ -9,9 +9,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {
-	public class ContextProcessingDesignFactory : IDesignTimeDbContextFactory<DomainDbContext>
+	public class ContextProcessingDesignFactory : IDesignTimeDbContextFactory<DomainContext>
 	{
-		public DomainDbContext CreateDbContext(string[] args)
+		public DomainContext CreateDbContext(string[] args)
 		{
 			var config = new ConfigurationBuilder()
 				.SetBasePath(Directory.GetCurrentDirectory())
@@ -19,10 +19,10 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 				.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", true)
 				.Build();
 
-			var optionsBuilder = new DbContextOptionsBuilder<DomainDbContext>()
-				.UseSqlite(config.GetConnectionString(nameof(DomainDbContext)));
+			var optionsBuilder = new DbContextOptionsBuilder<DomainContext>()
+				.UseSqlite(config.GetConnectionString(nameof(DomainContext)));
 
-			return new DomainDbContext(optionsBuilder.Options, new NoMediator());
+			return new DomainContext(optionsBuilder.Options, new NoMediator());
 		}
 
 		class NoMediator : IMediator

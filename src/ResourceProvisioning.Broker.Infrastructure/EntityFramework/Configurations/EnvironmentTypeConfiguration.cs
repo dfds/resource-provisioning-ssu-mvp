@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.Environment> contextConfiguration)
 		{
-			contextConfiguration.ToTable("Environments", DomainDbContext.DEFAULT_SCHEMA);
+			contextConfiguration.ToTable("Environments", DomainContext.DEFAULT_SCHEMA);
 			contextConfiguration.HasKey(o => o.Id);
 			contextConfiguration.Ignore(b => b.DomainEvents);
 			contextConfiguration.Property<DateTime>("CreateDate").IsRequired();

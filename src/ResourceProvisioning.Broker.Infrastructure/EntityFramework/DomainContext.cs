@@ -11,9 +11,9 @@ using ResourceProvisioning.Broker.Infrastructure.Extensions;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {
-	public class DomainDbContext : DbContext, IUnitOfWork
+	public class DomainContext : DbContext, IUnitOfWork
 	{
-		public const string DEFAULT_SCHEMA = nameof(DomainDbContext);
+		public const string DEFAULT_SCHEMA = nameof(DomainContext);
 		private readonly IMediator _mediator;
 
 		public virtual DbSet<Environment> Environments { get; set; }
@@ -24,13 +24,13 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
-		public DomainDbContext() : this(new DbContextOptions<DomainDbContext>(){}, null) { }
+		public DomainContext() : this(new DbContextOptions<DomainContext>(){}, null) { }
 		
-		public DomainDbContext(DbContextOptions<DomainDbContext> options, IMediator mediator) : base(options)
+		public DomainContext(DbContextOptions<DomainContext> options, IMediator mediator) : base(options)
 		{
 			_mediator = mediator;
 
-			System.Diagnostics.Debug.WriteLine($"{nameof(DomainDbContext)}::ctor ->" + GetHashCode());
+			System.Diagnostics.Debug.WriteLine($"{nameof(DomainContext)}::ctor ->" + GetHashCode());
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)

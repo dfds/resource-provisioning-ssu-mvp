@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<EnvironmentStatus> ContextStatusConfiguration)
 		{
-			ContextStatusConfiguration.ToTable("EnvironmentStatus", DomainDbContext.DEFAULT_SCHEMA);
+			ContextStatusConfiguration.ToTable("EnvironmentStatus", DomainContext.DEFAULT_SCHEMA);
 			ContextStatusConfiguration.HasKey(o => o.Id);
 
 			ContextStatusConfiguration.Property(o => o.Id)

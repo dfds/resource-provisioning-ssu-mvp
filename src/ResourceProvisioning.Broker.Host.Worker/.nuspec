@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<!-- Required elements-->
+		<id>$id$</id>
+		<version>$version$</version>
+		<description>$description$</description>
+		<authors>xobnd</authors>
+
+		<!-- Optional elements -->
+		<title>$title$</title>
+		<owners>Architecture Enabler Team</owners>
+		<license type="expression">Apache-2.0</license>
+		<requireLicenseAcceptance>False</requireLicenseAcceptance>
+		<developmentDependency>True</developmentDependency>
+		<packageTypes>
+			<packageType name="DotnetCoreSample" />
+		</packageTypes>
+	</metadata>
+</package>
