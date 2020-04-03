@@ -4,11 +4,12 @@ using ResourceProvisioning.Abstractions.Events.Integration;
 
 namespace ResourceProvisioning.Broker.Host.Api.Application.IntegrationEvents.Events
 {
-	public class EnvironmentResourceCreatedEvent : BaseIntegrationEvent
+	//TODO: Fake this event as it will be published by IProvisioningProviders
+	public class ResourceProvisioningCompletedEvent : BaseIntegrationEvent
 	{
 		[JsonProperty]
 		public Guid ResourceId { get; private set; }
 
-		public EnvironmentResourceCreatedEvent(Guid resourceId) => ResourceId = resourceId;
+		public ResourceProvisioningCompletedEvent(Guid resourceId) => ResourceId = resourceId;
 	}
 }
