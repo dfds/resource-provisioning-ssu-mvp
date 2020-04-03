@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class ContextStatusEntityTypeConfiguration : IEntityTypeConfiguration<ContextStatus>
+	class EnvironmentStatusTypeConfiguration : IEntityTypeConfiguration<EnvironmentStatus>
 	{
-		public void Configure(EntityTypeBuilder<ContextStatus> ContextStatusConfiguration)
+		public void Configure(EntityTypeBuilder<EnvironmentStatus> ContextStatusConfiguration)
 		{
-			ContextStatusConfiguration.ToTable("ContextStatus", DomainDbContext.DEFAULT_SCHEMA);
+			ContextStatusConfiguration.ToTable("EnvironmentStatus", DomainDbContext.DEFAULT_SCHEMA);
 			ContextStatusConfiguration.HasKey(o => o.Id);
 
 			ContextStatusConfiguration.Property(o => o.Id)

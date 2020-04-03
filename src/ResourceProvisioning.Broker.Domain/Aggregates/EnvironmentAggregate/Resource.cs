@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ResourceProvisioning.Abstractions.Entities;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
 	public class Resource : BaseEntity<Guid>
 	{			   

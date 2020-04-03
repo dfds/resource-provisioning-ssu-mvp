@@ -24,7 +24,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 			var exists = await ExistAsync(id);
 
 			var request = exists ? 
-				throw new ContextProcessingInfrastructureException($"Request with {id} already exists") : 
+				throw new BrokerException($"Request with {id} already exists") : 
 				new ClientRequest()
 				{
 					Id = id,

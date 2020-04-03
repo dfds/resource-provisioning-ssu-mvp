@@ -5,7 +5,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResourceProvisioning.Abstractions.Data;
-using ResourceProvisioning.Broker.Domain.Aggregates.ContextAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations;
 using ResourceProvisioning.Broker.Infrastructure.Extensions;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
@@ -15,11 +16,11 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		public const string DEFAULT_SCHEMA = nameof(DomainDbContext);
 		private readonly IMediator _mediator;
 
-		public virtual DbSet<Context> Contexts { get; set; }
+		public virtual DbSet<Environment> Environments { get; set; }
 
 		public virtual DbSet<Resource> Resources { get; set; }
 
-		public virtual DbSet<ContextStatus> ContextStatus { get; set; }
+		public virtual DbSet<EnvironmentStatus> EnvironmentStatuses { get; set; }
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
@@ -34,11 +35,10 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			//modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
-			//modelBuilder.ApplyConfiguration(new BaseEmployeeEntityTypeConfiguration());
-			//modelBuilder.ApplyConfiguration(new ContextEntityTypeConfiguration());
-			//modelBuilder.ApplyConfiguration(new ContextDetailEntityTypeConfiguration());
-			//modelBuilder.ApplyConfiguration(new ContextStatusEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentStatusTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new ResourceEntityTypeConfiguration());
 		}
 
 		public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

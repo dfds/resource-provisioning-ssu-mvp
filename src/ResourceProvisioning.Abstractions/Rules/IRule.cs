@@ -6,7 +6,7 @@ namespace ResourceProvisioning.Abstractions.Rules
 {
 	interface IRule
 	{
-		Task Execute<T>(T entity) where T : IEntity;
+		void Execute<T>(T entity) where T : IEntity;
 
 		Boolean IsMatch<T>(T entity) where T : IEntity;
 	}
