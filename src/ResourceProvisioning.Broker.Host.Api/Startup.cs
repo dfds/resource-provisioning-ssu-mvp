@@ -67,7 +67,8 @@ namespace ResourceProvisioning.Broker.Host.Api
 									});
 			}, ServiceLifetime.Scoped);
 
-			services.Configure<BrokerOptions>(Configuration);
+			//TODO: Register remaining dependencies (eventhandlers, commandhandlers, services, repos, etc).
+			services.Configure<ProvisioningBrokerOptions>(Configuration);
 		}
 		
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

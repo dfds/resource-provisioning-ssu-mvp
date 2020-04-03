@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Infrastructure.Provisioning
 {
-	interface IProvisioningEvent : IEvent
+	public interface IProvisioningEvent : IEvent
 	{
 	}
 }

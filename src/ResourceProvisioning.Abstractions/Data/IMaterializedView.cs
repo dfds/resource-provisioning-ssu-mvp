@@ -1,6 +1,6 @@
 ﻿namespace ResourceProvisioning.Abstractions.Data
 {
-	public interface IReadModel
+	public interface IMaterializedView
 	{
 	}
 }

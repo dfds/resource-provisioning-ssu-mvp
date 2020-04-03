@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.EnvironmentAggregate.Environment>
+	class EnvironmentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.EnvironmentAggregate.Environment>
 	{
 		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.Environment> contextConfiguration)
 		{
-			contextConfiguration.ToTable("Environments", DomainContext.DEFAULT_SCHEMA);
+			contextConfiguration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
 			contextConfiguration.HasKey(o => o.Id);
 			contextConfiguration.Ignore(b => b.DomainEvents);
 			contextConfiguration.Property<DateTime>("CreateDate").IsRequired();

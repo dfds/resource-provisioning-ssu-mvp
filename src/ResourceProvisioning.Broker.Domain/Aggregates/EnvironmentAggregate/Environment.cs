@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
-using ResourceProvisioning.Broker.Domain.Events.Domain;
+using ResourceProvisioning.Broker.Domain.Events;
 using ResourceProvisioning.Broker.Exceptions;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		// Using a private collection field, better for DDD Aggregate's encapsulation
 		// so resources cannot be added from "outside the AggregateRoot" directly to the collection,
 		// but only through the method Environment.AddResource() which includes behaviour.
-		private List<Resource> _resources;
+		private List<EnvironmentResource> _resources;
 
 		public DesiredState State { get; private set; }
 
@@ -29,21 +29,21 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 
 		public Guid OwnerId { get; private set; }
 
-		public IEnumerable<Resource> Resources => _resources.AsReadOnly();
+		public IEnumerable<EnvironmentResource> Resources => _resources.AsReadOnly();
 
 		protected Environment() : base()
 		{
-			_resources = new List<Resource>();
+			_resources = new List<EnvironmentResource>();
 		}
 
-		public Environment(Guid employeeId, string employeeName, string employeeEmail, Guid? ownerId = null) : this()
+		public Environment(Guid creatorId, string creatorName, string creatorEmail, Guid? ownerId = null) : this()
 		{
 			_statusId = EnvironmentStatus.Submitted.Id;
 			CreateDate = DateTime.UtcNow;
-			OwnerId = ownerId ?? employeeId;
-			State = new DesiredState(employeeId.ToString(), employeeName, employeeEmail, string.Empty);
+			OwnerId = ownerId ?? creatorId;
+			State = new DesiredState(creatorId.ToString(), creatorName, creatorEmail, OwnerId.ToString());
 			
-			AddDomainEvent(new EnvironmentCreated(this));
+			AddDomainEvent(new EnvironmentCreatedEvent(this));
 		}
 
 		// DDD Patterns comment
@@ -55,7 +55,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 
 			if (existingResource == null)
 			{        
-				var resource = new Resource(resourceId, comment);
+				var resource = new EnvironmentResource(resourceId, comment);
 
 				var validationResult = resource.Validate(new ValidationContext(resource));
 
@@ -70,22 +70,22 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			}
 		}
 
-		public void SetInProgressStatus()
+		public void SetProvisioningStatus()
 		{
 			if (_statusId == EnvironmentStatus.Submitted.Id)
 			{
-				AddDomainEvent(new EnvironmentStatusChangedToInProgress(Id));
+				AddDomainEvent(new EnvironmentStatusChangedToProvisioningEvent(Id));
 
-				_statusId = EnvironmentStatus.InProgress.Id;
-				Description = "InProgress";
+				_statusId = EnvironmentStatus.Provisioning.Id;
+				Description = "Provisioning";
 			}
 		}
 
 		public void SetCompletedStatus()
 		{
-			if (_statusId == EnvironmentStatus.InProgress.Id)
+			if (_statusId == EnvironmentStatus.Provisioning.Id)
 			{
-				AddDomainEvent(new EnvironmentChangedToCompleted(Id));
+				AddDomainEvent(new EnvironmentStatusChangedToCompletedEvent(Id));
 
 				_statusId = EnvironmentStatus.Completed.Id;
 				Description = "Completed";
@@ -102,7 +102,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			_statusId = EnvironmentStatus.Cancelled.Id;
 			Description = "Cancelled";
 
-			AddDomainEvent(new EnvironmentStatusChangedToCancelled(Id));
+			AddDomainEvent(new EnvironmentStatusChangedToCancelledEvent(Id));
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

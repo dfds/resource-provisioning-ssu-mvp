@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Infrastructure.Provisioning
 {
-	interface IProvisioningProvider : ICommandHandler<IProvisioningRequest, IProvisioningResponse>
+	public interface IProvisioningProvider : ICommandHandler<IProvisioningRequest, IProvisioningResponse>
 	{
 
 	}

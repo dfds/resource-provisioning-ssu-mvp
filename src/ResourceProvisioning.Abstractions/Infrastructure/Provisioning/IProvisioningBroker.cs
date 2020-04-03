@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Abstractions.Infrastructure.Provisioning
 {
-	interface IProvisioningBroker : IProvisioningProvider, IGridActor
+	public interface IProvisioningBroker : IProvisioningProvider, IEventHandler<IProvisioningEvent>, IGridActor
 	{
-		IEnumerable<IProvisioningHandler> Handlers { get; }
+
 	}
 }

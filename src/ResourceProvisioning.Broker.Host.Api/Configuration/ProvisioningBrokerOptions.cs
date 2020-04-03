@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Broker.Host.Api.Configuration
 {
-	public class BrokerOptions
+	public class ProvisioningBrokerOptions
 	{
 		public IConfigurationSection ConnectionStrings { get; set; }
 	}

@@ -4,8 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using ResourceProvisioning.Abstractions.Data;
-using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Repository;
 
@@ -17,8 +15,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 		{
 
 		}
-
-		IUnitOfWork IRepository.UnitOfWork => throw new NotImplementedException();
 
 		public override async Task<IEnumerable<Domain.Aggregates.EnvironmentAggregate.Environment>> GetAsync(Expression<Func<Domain.Aggregates.EnvironmentAggregate.Environment, bool>> filter)
 		{

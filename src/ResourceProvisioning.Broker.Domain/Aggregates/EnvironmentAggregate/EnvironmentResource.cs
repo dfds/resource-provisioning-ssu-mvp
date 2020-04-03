@@ -5,17 +5,17 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
-	public class Resource : BaseEntity<Guid>
+	public class EnvironmentResource : BaseEntity<Guid>
 	{			   
 		public Guid ResourceId { get; private set; }
 
 		public string Comment { get; private set; }
 
-		protected Resource() : base()
+		protected EnvironmentResource() : base()
 		{
 		}
 
-		public Resource(Guid resourceId, string comment) : this()
+		public EnvironmentResource(Guid resourceId, string comment) : this()
 		{
 			ResourceId = resourceId;
 			Comment = comment;

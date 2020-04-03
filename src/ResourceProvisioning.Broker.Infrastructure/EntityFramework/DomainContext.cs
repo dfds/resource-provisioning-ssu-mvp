@@ -18,7 +18,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		public virtual DbSet<Environment> Environments { get; set; }
 
-		public virtual DbSet<Resource> Resources { get; set; }
+		public virtual DbSet<EnvironmentResource> EnvironmentResources { get; set; }
 
 		public virtual DbSet<EnvironmentStatus> EnvironmentStatuses { get; set; }
 
@@ -36,9 +36,9 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new EnvironmentTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new EnvironmentStatusTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new ResourceEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentStatusEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentResourceEntityTypeConfiguration());
 		}
 
 		public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

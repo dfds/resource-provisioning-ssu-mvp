@@ -1,6 +1,6 @@
 ﻿namespace ResourceProvisioning.Abstractions.Infrastructure.Provisioning
 {
-	interface IProvisioningResponse
+	public interface IProvisioningResponse
 	{
 	}
 }

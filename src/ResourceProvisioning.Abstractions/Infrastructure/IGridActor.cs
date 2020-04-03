@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Infrastructure
 {
-	interface IGridActor
+	public interface IGridActor
 	{
 		Guid Id { get; }
 

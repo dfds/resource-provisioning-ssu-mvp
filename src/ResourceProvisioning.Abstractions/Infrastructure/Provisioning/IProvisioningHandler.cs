@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Infrastructure.Provisioning
 {
-	interface IProvisioningHandler : IGridActor, IEventHandler<IProvisioningEvent>
+	public interface IProvisioningHandler : IGridActor, IEventHandler<IProvisioningEvent>
 	{
 	}
 }

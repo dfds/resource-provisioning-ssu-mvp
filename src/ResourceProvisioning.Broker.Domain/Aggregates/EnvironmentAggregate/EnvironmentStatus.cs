@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 	public class EnvironmentStatus : BaseEnumeration
 	{
 		public static EnvironmentStatus Submitted = new EnvironmentStatus(1, nameof(Submitted).ToLowerInvariant());
-		public static EnvironmentStatus InProgress = new EnvironmentStatus(2, nameof(InProgress).ToLowerInvariant());
+		public static EnvironmentStatus Provisioning = new EnvironmentStatus(2, nameof(Provisioning).ToLowerInvariant());
 		public static EnvironmentStatus Completed = new EnvironmentStatus(3, nameof(Completed).ToLowerInvariant());
 		public static EnvironmentStatus Cancelled = new EnvironmentStatus(4, nameof(Cancelled).ToLowerInvariant());
 
@@ -22,7 +22,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		}
 
 		public static IEnumerable<EnvironmentStatus> List() =>
-			new[] { Submitted, InProgress, Completed, Cancelled };
+			new[] { Submitted, Provisioning, Completed, Cancelled };
 
 		public static EnvironmentStatus FromName(string name)
 		{

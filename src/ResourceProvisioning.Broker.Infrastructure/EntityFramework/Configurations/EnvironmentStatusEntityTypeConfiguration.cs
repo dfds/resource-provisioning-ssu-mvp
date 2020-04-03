@@ -4,7 +4,7 @@ using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentStatusTypeConfiguration : IEntityTypeConfiguration<EnvironmentStatus>
+	class EnvironmentStatusEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentStatus>
 	{
 		public void Configure(EntityTypeBuilder<EnvironmentStatus> ContextStatusConfiguration)
 		{
