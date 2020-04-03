@@ -9,8 +9,6 @@ namespace ResourceProvisioning.Abstractions.Repositories
 {
 	public interface IRepository<TAggregate> : IRepository where TAggregate : IAggregateRoot
 	{
-		IUnitOfWork UnitOfWork { get; }
-
 		Task<IEnumerable<TAggregate>> GetAsync(Expression<Func<TAggregate, bool>> filter);
 
 		TAggregate Add(TAggregate aggregate);
@@ -22,5 +20,6 @@ namespace ResourceProvisioning.Abstractions.Repositories
 
 	public interface IRepository
 	{
+		IUnitOfWork UnitOfWork { get; }
 	}
 }

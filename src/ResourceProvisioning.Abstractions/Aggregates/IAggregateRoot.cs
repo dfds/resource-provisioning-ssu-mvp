@@ -1,6 +1,8 @@
-﻿namespace ResourceProvisioning.Abstractions.Aggregates
+﻿using ResourceProvisioning.Abstractions.Entities;
+
+namespace ResourceProvisioning.Abstractions.Aggregates
 {
-	public interface IAggregateRoot
+	public interface IAggregateRoot : IEntity
 	{
 
 	}

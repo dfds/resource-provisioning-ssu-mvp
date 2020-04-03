@@ -20,6 +20,5 @@ namespace ResourceProvisioning.Abstractions.Entities
 		void RemoveDomainEvent(IDomainEvent @event);
 
 		void ClearDomainEvents();
-
 	}
 }

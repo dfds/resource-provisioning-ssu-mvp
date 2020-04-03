@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using ResourceProvisioning.Abstractions.Events;
+using ResourceProvisioning.Abstractions.Rules;
 
 namespace ResourceProvisioning.Abstractions.Policies
 {
-	interface IPolicy<T>
+	interface IPolicy : IEventHandler<IEvent>
 	{
-		Task Apply(T target);
-    }
+		IRuleEvaluator Evaluator { get; }
+	}
 }
