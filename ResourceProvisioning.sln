@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceProvisioning.Broker
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Broker", "Broker", "{6D75FFD1-B66C-4C29-993F-5B273B31A8DA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F04493C6-3E4F-499D-90F1-88A47EDF996D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{F04493C6-3E4F-499D-90F1-88A47EDF996D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceProvisioning.Broker.Application", "src\ResourceProvisioning.Broker.Application\ResourceProvisioning.Broker.Application.csproj", "{D58C02BC-26B3-4AD9-9281-626C8B5B87A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{CEE1198F-797F-42FB-A00B-9A79EFAE0862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEE1198F-797F-42FB-A00B-9A79EFAE0862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEE1198F-797F-42FB-A00B-9A79EFAE0862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58C02BC-26B3-4AD9-9281-626C8B5B87A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58C02BC-26B3-4AD9-9281-626C8B5B87A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58C02BC-26B3-4AD9-9281-626C8B5B87A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58C02BC-26B3-4AD9-9281-626C8B5B87A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{19F13527-628D-4C0C-8E48-E00839A7E00B} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
 		{FBCEAA8A-8599-4DF4-9EEB-5C8BAD8A75F4} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
 		{CEE1198F-797F-42FB-A00B-9A79EFAE0862} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
+		{D58C02BC-26B3-4AD9-9281-626C8B5B87A0} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06880FAD-1B9E-4E55-B800-04BEC6803345}

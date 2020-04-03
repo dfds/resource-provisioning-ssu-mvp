@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using ResourceProvisioning.Broker.Host.Api.Configuration;
+using ResourceProvisioning.Broker.Application;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 

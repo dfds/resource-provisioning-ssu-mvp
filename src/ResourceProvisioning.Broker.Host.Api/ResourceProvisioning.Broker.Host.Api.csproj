@@ -11,13 +11,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ResourceProvisioning.Abstractions\ResourceProvisioning.Abstractions.csproj" />
-      <ProjectReference Include="..\ResourceProvisioning.Broker.Domain\ResourceProvisioning.Broker.Domain.csproj" />
-      <ProjectReference Include="..\ResourceProvisioning.Broker.Infrastructure\ResourceProvisioning.Broker.Infrastructure.csproj" />
+      <Folder Include="Resources\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\" />
+      <ProjectReference Include="..\ResourceProvisioning.Broker.Application\ResourceProvisioning.Broker.Application.csproj" />
     </ItemGroup>
 
 </Project>
