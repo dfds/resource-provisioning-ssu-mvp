@@ -7,8 +7,6 @@ This repository contains the complete source code for the ResourceProvisioning p
 
 [TODO]
 
- * Want to **learn more** about Microservice Architectures? See the [related information](#user-content-related-information) section.
-
 ## Getting started
 
 [TODO]
