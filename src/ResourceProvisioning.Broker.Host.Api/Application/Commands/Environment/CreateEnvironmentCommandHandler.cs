@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using ResourceProvisioning.Abstractions.Commands;
+using ResourceProvisioning.Broker.Host.Api.Application.Commands.Idempotency;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
 using ResourceProvisioning.Broker.Repository;
 

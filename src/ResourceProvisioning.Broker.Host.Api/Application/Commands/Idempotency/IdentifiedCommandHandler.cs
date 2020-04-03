@@ -4,7 +4,7 @@ using MediatR;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
 
-namespace ResourceProvisioning.Broker.Host.Api.Application.Commands
+namespace ResourceProvisioning.Broker.Host.Api.Application.Commands.Idempotency
 {
 	/// <summary>
 	/// Provides a base implementation for handling duplicate request and ensuring idempotent updates, in the cases where

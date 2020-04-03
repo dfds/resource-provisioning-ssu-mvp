@@ -1,7 +1,7 @@
 ﻿using System;
 using ResourceProvisioning.Abstractions.Commands;
 
-namespace ResourceProvisioning.Broker.Host.Api.Application.Commands
+namespace ResourceProvisioning.Broker.Host.Api.Application.Commands.Idempotency
 {
 	public class IdentifiedCommand<T, R> : ICommand<R> where T : ICommand<R>
 	{
