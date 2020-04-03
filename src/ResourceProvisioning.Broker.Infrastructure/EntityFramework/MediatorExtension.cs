@@ -4,9 +4,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ResourceProvisioning.Abstractions.Entities;
 
-namespace ResourceProvisioning.Broker.Infrastructure.Extensions
+namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {
-	//TODO: Move this to seperate assembly. It will be reused alot across hosts
 	static class MediatorExtension
 	{
 		public static async Task DispatchDomainEventsAsync<T>(this IMediator mediator, T ctx) where T : DbContext

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Broker.Application.Data;
 
@@ -19,26 +17,11 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 	public class CreateEnvironmentCommand : ICommand<bool>
 	{
 		[DataMember]
-		private readonly List<EnvironmentResourceDto> _resources;
-
-		[DataMember]
-		public Guid EmployeeId { get; private set; }
-
-		[DataMember]
-		public string EmployeeName { get; private set; }
-
-		[DataMember]
-		public string EmployeeEmail { get; private set; }
-
-		[DataMember]
-		public IEnumerable<EnvironmentResourceDto> Resources => _resources.AsReadOnly();
+		public DesiredStateDto DesiredState { get; private set; }
 				
-		public CreateEnvironmentCommand(Guid employeeId, string employeeName, string employeeEmail, List<EnvironmentResourceDto> resources)
+		public CreateEnvironmentCommand(DesiredStateDto desiredState)
 		{
-			EmployeeId = employeeId;
-			EmployeeName = employeeName;
-			EmployeeEmail = employeeEmail;
-			_resources = resources;
+			DesiredState = desiredState;
 		}
 	}
 }

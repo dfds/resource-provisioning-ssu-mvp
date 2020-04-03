@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace ResourceProvisioning.Abstractions.Events.Integration
+namespace ResourceProvisioning.Abstractions.Events
 {
 	public abstract class BaseIntegrationEvent : IIntegrationEvent
 	{

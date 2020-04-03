@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Broker.Application.Commands.Idempotency;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
 using ResourceProvisioning.Broker.Repository;
 
@@ -20,13 +21,9 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 		public override async Task<bool> Handle(CreateEnvironmentCommand command, CancellationToken cancellationToken)
 		{
-			var environment = new Domain.Aggregates.EnvironmentAggregate.Environment(command.EmployeeId, command.EmployeeName, command.EmployeeEmail);
+			var desiredState = new DesiredState(command.DesiredState.Option1, command.DesiredState.Option2, command.DesiredState.Option3, command.DesiredState.Option4);
+			var environment = new Domain.Aggregates.EnvironmentAggregate.Environment(desiredState);
 			
-			foreach (var resourceDto in command.Resources)
-			{
-				environment.AddResource(resourceDto.ResourceId, resourceDto.Comment);
-			}
-
 			_environmentRepository.Add(environment);
 			
 			return await _environmentRepository.UnitOfWork.SaveEntitiesAsync();

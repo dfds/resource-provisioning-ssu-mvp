@@ -1,8 +1,8 @@
 ﻿using System;
 using Newtonsoft.Json;
-using ResourceProvisioning.Abstractions.Events.Integration;
+using ResourceProvisioning.Abstractions.Events;
 
-namespace ResourceProvisioning.Broker.Application.IntegrationEvents.Events
+namespace ResourceProvisioning.Broker.Application.Events
 {
 	public class EnvironmentUpdatedEvent : BaseIntegrationEvent
 	{

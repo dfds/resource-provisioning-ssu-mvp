@@ -1,4 +1,4 @@
-﻿namespace ResourceProvisioning.Abstractions.Events.Integration
+﻿namespace ResourceProvisioning.Abstractions.Events
 {
 	public interface IIntegrationEventHandler<in TEvent> : IIntegrationEventHandler, IEventHandler<TEvent> where TEvent : IIntegrationEvent
 	{

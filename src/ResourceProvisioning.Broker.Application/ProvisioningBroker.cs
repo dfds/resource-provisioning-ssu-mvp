@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Data;
-using ResourceProvisioning.Abstractions.Infrastructure;
-using ResourceProvisioning.Abstractions.Infrastructure.Provisioning;
+using ResourceProvisioning.Abstractions.Grid;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Application
 {

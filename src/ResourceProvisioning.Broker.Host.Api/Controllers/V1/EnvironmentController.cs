@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Data;
-using ResourceProvisioning.Abstractions.Infrastructure.Provisioning;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 {

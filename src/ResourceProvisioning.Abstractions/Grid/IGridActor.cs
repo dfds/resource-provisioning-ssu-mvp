@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ResourceProvisioning.Abstractions.Infrastructure
+namespace ResourceProvisioning.Abstractions.Grid
 {
 	public interface IGridActor
 	{

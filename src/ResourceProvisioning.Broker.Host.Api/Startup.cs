@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection;
+﻿using System.Reflection;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,11 +39,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
-			services.AddLocalization(options =>
-			{
-				options.ResourcesPath = "Resources";
-			});
-
 			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			services.AddSwaggerGen(c =>
 			{
@@ -75,23 +67,8 @@ namespace ResourceProvisioning.Broker.Host.Api
 		{
 			app.UseCors("open");
 			app.UseHttpsRedirection();
-
-			var supportedCultures = new List<CultureInfo>
-			{
-				new CultureInfo("en-US"),
-				new CultureInfo("da-DK"),
-			};
-
-			app.UseRequestLocalization(new RequestLocalizationOptions
-			{
-				DefaultRequestCulture = new RequestCulture("da-DK"),
-				SupportedCultures = supportedCultures,
-				SupportedUICultures = supportedCultures
-			});
-
 			app.UseRouting();
 			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
 			{

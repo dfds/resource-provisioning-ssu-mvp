@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Service
 {
 	public interface IDomainService
 	{
-		Task<DesiredState> GetAsync(Expression<Func<DesiredState, bool>> predicate);
+		Task<Domain.Aggregates.EnvironmentAggregate.Environment> GetEnvironmentByIdAsync(Guid environmentId);
 
-		Task<DesiredState> AddAsync(DesiredState state);
+		Task<Domain.Aggregates.EnvironmentAggregate.Environment> AddEnvironmentAsync(DesiredState state);
 
-		Task<DesiredState> UpdateAsync(DesiredState state);
+		Task<Domain.Aggregates.EnvironmentAggregate.Environment> UpdateEnvironmentAsync(Guid environmentId, DesiredState state);
 
-		Task<DesiredState> DeleteAsync(DesiredState state);
+		Task DeleteEnvironmentAsync(Guid environmentId);
 	}
 }

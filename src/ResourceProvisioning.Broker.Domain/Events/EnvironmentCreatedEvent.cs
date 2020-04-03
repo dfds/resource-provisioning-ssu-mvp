@@ -1,4 +1,4 @@
-﻿using ResourceProvisioning.Abstractions.Events.Domain;
+﻿using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Domain.Events
 {

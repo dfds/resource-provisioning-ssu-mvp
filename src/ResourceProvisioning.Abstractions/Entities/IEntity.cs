@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using ResourceProvisioning.Abstractions.Events.Domain;
+using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Abstractions.Entities
 {

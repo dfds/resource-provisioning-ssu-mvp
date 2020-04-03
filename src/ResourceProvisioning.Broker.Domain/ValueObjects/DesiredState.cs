@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ResourceProvisioning.Abstractions.Entities;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
+namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
 	public class DesiredState : BaseValueObject
 	{

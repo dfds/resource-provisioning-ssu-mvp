@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
-using ResourceProvisioning.Broker.Infrastructure.Exceptions;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 {
@@ -24,7 +23,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 			var exists = await ExistAsync(id);
 
 			var request = exists ? 
-				throw new BrokerException($"Request with {id} already exists") : 
+				throw new Exception($"Request with {id} already exists") : 
 				new ClientRequest()
 				{
 					Id = id,

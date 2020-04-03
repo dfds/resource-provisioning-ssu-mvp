@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Resources\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\ResourceProvisioning.Broker.Application\ResourceProvisioning.Broker.Application.csproj" />
     </ItemGroup>
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ResourceProvisioning.Abstractions.Events.Integration;
-using ResourceProvisioning.Broker.Application.IntegrationEvents.Events;
+using ResourceProvisioning.Abstractions.Events;
+using ResourceProvisioning.Broker.Application.Events;
 
 namespace ResourceProvisioning.Broker.Application.EventHandlers
 {

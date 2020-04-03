@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations;
-using ResourceProvisioning.Broker.Infrastructure.Extensions;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 using ResourceProvisioning.Broker.Repository;
 using ResourceProvisioning.Broker.Service;
 
@@ -16,27 +15,22 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			_environmentRepository = environmentRepository;
 		}
 
-		public Task<DesiredState> AddAsync(DesiredState state)
+		public Task<Aggregates.EnvironmentAggregate.Environment> AddEnvironmentAsync(DesiredState state)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<DesiredState> DeleteAsync(DesiredState state)
+		public Task DeleteEnvironmentAsync(Guid environmentId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<DesiredState> GetAsync(Expression<Func<DesiredState, bool>> predicate)
+		public Task<Aggregates.EnvironmentAggregate.Environment> GetEnvironmentByIdAsync(Guid environmentId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<DesiredState> GetByContextId(Guid contextId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Task<DesiredState> UpdateAsync(DesiredState state)
+		public Task<Aggregates.EnvironmentAggregate.Environment> UpdateEnvironmentAsync(Guid environmentId, DesiredState state)
 		{
 			throw new NotImplementedException();
 		}

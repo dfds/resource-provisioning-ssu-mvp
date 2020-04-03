@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ResourceProvisioning.Abstractions.Events.Domain
+namespace ResourceProvisioning.Abstractions.Events
 {
 	public interface IDomainEvent : IEvent, INotification
 	{

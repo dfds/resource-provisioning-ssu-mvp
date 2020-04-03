@@ -5,6 +5,7 @@ using System.Linq;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
 using ResourceProvisioning.Broker.Domain.Events;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 using ResourceProvisioning.Broker.Exceptions;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
@@ -21,9 +22,9 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 
 		// EF comment: When using EF its typically good practice to bundle the FKEY fields with their corresponding navigation properties.
 		public EnvironmentStatus Status { get; private set; }
-		private int _statusId;
+		private int _statusId = EnvironmentStatus.Created.Id;
 
-		public DateTime CreateDate { get; private set; }
+		public DateTime CreateDate => DateTime.UtcNow;
 
 		public string Description { get; private set; }
 
@@ -36,12 +37,9 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			_resources = new List<EnvironmentResource>();
 		}
 
-		public Environment(Guid creatorId, string creatorName, string creatorEmail, Guid? ownerId = null) : this()
+		public Environment(DesiredState desiredState) : this()
 		{
-			_statusId = EnvironmentStatus.Submitted.Id;
-			CreateDate = DateTime.UtcNow;
-			OwnerId = ownerId ?? creatorId;
-			State = new DesiredState(creatorId.ToString(), creatorName, creatorEmail, OwnerId.ToString());
+			State = desiredState;
 			
 			AddDomainEvent(new EnvironmentCreatedEvent(this));
 		}
@@ -51,6 +49,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		// so any behavior and validations are controlled by the AggregateRoot in order to maintain consistency between the whole Aggregate. 
 		public void AddResource(Guid resourceId, string comment)
 		{
+			//TODO: Adding a resource should sync with the desired state.
 			var existingResource = _resources.Where(o => o.ResourceId == resourceId).SingleOrDefault();
 
 			if (existingResource == null)
@@ -70,39 +69,39 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			}
 		}
 
-		public void SetProvisioningStatus()
+		public void SetInitializingStatus()
 		{
-			if (_statusId == EnvironmentStatus.Submitted.Id)
+			if (_statusId == EnvironmentStatus.Created.Id)
 			{
-				AddDomainEvent(new EnvironmentStatusChangedToProvisioningEvent(Id));
+				AddDomainEvent(new EnvironmentStatusChangedToInitializingEvent(Id));
 
-				_statusId = EnvironmentStatus.Provisioning.Id;
-				Description = "Provisioning";
+				_statusId = EnvironmentStatus.Initializing.Id;
+				Description = "Initializing";
 			}
 		}
 
-		public void SetCompletedStatus()
+		public void SetReadyStatus()
 		{
-			if (_statusId == EnvironmentStatus.Provisioning.Id)
+			if (_statusId == EnvironmentStatus.Initializing.Id)
 			{
-				AddDomainEvent(new EnvironmentStatusChangedToCompletedEvent(Id));
+				AddDomainEvent(new EnvironmentStatusChangedToReadyEvent(Id));
 
-				_statusId = EnvironmentStatus.Completed.Id;
-				Description = "Completed";
+				_statusId = EnvironmentStatus.Ready.Id;
+				Description = "Ready";
 			}
 		}
 
-		public void SetCancelledStatus()
+		public void SetTerminatedStatus()
 		{
-			if (_statusId == EnvironmentStatus.Completed.Id)
+			if (_statusId == EnvironmentStatus.Terminated.Id)
 			{
-				throw new EnvironmentDomainException($"{Status.Name} -> {EnvironmentStatus.Cancelled.Name}");
+				throw new EnvironmentDomainException($"{Status.Name} -> {EnvironmentStatus.Terminated.Name}");
 			}
 
-			_statusId = EnvironmentStatus.Cancelled.Id;
-			Description = "Cancelled";
+			_statusId = EnvironmentStatus.Terminated.Id;
+			Description = "Terminated";
 
-			AddDomainEvent(new EnvironmentStatusChangedToCancelledEvent(Id));
+			AddDomainEvent(new EnvironmentStatusChangedToTerminatedEvent(Id));
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

@@ -1,4 +1,4 @@
-﻿namespace ResourceProvisioning.Abstractions.Events.Domain
+﻿namespace ResourceProvisioning.Abstractions.Events
 {
 	public interface IDomainEventHandler<in TEvent> : IDomainEventHandler, IEventHandler<TEvent> where TEvent : IDomainEvent
 	{
