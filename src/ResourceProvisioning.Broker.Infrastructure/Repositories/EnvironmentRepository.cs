@@ -20,7 +20,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 		{
 			return await Task.Factory.StartNew(() =>
 			{
-				return _context.Environments
+				return _context.Environment
 							 .AsNoTracking()
 							 .Where(filter)
 							 .Include(i => i.Resources)
@@ -32,7 +32,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 
 		public async Task<Domain.Aggregates.EnvironmentAggregate.Environment> GetByIdAsync(Guid contextId)
 		{
-			var environment = await _context.Environments.FindAsync(contextId);
+			var environment = await _context.Environment.FindAsync(contextId);
 
 			if (environment != null)
 			{

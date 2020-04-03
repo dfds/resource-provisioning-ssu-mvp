@@ -16,11 +16,11 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		public const string DEFAULT_SCHEMA = nameof(DomainContext);
 		private readonly IMediator _mediator;
 
-		public virtual DbSet<Environment> Environments { get; set; }
+		public virtual DbSet<Environment> Environment { get; set; }
 
-		public virtual DbSet<EnvironmentResource> EnvironmentResources { get; set; }
+		public virtual DbSet<EnvironmentResource> EnvironmentResource { get; set; }
 
-		public virtual DbSet<EnvironmentStatus> EnvironmentStatuses { get; set; }
+		public virtual DbSet<EnvironmentStatus> EnvironmentStatus { get; set; }
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
