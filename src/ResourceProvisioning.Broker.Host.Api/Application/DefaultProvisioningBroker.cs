@@ -2,29 +2,25 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Infrastructure;
 using ResourceProvisioning.Abstractions.Infrastructure.Provisioning;
-using ResourceProvisioning.Broker.Host.Api.Configuration;
 
 namespace ResourceProvisioning.Broker.Host.Api.Application
 {
 	public class DefaultProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
-		private readonly ProvisioningBrokerOptions _options;
 		private readonly IQueryProvider _queryProvider;
 
 		public Guid Id { get; internal set; }
 
         public GridActorType Type => GridActorType.System;
 
-		public DefaultProvisioningBroker(IMediator mediator, IQueryProvider queryProvider, IOptions<ProvisioningBrokerOptions> options = default) 
+		public DefaultProvisioningBroker(IMediator mediator, IQueryProvider queryProvider) 
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 			_queryProvider = queryProvider ?? throw new ArgumentNullException(nameof(queryProvider));
-			_options = options?.Value;
 		}
 
 		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
