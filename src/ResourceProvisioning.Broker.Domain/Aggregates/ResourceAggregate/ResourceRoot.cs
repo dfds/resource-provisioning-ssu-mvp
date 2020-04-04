@@ -15,8 +15,12 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate
 
 		public DesiredState DesiredState { get; private set; }
 
-		public DateTime RegisteredDate => DateTime.UtcNow;
-		
+		public DateTime RegisteredDate { get; private set; } = DateTime.Now;
+
+		private ResourceRoot() : base()
+		{
+		}
+
 		public ResourceRoot(DesiredState desiredState) : base()
 		{
 			DesiredState = desiredState;

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Linq;
 using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using ResourceProvisioning.Abstractions.Aggregates;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
@@ -108,6 +109,14 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			await _resourceRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return resource;
+		}
+
+		public async Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(DesiredState desiredState)
+		{
+			var resources = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
+			var environments = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
+
+			return resources.Cast<IAggregateRoot>().Concat(environments);
 		}
 	}
 }

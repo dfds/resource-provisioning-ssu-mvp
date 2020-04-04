@@ -19,7 +19,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		public EnvironmentStatus Status { get; private set; }
 		private int _statusId = EnvironmentStatus.Created.Id;
 
-		public DateTime CreateDate => DateTime.UtcNow;
+		public DateTime CreateDate { get; private set; } = DateTime.Now;
 
 		public IEnumerable<EnvironmentResourceReference> Resources => _resources.AsReadOnly();
 

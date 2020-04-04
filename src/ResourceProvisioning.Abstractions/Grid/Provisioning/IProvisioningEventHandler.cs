@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 {
-	public interface IProvisioningHandler : IGridActor, IEventHandler<IProvisioningEvent>
+	public interface IProvisioningEventHandler : IGridActor, IEventHandler<IProvisioningEvent>
 	{
 	}
 }

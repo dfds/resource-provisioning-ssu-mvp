@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using ResourceProvisioning.Abstractions.Entities;
-using ResourceProvisioning.Abstractions.Grid;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
