@@ -6,55 +6,42 @@ using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
 using ResourceProvisioning.Broker.Domain.Events;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
-using ResourceProvisioning.Broker.Exceptions;
+using ResourceProvisioning.Broker.Domain.Exceptions;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
-	public class Environment : BaseEntity<Guid>, IAggregateRoot
+	public sealed class Environment : BaseEntity<Guid>, IAggregateRoot
 	{
-		// DDD Patterns comment:
-		// Using a private collection field, better for DDD Aggregate's encapsulation
-		// so resources cannot be added from "outside the AggregateRoot" directly to the collection,
-		// but only through the method Environment.AddResource() which includes behaviour.
 		private List<EnvironmentResource> _resources;
 
-		public DesiredState State { get; private set; }
+		public DesiredState DesiredState { get; private set; }
 
-		// EF comment: When using EF its typically good practice to bundle the FKEY fields with their corresponding navigation properties.
 		public EnvironmentStatus Status { get; private set; }
 		private int _statusId = EnvironmentStatus.Created.Id;
 
 		public DateTime CreateDate => DateTime.UtcNow;
 
-		public string Description { get; private set; }
-
-		public Guid OwnerId { get; private set; }
-
 		public IEnumerable<EnvironmentResource> Resources => _resources.AsReadOnly();
 
-		protected Environment() : base()
+		private Environment() : base()
 		{
 			_resources = new List<EnvironmentResource>();
 		}
 
 		public Environment(DesiredState desiredState) : this()
 		{
-			State = desiredState;
+			DesiredState = desiredState;
 			
 			AddDomainEvent(new EnvironmentCreatedEvent(this));
 		}
 
-		// DDD Patterns comment
-		// This Environment AggregateRoot's method "AddResource()" should be the only way to add a Resource to the Environment,
-		// so any behavior and validations are controlled by the AggregateRoot in order to maintain consistency between the whole Aggregate. 
-		public void AddResource(Guid resourceId, string comment)
+		public void AddResource(Guid resourceId, DateTime provisioned, string comment, bool isDesired)
 		{
-			//TODO: Adding a resource should sync with the desired state.
-			var existingResource = _resources.Where(o => o.ResourceId == resourceId).SingleOrDefault();
+			var existingResource = _resources.Where(o => o.Id == resourceId).SingleOrDefault();
 
 			if (existingResource == null)
 			{        
-				var resource = new EnvironmentResource(resourceId, comment);
+				var resource = new EnvironmentResource(resourceId, provisioned, comment, isDesired);
 
 				var validationResult = resource.Validate(new ValidationContext(resource));
 
@@ -66,50 +53,52 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 				}
 
 				_resources.Add(resource);
+
+				Initialize();
 			}
 		}
 
-		public void SetInitializingStatus()
-		{
-			if (_statusId == EnvironmentStatus.Created.Id)
-			{
-				AddDomainEvent(new EnvironmentStatusChangedToInitializingEvent(Id));
+		public void SetDesiredState(DesiredState desiredState) {
+			DesiredState = desiredState;
 
-				_statusId = EnvironmentStatus.Initializing.Id;
-				Description = "Initializing";
+			Initialize();
+		}
+
+		public void Initialize()
+		{
+			_statusId = EnvironmentStatus.Initializing.Id;
+
+			AddDomainEvent(new EnvironmentInitializingEvent(Id));
+		}
+
+		public void Start()
+		{
+			if (_statusId == EnvironmentStatus.Initializing.Id && HasDesiredState())
+			{
+				_statusId = EnvironmentStatus.Started.Id;
+
+				AddDomainEvent(new EnvironmentStartedEvent(Id));
 			}
 		}
 
-		public void SetReadyStatus()
+		public void Terminate()
 		{
-			if (_statusId == EnvironmentStatus.Initializing.Id)
-			{
-				AddDomainEvent(new EnvironmentStatusChangedToReadyEvent(Id));
-
-				_statusId = EnvironmentStatus.Ready.Id;
-				Description = "Ready";
-			}
-		}
-
-		public void SetTerminatedStatus()
-		{
-			if (_statusId == EnvironmentStatus.Terminated.Id)
-			{
-				throw new EnvironmentDomainException($"{Status.Name} -> {EnvironmentStatus.Terminated.Name}");
-			}
-
 			_statusId = EnvironmentStatus.Terminated.Id;
-			Description = "Terminated";
 
-			AddDomainEvent(new EnvironmentStatusChangedToTerminatedEvent(Id));
+			AddDomainEvent(new EnvironmentTerminatedEvent(Id));
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
-			if (State == null)
+			if (DesiredState == null)
 			{
-				yield return new ValidationResult(nameof(State));
+				yield return new ValidationResult(nameof(DesiredState));
 			}
+		}
+
+		private bool HasDesiredState() 
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

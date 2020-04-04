@@ -1,25 +1,22 @@
 ﻿using System.Runtime.Serialization;
 using ResourceProvisioning.Abstractions.Commands;
-using ResourceProvisioning.Broker.Application.Data;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
-	// DDD and CQRS patterns comment: Note that it is recommended to implement immutable Commands
-	// In this case, its immutability is achieved by having all the setters as private
-	// plus only being able to update the data just once, when creating the object through its constructor.
-	// References on Immutable Commands:  
+	// TODO: Document that it is recommended to implement immutable Commands.  
 	// http://cqrs.nu/Faq
 	// https://docs.spine3.org/motivation/immutability.html 
 	// http://blog.gauffin.org/2012/06/griffin-container-introducing-command-support/
 	// https://msdn.microsoft.com/en-us/library/bb383979.aspx
 
 	[DataContract]
-	public class CreateEnvironmentCommand : ICommand<bool>
+	public class CreateEnvironmentCommand : ICommand<Domain.Aggregates.EnvironmentAggregate.Environment>
 	{
 		[DataMember]
-		public DesiredStateDto DesiredState { get; private set; }
+		public DesiredState DesiredState { get; private set; }
 				
-		public CreateEnvironmentCommand(DesiredStateDto desiredState)
+		public CreateEnvironmentCommand(DesiredState desiredState)
 		{
 			DesiredState = desiredState;
 		}

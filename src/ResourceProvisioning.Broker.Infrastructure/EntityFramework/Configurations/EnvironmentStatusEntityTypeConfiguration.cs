@@ -6,17 +6,17 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 {
 	class EnvironmentStatusEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentStatus>
 	{
-		public void Configure(EntityTypeBuilder<EnvironmentStatus> ContextStatusConfiguration)
+		public void Configure(EntityTypeBuilder<EnvironmentStatus> configuration)
 		{
-			ContextStatusConfiguration.ToTable("EnvironmentStatus", DomainContext.DEFAULT_SCHEMA);
-			ContextStatusConfiguration.HasKey(o => o.Id);
+			configuration.ToTable("EnvironmentStatus", DomainContext.DEFAULT_SCHEMA);
+			configuration.HasKey(o => o.Id);
 
-			ContextStatusConfiguration.Property(o => o.Id)
+			configuration.Property(o => o.Id)
 				.HasDefaultValue(1)
 				.ValueGeneratedNever()
 				.IsRequired();
 
-			ContextStatusConfiguration.Property(o => o.Name)
+			configuration.Property(o => o.Name)
 				.HasMaxLength(200)
 				.IsRequired();
 		}

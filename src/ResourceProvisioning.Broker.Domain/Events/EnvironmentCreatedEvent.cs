@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Broker.Domain.Events
 {
-	public class EnvironmentCreatedEvent : IDomainEvent
+	public sealed class EnvironmentCreatedEvent : IDomainEvent
 	{
 		public Aggregates.EnvironmentAggregate.Environment Environment { get; }
 

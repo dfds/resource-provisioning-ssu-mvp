@@ -3,7 +3,7 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	public class DesiredState : BaseValueObject
+	public sealed class DesiredState : BaseValueObject
 	{
 		public string Option1 { get; private set; }
 

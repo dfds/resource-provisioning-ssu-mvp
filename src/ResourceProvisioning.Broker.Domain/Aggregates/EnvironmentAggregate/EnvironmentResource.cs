@@ -5,27 +5,31 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
-	public class EnvironmentResource : BaseEntity<Guid>
+	public sealed class EnvironmentResource : BaseEntity<Guid>
 	{			   
-		public Guid ResourceId { get; private set; }
+		public DateTime Provisioned { get; private set; }
+
+		public bool IsDesired { get; private set; }
 
 		public string Comment { get; private set; }
 
-		protected EnvironmentResource() : base()
+		private EnvironmentResource() : base()
 		{
 		}
 
-		public EnvironmentResource(Guid resourceId, string comment) : this()
+		public EnvironmentResource(Guid id, DateTime provisioned, string comment, bool isDesired) : this()
 		{
-			ResourceId = resourceId;
+			Id = id;
+			Provisioned = provisioned;
 			Comment = comment;
+			IsDesired = isDesired;
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
-			if (ResourceId == Guid.Empty)
+			if (Id == Guid.Empty)
 			{ 
-				yield return new ValidationResult($"Invalid resource id: {ResourceId}");
+				yield return new ValidationResult($"Invalid resource id: {Id}");
 			}
 		}
 	}

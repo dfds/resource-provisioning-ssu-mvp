@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
-using ResourceProvisioning.Broker.Repository;
-using ResourceProvisioning.Broker.Service;
+using ResourceProvisioning.Broker.Domain.Repository;
+using System.Collections.Generic;
+using System.Threading;
+using System.Linq;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
-	public class DomainService : IDomainService
+	public sealed class DomainService : IDomainService
 	{
 		private readonly IEnvironmentRepository _environmentRepository;
 
@@ -15,24 +17,52 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			_environmentRepository = environmentRepository;
 		}
 
-		public Task<Aggregates.EnvironmentAggregate.Environment> AddEnvironmentAsync(DesiredState state)
+		public async Task<Aggregates.EnvironmentAggregate.Environment> AddEnvironmentAsync(DesiredState desiredState, CancellationToken cancellationToken = default)
 		{
-			throw new NotImplementedException();
+			var environment = _environmentRepository.Add(new Aggregates.EnvironmentAggregate.Environment(desiredState));
+
+			await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+			return environment;
 		}
 
-		public Task DeleteEnvironmentAsync(Guid environmentId)
+		public async Task DeleteEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
 		{
-			throw new NotImplementedException();
+			var environment = await GetEnvironmentByIdAsync(environmentId);
+
+			if (environment != null)
+			{
+				_environmentRepository.Delete(environment);
+
+				await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+			}
 		}
 
-		public Task<Aggregates.EnvironmentAggregate.Environment> GetEnvironmentByIdAsync(Guid environmentId)
+		public async Task<Aggregates.EnvironmentAggregate.Environment> GetEnvironmentByIdAsync(Guid environmentId)
 		{
-			throw new NotImplementedException();
+			var results = await _environmentRepository.GetAsync(env => env.Id == environmentId);
+
+			return results.SingleOrDefault();
 		}
 
-		public Task<Aggregates.EnvironmentAggregate.Environment> UpdateEnvironmentAsync(Guid environmentId, DesiredState state)
+		public async Task<IEnumerable<Aggregates.EnvironmentAggregate.Environment>> GetEnvironmentByResourceIdAsync(Guid resourceId)
 		{
-			throw new NotImplementedException();
+			var results = await _environmentRepository.GetAsync((env) => env.Resources.Any(res => res.Id == resourceId));
+
+			return results;
+		}
+
+		public async Task<Aggregates.EnvironmentAggregate.Environment> UpdateEnvironmentAsync(Guid environmentId, DesiredState desiredState, CancellationToken cancellationToken = default)
+		{
+			var environment = await GetEnvironmentByIdAsync(environmentId);
+
+			environment.SetDesiredState(desiredState);
+
+			_environmentRepository.Update(environment);
+
+			await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
+			return environment;
 		}
 	}
 }

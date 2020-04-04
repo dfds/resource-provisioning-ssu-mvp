@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Abstractions.Repositories
 
 		TAggregate Update(TAggregate aggregate);
 
-		void Delete(TAggregate manager);
+		void Delete(TAggregate aggregate);
 	}
 
 	public interface IRepository

@@ -4,44 +4,37 @@ using System.Threading.Tasks;
 using MediatR;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Broker.Application.Commands.Idempotency;
-using ResourceProvisioning.Broker.Domain.ValueObjects;
+using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
-using ResourceProvisioning.Broker.Repository;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
-	public class CreateEnvironmentCommandHandler : BaseCommandHandler<CreateEnvironmentCommand, bool>
+	public class CreateEnvironmentCommandHandler : BaseCommandHandler<CreateEnvironmentCommand, Domain.Aggregates.EnvironmentAggregate.Environment>
 	{
-		private readonly IEnvironmentRepository _environmentRepository;
+		private readonly IDomainService _domainService;
 
-		public CreateEnvironmentCommandHandler(IMediator mediator, IEnvironmentRepository environmentRepository) : base(mediator)
+		public CreateEnvironmentCommandHandler(IMediator mediator, IDomainService domainService) : base(mediator)
 		{
-			_environmentRepository = environmentRepository ?? throw new ArgumentNullException(nameof(environmentRepository));
+			_domainService = domainService ?? throw new ArgumentNullException(nameof(domainService));
 		}
 
-		public override async Task<bool> Handle(CreateEnvironmentCommand command, CancellationToken cancellationToken)
-		{
-			var desiredState = new DesiredState(command.DesiredState.Option1, command.DesiredState.Option2, command.DesiredState.Option3, command.DesiredState.Option4);
-			var environment = new Domain.Aggregates.EnvironmentAggregate.Environment(desiredState);
-			
-			_environmentRepository.Add(environment);
-			
-			return await _environmentRepository.UnitOfWork.SaveEntitiesAsync();
+		public override async Task<Domain.Aggregates.EnvironmentAggregate.Environment> Handle(CreateEnvironmentCommand command, CancellationToken cancellationToken)
+		{						
+			return await _domainService.AddEnvironmentAsync(command.DesiredState);
 		}
 	}
 
 
-	// Use for Idempotency in Command process
-	public class CreateEnvironmentIdentifiedCommandHandler : IdentifiedCommandHandler<CreateEnvironmentCommand, bool>
+	//TODO: Finalize Idempotency concept
+	public class CreateEnvironmentIdentifiedCommandHandler : IdentifiedCommandHandler<CreateEnvironmentCommand, Domain.Aggregates.EnvironmentAggregate.Environment>
 	{
 		public CreateEnvironmentIdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager) : base(mediator, requestManager)
 		{
 		}
 
-		protected override bool CreateResultForDuplicateRequest()
+		protected override Domain.Aggregates.EnvironmentAggregate.Environment CreateResultForDuplicateRequest()
 		{
-			// Ignore duplicate requests.
-			return true;                
+			return null;               
 		}
 	}
 }

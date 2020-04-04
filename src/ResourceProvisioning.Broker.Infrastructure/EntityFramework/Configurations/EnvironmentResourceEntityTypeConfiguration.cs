@@ -7,14 +7,15 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 {
 	class EnvironmentResourceEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentResource>
 	{
-		public void Configure(EntityTypeBuilder<EnvironmentResource> ContextItemConfiguration)
+		public void Configure(EntityTypeBuilder<EnvironmentResource> configuration)
 		{
-			ContextItemConfiguration.ToTable("EnvironmentResource", DomainContext.DEFAULT_SCHEMA);
-			ContextItemConfiguration.HasKey(o => o.Id);
-			ContextItemConfiguration.Ignore(b => b.DomainEvents);
-			ContextItemConfiguration.Property<Guid>("EnvironmentId").IsRequired();
-			ContextItemConfiguration.Property<Guid>("ResourceId").IsRequired();
-			ContextItemConfiguration.Property<string>("Comment").IsRequired();
+			configuration.ToTable("EnvironmentResource", DomainContext.DEFAULT_SCHEMA);
+			configuration.HasKey(o => o.Id);
+			configuration.Ignore(b => b.DomainEvents);
+			configuration.Property<Guid>("EnvironmentId").IsRequired();
+			configuration.Property<DateTime>("Provisioned").IsRequired();
+			configuration.Property<bool>("IsDesired").IsRequired();
+			configuration.Property<string>("Comment").IsRequired();
 		}
 	}
 }

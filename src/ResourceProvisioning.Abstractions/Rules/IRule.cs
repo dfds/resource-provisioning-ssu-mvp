@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Abstractions.Rules
 {
-	interface IRule
+	public interface IRule
 	{
 		void Execute<T>(T entity) where T : IEntity;
 

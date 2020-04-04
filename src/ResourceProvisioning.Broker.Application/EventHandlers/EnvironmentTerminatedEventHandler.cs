@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Broker.Domain.Events;
-using ResourceProvisioning.Broker.Repository;
+using ResourceProvisioning.Broker.Domain.Repository;
 
 namespace ResourceProvisioning.Broker.Application.EventHandlers
 {
-	public class EnvironmentStatusChangedToInitializingEventHandler : IDomainEventHandler<EnvironmentStatusChangedToInitializingEvent>
+	public class EnvironmentTerminatedEventHandler : IDomainEventHandler<EnvironmentTerminatedEvent>
 	{
-		public async Task HandleAsync(EnvironmentStatusChangedToInitializingEvent environmentProvisioningEvent, CancellationToken cancellationToken)
+		public async Task Handle(EnvironmentTerminatedEvent environmentCancelledEvent, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Application.EventHandlers
 {
 	public class EnvironmentCreatedEventHandler : IDomainEventHandler<EnvironmentCreatedEvent>
 	{
-		public async Task HandleAsync(EnvironmentCreatedEvent environmentCreatedEvent, CancellationToken cancellationToken)
+		public Task Handle(EnvironmentCreatedEvent notification, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

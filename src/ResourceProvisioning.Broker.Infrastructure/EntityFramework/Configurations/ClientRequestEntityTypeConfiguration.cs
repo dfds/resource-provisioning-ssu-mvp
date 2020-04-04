@@ -6,12 +6,12 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 {
 	class ClientRequestEntityTypeConfiguration : IEntityTypeConfiguration<ClientRequest>
 	{
-		public void Configure(EntityTypeBuilder<ClientRequest> requestConfiguration)
+		public void Configure(EntityTypeBuilder<ClientRequest> configuration)
 		{
-			requestConfiguration.ToTable("Request", DomainContext.DEFAULT_SCHEMA);
-			requestConfiguration.HasKey(cr => cr.Id);
-			requestConfiguration.Property(cr => cr.Name).IsRequired();
-			requestConfiguration.Property(cr => cr.Time).IsRequired();
+			configuration.ToTable("Request", DomainContext.DEFAULT_SCHEMA);
+			configuration.HasKey(cr => cr.Id);
+			configuration.Property(cr => cr.Name).IsRequired();
+			configuration.Property(cr => cr.Time).IsRequired();
 		}
 	}
 }

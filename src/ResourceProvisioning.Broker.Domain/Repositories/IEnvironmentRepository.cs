@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Repositories;
 
-namespace ResourceProvisioning.Broker.Repository
+namespace ResourceProvisioning.Broker.Domain.Repository
 {
 	public interface IEnvironmentRepository : IRepository<Domain.Aggregates.EnvironmentAggregate.Environment>
 	{

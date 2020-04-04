@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
-using ResourceProvisioning.Broker.Repository;
+using ResourceProvisioning.Broker.Domain.Repository;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 {
@@ -25,7 +25,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 							 .Where(filter)
 							 .Include(i => i.Resources)
 							 .Include(i => i.Status)
-							 .Include(i => i.State)
+							 .Include(i => i.DesiredState)
 							 .AsEnumerable();
 			});
 		}
@@ -42,7 +42,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 				{
 					await entry.Collection(i => i.Resources).LoadAsync();
 					await entry.Reference(i => i.Status).LoadAsync();
-					await entry.Reference(i => i.State).LoadAsync();
+					await entry.Reference(i => i.DesiredState).LoadAsync();
 				}
 			}
 

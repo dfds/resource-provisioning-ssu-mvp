@@ -3,7 +3,7 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Abstractions.Rules
 {
-	interface IRuleEvaluator
+	public interface IRuleEvaluator
 	{
 		IEnumerable<IRule> Rules { get; }
 

@@ -6,28 +6,23 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 {
 	class EnvironmentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.EnvironmentAggregate.Environment>
 	{
-		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.Environment> contextConfiguration)
+		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.Environment> configuration)
 		{
-			contextConfiguration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
-			contextConfiguration.HasKey(o => o.Id);
-			contextConfiguration.Ignore(b => b.DomainEvents);
-			contextConfiguration.Property<DateTime>("CreateDate").IsRequired();
-			contextConfiguration.Property<Guid?>("OwnerId").IsRequired(false);
-			contextConfiguration.Property<int>("StatusId").IsRequired();
-			contextConfiguration.Property<string>("Description").IsRequired(false);
+			configuration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
+			configuration.HasKey(o => o.Id);
+			configuration.Ignore(b => b.DomainEvents);
+			configuration.Property<DateTime>("CreateDate").IsRequired();
+			configuration.Property<int>("StatusId").IsRequired();
 
-			//DesiredState value object persisted as owned entity type supported since EF Core 2.0
-			contextConfiguration.OwnsOne(o => o.State);
-
-			var navigation = contextConfiguration.Metadata.FindNavigation(nameof(Domain.Aggregates.EnvironmentAggregate.Environment.Resources));
-
-			// DDD Patterns comment:
-			//Set as field (New since EF 1.1) to access the Environment.Resource collection property through its field
-			navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-			contextConfiguration.HasOne(o => o.Status)
+			configuration.HasOne(o => o.Status)
 				.WithMany()
 				.HasForeignKey("StatusId");
+
+			configuration.OwnsOne(o => o.DesiredState);
+
+			var navigation = configuration.Metadata.FindNavigation(nameof(Domain.Aggregates.EnvironmentAggregate.Environment.Resources));
+
+			navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}
 	}
 }

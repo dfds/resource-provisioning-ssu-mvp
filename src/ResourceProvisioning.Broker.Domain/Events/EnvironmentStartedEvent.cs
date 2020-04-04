@@ -3,11 +3,11 @@ using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Domain.Events
 {
-	public class EnvironmentStatusChangedToInitializingEvent : IDomainEvent
+	public sealed class EnvironmentStartedEvent : IDomainEvent
 	{
 		public Guid EnvironmentId { get; }
 
-		public EnvironmentStatusChangedToInitializingEvent(Guid environmentId)
+		public EnvironmentStartedEvent(Guid environmentId)
 		{
 			EnvironmentId = environmentId;
 		}

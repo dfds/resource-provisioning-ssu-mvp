@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Abstractions.Entities
@@ -11,7 +12,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 		bool IsTransient();
 	}
 
-	public interface IEntity : IValidatableObject
+	public interface IEntity : IMaterializedView, IValidatableObject
 	{
 		IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
 

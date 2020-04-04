@@ -3,25 +3,27 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Options;
-using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application
 {
 	public class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
-		private readonly IQueryProvider _queryProvider;
+		private readonly IDomainService _domainService;
+		private readonly ProvisioningBrokerOptions _options;
 
 		public Guid Id { get; internal set; }
 
         public GridActorType Type => GridActorType.System;
 
-		public ProvisioningBroker(IMediator mediator, IQueryProvider queryProvider, IOptions<ProvisioningBrokerOptions> options = default) 
+		public ProvisioningBroker(IMediator mediator, IDomainService domainService, IOptions<ProvisioningBrokerOptions> options = default) 
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-			_queryProvider = queryProvider ?? throw new ArgumentNullException(nameof(queryProvider));
+			_domainService = domainService ?? throw new ArgumentNullException(nameof(domainService));
+			_options = options?.Value;
 		}
 
 		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ namespace ResourceProvisioning.Broker.Application
 			throw new NotImplementedException();
 		}
 
-		public Task HandleAsync(IProvisioningEvent @event, CancellationToken cancellationToken = default)
+		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)
 		{
 			//TODO: Query environments affected by EnvironmentResourceCreatedEvent		
 			//TODO: Implement UpdateEnvironmentCommand

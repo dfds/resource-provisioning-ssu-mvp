@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ResourceProvisioning.Broker.Exceptions
+namespace ResourceProvisioning.Broker.Domain.Exceptions
 {
-	public class EnvironmentDomainException : Exception
+	public sealed class EnvironmentDomainException : Exception
 	{
 		public EnvironmentDomainException()
 		{ }
