@@ -9,7 +9,7 @@ using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
-	public interface IControlPlaneService
+	public interface IControlPlaneService : IDomainService
 	{
 		Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(DesiredState desiredState);
 

@@ -6,9 +6,9 @@ using ResourceProvisioning.Broker.Domain.Events;
 
 namespace ResourceProvisioning.Broker.Application.Events
 {
-	public class EnvironmentCreatedEventHandler : IDomainEventHandler<EnvironmentCreatedEvent>
+	public class ResourceReadyEventHandler : IDomainEventHandler<ResourceReadyEvent>
 	{
-		public Task Handle(EnvironmentCreatedEvent @event, CancellationToken cancellationToken)
+		public async Task Handle(ResourceReadyEvent @event, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();
 		}

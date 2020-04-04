@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Broker.Host.Api
 		}
 
 		public IConfiguration Configuration { get; }
-		
+
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddLogging();
@@ -41,6 +41,10 @@ namespace ResourceProvisioning.Broker.Host.Api
 					Title = "Broker API",
 					Version = "v1"
 				});
+			});
+
+			Application.DependencyInjection.AddProvisioningBroker(services, options => {
+				Configuration.Bind(options);
 			});
 		}
 		

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Commands;
+using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
@@ -20,7 +21,8 @@ namespace ResourceProvisioning.Broker.Application
 			services.Configure(configureOptions);
 
 			services.AddBehaviors();
-			services.AddCommands();
+			services.AddCommandHandlers();
+			services.AddEventHandlers();
 			services.AddIdempotency();
 			services.AddPersistancy(configureOptions);
 			services.AddRepositories();
@@ -32,10 +34,14 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<,>));
 		}
 
-		private static void AddCommands(this IServiceCollection services)
+		private static void AddCommandHandlers(this IServiceCollection services)
 		{
-			services.AddTransient(typeof(ICommand<>), typeof(ICommand<>));
 			services.AddTransient(typeof(ICommandHandler<,>), typeof(ICommandHandler<,>));
+		}
+
+		private static void AddEventHandlers(this IServiceCollection services)
+		{
+			services.AddTransient(typeof(IEventHandler<>), typeof(IEventHandler<>));
 		}
 
 		private static void AddIdempotency(this IServiceCollection services)
@@ -47,26 +53,24 @@ namespace ResourceProvisioning.Broker.Application
 		{
 			var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-			using (var serviceProvider = services.BuildServiceProvider()) 
-			{
-				var brokerOptions = serviceProvider.GetService<IOptions<ProvisioningBrokerOptions>>()?.Value;
+			using var serviceProvider = services.BuildServiceProvider();
+			var brokerOptions = serviceProvider.GetService<IOptions<ProvisioningBrokerOptions>>()?.Value;
 
-				if (brokerOptions != null)
+			if (brokerOptions != null)
+			{
+				services.AddDbContext<DomainContext>(options =>
 				{
-					services.AddDbContext<DomainContext>(options =>
-					{
-						options.UseSqlite(brokerOptions.ConnectionStrings.GetValue<string>(nameof(DomainContext)),
-											sqliteOptionsAction: sqliteOptions =>
-											{
-												sqliteOptions.MigrationsAssembly(callingAssemblyName);
-												sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
-											});
-					}, ServiceLifetime.Scoped);
-				}
-				else 
-				{
-					throw new ProvisioningBrokerException("Could not resolve provision broker options");
-				}
+					options.UseSqlite(brokerOptions.ConnectionStrings.GetValue<string>(nameof(DomainContext)),
+										sqliteOptionsAction: sqliteOptions =>
+										{
+											sqliteOptions.MigrationsAssembly(callingAssemblyName);
+											sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+										});
+				}, ServiceLifetime.Scoped);
+			}
+			else
+			{
+				throw new ProvisioningBrokerException("Could not resolve provision broker options");
 			}
 		}
 
@@ -77,7 +81,7 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddServices(this IServiceCollection services)
 		{
-			services.AddTransient<IControlPlaneService>();
+			services.AddTransient<IDomainService>();
 		}
 	}
 }

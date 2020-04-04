@@ -12,7 +12,7 @@ namespace ResourceProvisioning.Broker.Application
 	public class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
-		private readonly IControlPlaneService _domainService;
+		private readonly IControlPlaneService _controlPlaneService;
 		private readonly ProvisioningBrokerOptions _options;
 
 		public Guid Id { get; internal set; }
@@ -21,10 +21,10 @@ namespace ResourceProvisioning.Broker.Application
 
 		public IDesiredState DesiredState => throw new NotImplementedException();
 
-		public ProvisioningBroker(IMediator mediator, IControlPlaneService domainService, IOptions<ProvisioningBrokerOptions> options = default) 
+		public ProvisioningBroker(IMediator mediator, IControlPlaneService controlPlaneService, IOptions<ProvisioningBrokerOptions> options = default) 
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-			_domainService = domainService ?? throw new ArgumentNullException(nameof(domainService));
+			_controlPlaneService = controlPlaneService ?? throw new ArgumentNullException(nameof(controlPlaneService));
 			_options = options?.Value;
 		}
 
