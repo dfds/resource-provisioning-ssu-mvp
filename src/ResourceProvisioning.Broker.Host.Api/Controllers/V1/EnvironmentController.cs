@@ -1,6 +1,6 @@
 ﻿using System;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 {
@@ -8,11 +8,11 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 	[Route("[controller]")]
 	public class EnvironmentController : ControllerBase
 	{
-		private readonly IProvisioningBroker _broker;
+		private readonly IMediator _mediator;
 
-		public EnvironmentController(IProvisioningBroker broker)
+		public EnvironmentController(IMediator mediator)
 		{
-			_broker = broker ?? throw new ArgumentNullException(nameof(broker));
+			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 		}
 	}
 }

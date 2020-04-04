@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Abstractions.Events;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
@@ -26,7 +27,9 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddIdempotency();
 			services.AddPersistancy(configureOptions);
 			services.AddRepositories();
-			services.AddServices(); 
+			services.AddServices();
+
+			services.AddSingleton<IProvisioningBroker>();
 		}
 
 		private static void AddBehaviors(this IServiceCollection services)
