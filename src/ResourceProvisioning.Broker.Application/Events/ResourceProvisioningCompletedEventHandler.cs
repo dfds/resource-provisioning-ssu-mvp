@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Broker.Application.Events;
 
-namespace ResourceProvisioning.Broker.Application.EventHandlers
+namespace ResourceProvisioning.Broker.Application.Events
 {
 	public class ResourceProvisioningCompletedEventHandler : IIntegrationEventHandler<ResourceProvisioningCompletedEvent>
 	{	
