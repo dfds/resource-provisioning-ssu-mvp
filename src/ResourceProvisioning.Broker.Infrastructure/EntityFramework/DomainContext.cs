@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
@@ -15,11 +16,9 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		public const string DEFAULT_SCHEMA = nameof(DomainContext);
 		private readonly IMediator _mediator;
 
-		public virtual DbSet<Environment> Environment { get; set; }
+		public virtual DbSet<EnvironmentRoot> Environment { get; set; }
 
-		public virtual DbSet<EnvironmentResource> EnvironmentResource { get; set; }
-
-		public virtual DbSet<EnvironmentStatus> EnvironmentStatus { get; set; }
+		public virtual DbSet<ResourceRoot> Resource { get; set; }
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
@@ -35,9 +34,10 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new EnvironmentEntityTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new EnvironmentStatusEntityTypeConfiguration());
-			modelBuilder.ApplyConfiguration(new EnvironmentResourceEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new GridActorStatusEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new ResourceRootEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentRootEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new EnvironmentResourceReferenceEntityTypeConfiguration());
 		}
 
 		public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))

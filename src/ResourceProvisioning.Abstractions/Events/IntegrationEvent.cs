@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public abstract class BaseIntegrationEvent : IIntegrationEvent
+	public abstract class IntegrationEvent : IIntegrationEvent
 	{
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
@@ -10,7 +10,7 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public int Version { get; protected set; } = 1;
 
-		protected BaseIntegrationEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
+		protected IntegrationEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
 		{
 			if (id.HasValue)
 			{

@@ -3,7 +3,7 @@ using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Application.Events
 {
-	public class EnvironmentChangedEvent : BaseIntegrationEvent
+	public class EnvironmentChangedEvent : IntegrationEvent
 	{
 		public Guid EnvironmentId { get; private set; }
 

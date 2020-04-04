@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Domain.Repository;
+using ResourceProvisioning.Abstractions.Repositories;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 {
-	public class EnvironmentRepository : BaseRepository<DomainContext, Domain.Aggregates.EnvironmentAggregate.Environment>, IEnvironmentRepository
+	public class EnvironmentRepository : Repository<DomainContext, Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot>, IEnvironmentRepository
 	{
 		public EnvironmentRepository(DomainContext context) : base(context)
 		{
 
 		}
 
-		public override async Task<IEnumerable<Domain.Aggregates.EnvironmentAggregate.Environment>> GetAsync(Expression<Func<Domain.Aggregates.EnvironmentAggregate.Environment, bool>> filter)
+		public override async Task<IEnumerable<Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot>> GetAsync(Expression<Func<Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot, bool>> filter)
 		{
 			return await Task.Factory.StartNew(() =>
 			{
@@ -30,7 +31,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 			});
 		}
 
-		public async Task<Domain.Aggregates.EnvironmentAggregate.Environment> GetByIdAsync(Guid contextId)
+		public async Task<Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot> GetByIdAsync(Guid contextId)
 		{
 			var environment = await _context.Environment.FindAsync(contextId);
 
@@ -47,6 +48,25 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 			}
 
 			return environment;
+		}
+
+		public override Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot Add(Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot aggregate)
+		{
+			return _context.Add(aggregate).Entity;
+		}
+
+		public override Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot Update(Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot aggregate)
+		{
+			var changeTracker = _context.Entry(aggregate);
+
+			changeTracker.State = EntityState.Modified;
+
+			return changeTracker.Entity;
+		}
+
+		public override void Delete(Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot aggregate)
+		{
+			_context.Entry(aggregate).State = EntityState.Deleted;
 		}
 	}
 }

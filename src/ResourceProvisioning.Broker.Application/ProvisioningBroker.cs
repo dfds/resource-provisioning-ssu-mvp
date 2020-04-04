@@ -12,14 +12,16 @@ namespace ResourceProvisioning.Broker.Application
 	public class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
-		private readonly IDomainService _domainService;
+		private readonly IControlPlaneService _domainService;
 		private readonly ProvisioningBrokerOptions _options;
 
 		public Guid Id { get; internal set; }
 
         public GridActorType Type => GridActorType.System;
 
-		public ProvisioningBroker(IMediator mediator, IDomainService domainService, IOptions<ProvisioningBrokerOptions> options = default) 
+		public IDesiredState DesiredState => throw new NotImplementedException();
+
+		public ProvisioningBroker(IMediator mediator, IControlPlaneService domainService, IOptions<ProvisioningBrokerOptions> options = default) 
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 			_domainService = domainService ?? throw new ArgumentNullException(nameof(domainService));

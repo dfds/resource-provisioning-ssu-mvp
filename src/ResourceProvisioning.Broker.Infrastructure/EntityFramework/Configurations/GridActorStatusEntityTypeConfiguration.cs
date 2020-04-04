@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Abstractions.Grid;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentStatusEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentStatus>
+	class GridActorStatusEntityTypeConfiguration : IEntityTypeConfiguration<GridActorStatus>
 	{
-		public void Configure(EntityTypeBuilder<EnvironmentStatus> configuration)
+		public void Configure(EntityTypeBuilder<GridActorStatus> configuration)
 		{
-			configuration.ToTable("EnvironmentStatus", DomainContext.DEFAULT_SCHEMA);
+			configuration.ToTable("Status", DomainContext.DEFAULT_SCHEMA);
 			configuration.HasKey(o => o.Id);
 
 			configuration.Property(o => o.Id)

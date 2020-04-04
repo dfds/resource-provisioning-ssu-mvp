@@ -1,14 +1,9 @@
-﻿using System.Reflection;
-using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using ResourceProvisioning.Broker.Application;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware;
-using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Host.Api
 {
@@ -39,7 +34,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
-			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new OpenApiInfo
@@ -48,19 +42,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 					Version = "v1"
 				});
 			});
-
-			services.AddDbContext<DomainContext>(options => 
-			{
-				options.UseSqlite(Configuration.GetConnectionString(nameof(DomainContext)),
-									sqliteOptionsAction: sqliteOptions => 
-									{
-										sqliteOptions.MigrationsAssembly(typeof(Startup).GetTypeInfo().Assembly.GetName().Name);
-										sqliteOptions.MigrationsHistoryTable(typeof(Startup).GetTypeInfo().Assembly.GetName().Name + "MigrationHistory");
-									});
-			}, ServiceLifetime.Scoped);
-
-			//TODO: Register remaining dependencies (eventhandlers, commandhandlers, services, repos, etc).
-			services.Configure<ProvisioningBrokerOptions>(Configuration);
 		}
 		
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -12,7 +12,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Idempotency
 	/// </summary>
 	/// <typeparam name="T">Type of the command handler that performs the operation if request is not duplicated</typeparam>
 	/// <typeparam name="R">Return value of the inner command handler</typeparam>
-	public class IdentifiedCommandHandler<T, R> : BaseCommandHandler<IdentifiedCommand<T, R>, R> where T : ICommand<R>
+	public class IdentifiedCommandHandler<T, R> : CommandHandler<IdentifiedCommand<T, R>, R> where T : ICommand<R>
 	{
 		private readonly IRequestManager _requestManager;
 

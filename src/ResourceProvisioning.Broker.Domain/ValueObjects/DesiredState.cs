@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using ResourceProvisioning.Abstractions.Entities;
+using ResourceProvisioning.Abstractions.Grid;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	public sealed class DesiredState : BaseValueObject
+	public sealed class DesiredState : ValueObject, IDesiredState
 	{
 		public string Option1 { get; private set; }
 

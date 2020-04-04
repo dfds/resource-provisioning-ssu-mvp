@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.EnvironmentAggregate.Environment>
+	class EnvironmentRootEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot>
 	{
-		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.Environment> configuration)
+		public void Configure(EntityTypeBuilder<Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot> configuration)
 		{
 			configuration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
 			configuration.HasKey(o => o.Id);
@@ -20,7 +20,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 
 			configuration.OwnsOne(o => o.DesiredState);
 
-			var navigation = configuration.Metadata.FindNavigation(nameof(Domain.Aggregates.EnvironmentAggregate.Environment.Resources));
+			var navigation = configuration.Metadata.FindNavigation(nameof(Domain.Aggregates.EnvironmentAggregate.EnvironmentRoot.Resources));
 
 			navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}

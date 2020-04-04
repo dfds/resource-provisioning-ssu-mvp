@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Repositories;
+using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 
 namespace ResourceProvisioning.Broker.Domain.Repository
 {
-	public interface IEnvironmentRepository : IRepository<Domain.Aggregates.EnvironmentAggregate.Environment>
+	public interface IEnvironmentRepository : IRepository<EnvironmentRoot>
 	{
-		Task<Domain.Aggregates.EnvironmentAggregate.Environment> GetByIdAsync(Guid environmentId);
+		Task<EnvironmentRoot> GetByIdAsync(Guid environmentId);
 	}
 }

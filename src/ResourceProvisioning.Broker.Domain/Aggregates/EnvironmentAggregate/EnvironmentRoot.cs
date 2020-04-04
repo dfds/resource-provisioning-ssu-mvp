@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
+using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Broker.Domain.Events;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
-using ResourceProvisioning.Broker.Domain.Exceptions;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
-	public sealed class Environment : BaseEntity<Guid>, IAggregateRoot
+	public sealed class EnvironmentRoot : Entity<Guid>, IAggregateRoot
 	{
-		private List<EnvironmentResource> _resources;
+		private List<EnvironmentResourceReference> _resources;
 
 		public DesiredState DesiredState { get; private set; }
 
@@ -21,27 +21,27 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 
 		public DateTime CreateDate => DateTime.UtcNow;
 
-		public IEnumerable<EnvironmentResource> Resources => _resources.AsReadOnly();
+		public IEnumerable<EnvironmentResourceReference> Resources => _resources.AsReadOnly();
 
-		private Environment() : base()
+		private EnvironmentRoot() : base()
 		{
-			_resources = new List<EnvironmentResource>();
+			_resources = new List<EnvironmentResourceReference>();
 		}
 
-		public Environment(DesiredState desiredState) : this()
+		public EnvironmentRoot(DesiredState desiredState) : this()
 		{
 			DesiredState = desiredState;
 			
 			AddDomainEvent(new EnvironmentCreatedEvent(this));
 		}
 
-		public void AddResource(Guid resourceId, DateTime provisioned, string comment, bool isDesired)
+		public void AddResource(Guid resourceId, DateTime provisioned, string comment)
 		{
-			var existingResource = _resources.Where(o => o.Id == resourceId).SingleOrDefault();
+			var existingResource = _resources.Where(o => o.ResourceId == resourceId).SingleOrDefault();
 
 			if (existingResource == null)
 			{        
-				var resource = new EnvironmentResource(resourceId, provisioned, comment, isDesired);
+				var resource = new EnvironmentResourceReference(resourceId, provisioned, comment);
 
 				var validationResult = resource.Validate(new ValidationContext(resource));
 
@@ -49,7 +49,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 				{
 					var innerException = new AggregateException(validationResult.Select(o => new Exception(o.ErrorMessage)));
 
-					throw new EnvironmentDomainException(nameof(resource), innerException);
+					throw new ProvisioningBrokerDomainException(nameof(resource), innerException);
 				}
 
 				_resources.Add(resource);
@@ -66,26 +66,26 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 
 		public void Initialize()
 		{
-			_statusId = EnvironmentStatus.Initializing.Id;
+			_statusId = GridActorStatus.Initializing.Id;
 
 			AddDomainEvent(new EnvironmentInitializingEvent(Id));
 		}
 
 		public void Start()
 		{
-			if (_statusId == EnvironmentStatus.Initializing.Id && HasDesiredState())
+			if (_statusId == GridActorStatus.Initializing.Id)
 			{
-				_statusId = EnvironmentStatus.Started.Id;
+				_statusId = GridActorStatus.Started.Id;
 
 				AddDomainEvent(new EnvironmentStartedEvent(Id));
 			}
 		}
 
-		public void Terminate()
+		public void Stop()
 		{
-			_statusId = EnvironmentStatus.Terminated.Id;
+			_statusId = GridActorStatus.Stopped.Id;
 
-			AddDomainEvent(new EnvironmentTerminatedEvent(Id));
+			AddDomainEvent(new EnvironmentStoppedEvent(Id));
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -94,11 +94,6 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			{
 				yield return new ValidationResult(nameof(DesiredState));
 			}
-		}
-
-		private bool HasDesiredState() 
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

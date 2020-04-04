@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace ResourceProvisioning.Abstractions.Entities
 {
-	public abstract class BaseValueObject
+	public abstract class ValueObject
 	{
-		protected static bool EqualOperator(BaseValueObject left, BaseValueObject right)
+		protected static bool EqualOperator(ValueObject left, ValueObject right)
 		{
 			if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
 			{
@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 			return ReferenceEquals(left, null) || left.Equals(right);
 		}
 
-		protected static bool NotEqualOperator(BaseValueObject left, BaseValueObject right)
+		protected static bool NotEqualOperator(ValueObject left, ValueObject right)
 		{
 			return !(EqualOperator(left, right));
 		}
@@ -29,7 +29,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 				return false;
 			}
 
-			var other = (BaseValueObject)obj;
+			var other = (ValueObject)obj;
 			var thisValues = GetAtomicValues().GetEnumerator();
 			var otherValues = other.GetAtomicValues().GetEnumerator();
 
@@ -56,9 +56,9 @@ namespace ResourceProvisioning.Abstractions.Entities
 			 .Aggregate((x, y) => x ^ y);
 		}
 
-		public BaseValueObject GetCopy()
+		public ValueObject GetCopy()
 		{
-			return this.MemberwiseClone() as BaseValueObject;
+			return this.MemberwiseClone() as ValueObject;
 		}
 	}
 }

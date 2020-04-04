@@ -5,16 +5,16 @@ using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentResourceEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentResource>
+	class EnvironmentResourceReferenceEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentResourceReference>
 	{
-		public void Configure(EntityTypeBuilder<EnvironmentResource> configuration)
+		public void Configure(EntityTypeBuilder<EnvironmentResourceReference> configuration)
 		{
-			configuration.ToTable("EnvironmentResource", DomainContext.DEFAULT_SCHEMA);
+			configuration.ToTable("EnvironmentResourceReference", DomainContext.DEFAULT_SCHEMA);
 			configuration.HasKey(o => o.Id);
 			configuration.Ignore(b => b.DomainEvents);
 			configuration.Property<Guid>("EnvironmentId").IsRequired();
+			configuration.Property<Guid>("ResourceId").IsRequired();
 			configuration.Property<DateTime>("Provisioned").IsRequired();
-			configuration.Property<bool>("IsDesired").IsRequired();
 			configuration.Property<string>("Comment").IsRequired();
 		}
 	}

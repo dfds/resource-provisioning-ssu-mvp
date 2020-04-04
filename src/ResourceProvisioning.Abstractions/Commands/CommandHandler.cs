@@ -4,11 +4,11 @@ using MediatR;
 
 namespace ResourceProvisioning.Abstractions.Commands
 {
-	public abstract class BaseCommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse> where TRequest : ICommand<TResponse>
+	public abstract class CommandHandler<TRequest, TResponse> : ICommandHandler<TRequest, TResponse> where TRequest : ICommand<TResponse>
 	{
 		protected readonly IMediator _mediator;
 
-		protected BaseCommandHandler(IMediator mediator) 
+		protected CommandHandler(IMediator mediator) 
 		{
 			_mediator = mediator;
 		}

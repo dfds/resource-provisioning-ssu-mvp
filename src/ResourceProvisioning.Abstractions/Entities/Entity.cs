@@ -4,7 +4,7 @@ using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Abstractions.Entities
 {
-	public abstract class BaseEntity<TKey> : IEntity<TKey> where TKey : struct
+	public abstract class Entity<TKey> : IEntity<TKey> where TKey : struct
 	{
 		int? _requestedHashCode;
 
@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 		[Required]
 		public TKey Id { get; protected set; }
 
-		protected BaseEntity()
+		protected Entity()
 		{
 
 		}
@@ -43,7 +43,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 
 		public override bool Equals(object obj)
 		{
-			if (obj == null || !(obj is BaseEntity<TKey>))
+			if (obj == null || !(obj is Entity<TKey>))
 				return false;
 
 			if (ReferenceEquals(this, obj))
@@ -52,7 +52,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 			if (this.GetType() != obj.GetType())
 				return false;
 
-			var item = (BaseEntity<TKey>)obj;
+			var item = (Entity<TKey>)obj;
 
 			if (item.IsTransient() || this.IsTransient())
 				return false;
@@ -73,7 +73,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 				return base.GetHashCode();
 
 		}
-		public static bool operator ==(BaseEntity<TKey> left, BaseEntity<TKey> right)
+		public static bool operator ==(Entity<TKey> left, Entity<TKey> right)
 		{
 			if (Equals(left, null))
 				return Equals(right, null) ? true : false;
@@ -81,7 +81,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 				return left.Equals(right);
 		}
 
-		public static bool operator !=(BaseEntity<TKey> left, BaseEntity<TKey> right)
+		public static bool operator !=(Entity<TKey> left, Entity<TKey> right)
 		{
 			return !(left == right);
 		}

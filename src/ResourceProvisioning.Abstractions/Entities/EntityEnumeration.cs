@@ -5,16 +5,16 @@ using System.Reflection;
 
 namespace ResourceProvisioning.Abstractions.Entities
 {
-	public abstract class BaseEnumeration : IComparable
+	public abstract class EntityEnumeration : IComparable
 	{
 		public string Name { get; private set; }
 
 		public int Id { get; private set; }
 
-		protected BaseEnumeration()
+		protected EntityEnumeration()
 		{ }
 
-		protected BaseEnumeration(int id, string name)
+		protected EntityEnumeration(int id, string name)
 		{
 			Id = id;
 			Name = name;
@@ -22,7 +22,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 
 		public override string ToString() => Name;
 
-		public static IEnumerable<T> GetAll<T>() where T : BaseEnumeration
+		public static IEnumerable<T> GetAll<T>() where T : EntityEnumeration
 		{
 			var fields = typeof(T).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.DeclaredOnly);
 
@@ -31,7 +31,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is BaseEnumeration otherValue))
+			if (!(obj is EntityEnumeration otherValue))
 			{ 
 				return false;
 			}
@@ -44,25 +44,25 @@ namespace ResourceProvisioning.Abstractions.Entities
 
 		public override int GetHashCode() => Id.GetHashCode();
 
-		public static int AbsoluteDifference(BaseEnumeration firstValue, BaseEnumeration secondValue)
+		public static int AbsoluteDifference(EntityEnumeration firstValue, EntityEnumeration secondValue)
 		{
 			var absoluteDifference = Math.Abs(firstValue.Id - secondValue.Id);
 			return absoluteDifference;
 		}
 
-		public static T FromValue<T>(int value) where T : BaseEnumeration
+		public static T FromValue<T>(int value) where T : EntityEnumeration
 		{
 			var matchingItem = Parse<T, int>(value, "value", item => item.Id == value);
 			return matchingItem;
 		}
 
-		public static T FromDisplayName<T>(string displayName) where T : BaseEnumeration
+		public static T FromDisplayName<T>(string displayName) where T : EntityEnumeration
 		{
 			var matchingItem = Parse<T, string>(displayName, "display name", item => item.Name == displayName);
 			return matchingItem;
 		}
 
-		private static T Parse<T, K>(K value, string description, Func<T, bool> predicate) where T : BaseEnumeration
+		private static T Parse<T, K>(K value, string description, Func<T, bool> predicate) where T : EntityEnumeration
 		{
 			var matchingItem = GetAll<T>().FirstOrDefault(predicate);
 
@@ -74,6 +74,6 @@ namespace ResourceProvisioning.Abstractions.Entities
 			return matchingItem;
 		}
 
-		public int CompareTo(object other) => Id.CompareTo(((BaseEnumeration)other).Id);
+		public int CompareTo(object other) => Id.CompareTo(((EntityEnumeration)other).Id);
 	}
 }

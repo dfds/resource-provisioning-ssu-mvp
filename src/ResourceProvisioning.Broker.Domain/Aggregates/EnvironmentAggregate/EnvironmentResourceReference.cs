@@ -5,24 +5,23 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 {
-	public sealed class EnvironmentResource : BaseEntity<Guid>
-	{			   
-		public DateTime Provisioned { get; private set; }
+	public sealed class EnvironmentResourceReference : Entity<Guid>
+	{
+		public Guid ResourceId { get; private set; }
 
-		public bool IsDesired { get; private set; }
+		public DateTime Provisioned { get; private set; }
 
 		public string Comment { get; private set; }
 
-		private EnvironmentResource() : base()
+		private EnvironmentResourceReference() : base()
 		{
 		}
 
-		public EnvironmentResource(Guid id, DateTime provisioned, string comment, bool isDesired) : this()
+		public EnvironmentResourceReference(Guid resourceId, DateTime provisioned, string comment) : this()
 		{
-			Id = id;
+			ResourceId = resourceId;
 			Provisioned = provisioned;
 			Comment = comment;
-			IsDesired = isDesired;
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
