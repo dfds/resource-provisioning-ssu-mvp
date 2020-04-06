@@ -9,15 +9,15 @@ using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application
 {
-	public class ProvisioningBroker : IProvisioningBroker
+	public class ProvisioningBroker : IProvisioningProvider
 	{
 		private readonly IMediator _mediator;
 		private readonly IControlPlaneService _controlPlaneService;
 		private readonly ProvisioningBrokerOptions _options;
 
-		public Guid Id { get; internal set; }
+		public Guid Id => Guid.NewGuid();
 
-        public GridActorType Type => GridActorType.System;
+		public GridActorType Type => GridActorType.System;
 
 		public IDesiredState DesiredState => throw new NotImplementedException();
 

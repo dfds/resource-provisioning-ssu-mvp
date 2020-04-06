@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>Library</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Properties\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ResourceProvisioning.Provider.Domain\ResourceProvisioning.Provider.Domain.csproj" />
+    </ItemGroup>
+
+
+</Project>
