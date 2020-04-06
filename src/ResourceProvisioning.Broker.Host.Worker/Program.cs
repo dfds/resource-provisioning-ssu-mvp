@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ResourceProvisioning.Broker.Application;
 
 namespace ResourceProvisioning.Broker.Host.Worker
 {
@@ -15,6 +17,10 @@ namespace ResourceProvisioning.Broker.Host.Worker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                });
+
+					services.AddProvisioningBroker(options => {
+						hostContext.Configuration.Bind(options);
+					});
+				});
     }
 }
