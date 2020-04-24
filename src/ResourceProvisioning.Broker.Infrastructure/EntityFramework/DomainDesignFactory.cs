@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {
-	public class ContextProcessingDesignFactory : IDesignTimeDbContextFactory<DomainContext>
+	public class DomainDesignFactory : IDesignTimeDbContextFactory<DomainContext>
 	{
 		public DomainContext CreateDbContext(string[] args)
 		{
