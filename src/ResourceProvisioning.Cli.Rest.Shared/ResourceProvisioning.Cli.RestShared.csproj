@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ResourceProvisioning.Cli.RestShared</AssemblyName>
+    <RootNamespace>ResourceProvisioning.Cli.RestShared</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ResourceProvisioning.Cli.Core\ResourceProvisioning.Cli.Core.csproj" />
+  </ItemGroup>
+
+</Project>

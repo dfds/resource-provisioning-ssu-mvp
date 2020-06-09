@@ -1,0 +1,18 @@
+{
+  "name": "not-grafana-x45ah",
+  "apiVersion": "v2",
+  "labels": [
+    {
+      "key": "app-type",
+      "value": "not-dashboard"
+    },
+    {
+      "key": "owner",
+      "value": "sandbox-mikkel-x7aj1"
+    }
+  ],
+  "properties": {
+    "ui-theme": "bright-as-f",
+    "timezone": "UTC"
+  }
+}
