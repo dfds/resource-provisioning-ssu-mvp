@@ -10,6 +10,12 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public int Version { get; protected set; } = 1;
 
+		public Guid CorrelationId => throw new NotImplementedException();
+
+		public int SchemaVersion => throw new NotImplementedException();
+
+		public string EventType => throw new NotImplementedException();
+
 		protected PivotEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
 		{
 			if (id.HasValue)
