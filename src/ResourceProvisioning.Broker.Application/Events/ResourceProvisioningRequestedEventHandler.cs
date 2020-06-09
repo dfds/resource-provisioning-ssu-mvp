@@ -4,9 +4,9 @@ using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Application.Events
 {
-	public class ResourceProvisioningCompletedEventHandler : IPivotEventHandler<ResourceProvisioningCompletedEvent>
+	public class ResourceProvisioningRequestedEventHandler : IPivotEventHandler<ResourceProvisioningRequestedEvent>
 	{	
-		public Task Handle(ResourceProvisioningCompletedEvent @event, CancellationToken cancellationToken = default)
+		public Task Handle(ResourceProvisioningRequestedEvent @event, CancellationToken cancellationToken = default)
 		{
 			throw new System.NotImplementedException();
 		}

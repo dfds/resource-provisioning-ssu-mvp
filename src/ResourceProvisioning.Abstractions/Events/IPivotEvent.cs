@@ -2,13 +2,16 @@
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public interface IIntegrationEvent : IEvent
+	public interface IPivotEvent : IEvent
 	{
 		Guid Id { get; }
 
+		Guid CorrelationId { get; }
+
 		DateTime CreationDate { get; }
 
-		int Version { get; }
+		int SchemaVersion { get; }
 
+		string EventType { get; }
 	}
 }

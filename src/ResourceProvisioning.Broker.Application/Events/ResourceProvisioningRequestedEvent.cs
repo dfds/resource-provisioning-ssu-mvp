@@ -4,10 +4,10 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Application.Events
 {
-	public class ResourceProvisioningCompletedEvent : PivotEvent, IProvisioningEvent
+	public class ResourceProvisioningRequestedEvent : PivotEvent, IProvisioningEvent
 	{
 		public Guid ResourceId { get; private set; }
 
-		public ResourceProvisioningCompletedEvent(Guid resourceId) => ResourceId = resourceId;
+		public ResourceProvisioningRequestedEvent(Guid resourceId) => ResourceId = resourceId;
 	}
 }
