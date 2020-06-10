@@ -24,7 +24,7 @@ steps:
 
 - script: |
     ls
-    cp -r ssp/.git .
+    cp -r resource-provisioning-ssu-mvp/.git .
   displayName: Hacky alternative to GitVersion targetPath
 
 - task: UseGitVersion@5
@@ -45,7 +45,7 @@ steps:
     ls
     echo "Eh"
     ls ..
-    cd ssp/pipeline/ssucli
+    cd resource-provisioning-ssu-mvp/pipeline/ssucli
     pwsh test.ps1
   displayName: 'Run acceptance tests'
 # [X] Redo line with SSP-resource-poc
@@ -54,14 +54,14 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testRunner: VSTest
-    testResultsFiles: 'ssp/pipeline/ssucli/test-results/*.trx'
+    testResultsFiles: 'resource-provisioning-ssu-mvp/pipeline/ssucli/test-results/*.trx'
     failTaskOnFailedTests: true
   displayName: 'Publish test results'
 # [X] Redo line with SsuCli
 # Potentially fixed, test pipeline BEFORE removing this.
 
 - script: |
-    cd ssp/pipeline/ssucli
+    cd resource-provisioning-ssu-mvp/pipeline/ssucli
     GIT_MSG=$(git log -1 --pretty=%B)
     echo "##vso[task.setvariable variable=GIT_MSG]$GIT_MSG"
     pwsh build.ps1 win-x64 $APP_VERSION
@@ -94,7 +94,7 @@ steps:
   displayName: 'Build docker image'
   env:
     PAYLOAD_DIR: $(Build.ArtifactStagingDirectory)
-    SRC_DIR: $(Build.SourcesDirectory)/ssp
+    SRC_DIR: $(Build.SourcesDirectory)/resource-provisioning-ssu-mvp
     APP_VERSION: $(GitVersion.SemVer)
 
 - task: PublishBuildArtifacts@1
@@ -111,7 +111,7 @@ steps:
     echo $APP_VERSION
     git tag -a $APP_VERSION -m "$(GIT_MSG)"
     echo "PRE release-to-github.ps1"
-    pwsh $SRC_DIR/ssp/pipeline/ssucli/release-to-github.ps1 -inputFolder $PAYLOAD_DIR -appVersion $APP_VERSION
+    pwsh $SRC_DIR/resource-provisioning-ssu-mvp/pipeline/ssucli/release-to-github.ps1 -inputFolder $PAYLOAD_DIR -appVersion $APP_VERSION
   displayName: 'Release'
   env:
     GITHUB_TOKEN: $(release_ado_pipeline)
