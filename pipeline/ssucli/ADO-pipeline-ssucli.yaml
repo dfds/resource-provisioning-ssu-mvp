@@ -20,7 +20,9 @@ pool:
 steps:
 - checkout: SsuCli
 
-- checkout: ssp
+#- checkout: ssp
+
+- checkout: self
 
 - script: |
     ls
