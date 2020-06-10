@@ -4,7 +4,7 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Application.Events
 {
-	public class ResourceProvisioningRequestedEvent : PivotEvent, IProvisioningEvent
+	public class ResourceProvisioningRequestedEvent : IntegrationEvent, IProvisioningEvent
 	{
 		public Guid ResourceId { get; private set; }
 

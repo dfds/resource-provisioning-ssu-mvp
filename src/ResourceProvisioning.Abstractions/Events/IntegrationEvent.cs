@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public abstract class PivotEvent : IPivotEvent
+	public abstract class IntegrationEvent : IIntegrationEvent
 	{
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
@@ -12,11 +12,11 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public Guid CorrelationId => throw new NotImplementedException();
 
-		public int SchemaVersion => throw new NotImplementedException();
+		public int SchemaVersion => 1;
 
-		public string EventType => throw new NotImplementedException();
+		public string Type => throw new NotImplementedException();
 
-		protected PivotEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
+		protected IntegrationEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
 		{
 			if (id.HasValue)
 			{
