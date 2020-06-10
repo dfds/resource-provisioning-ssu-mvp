@@ -23,6 +23,7 @@ steps:
 - checkout: ssp
 
 - script: |
+    ls
     cp -r ssp/.git .
   displayName: Hacky alternative to GitVersion targetPath
 
