@@ -1,8 +1,8 @@
-﻿using System;
+﻿ using System;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public interface IPivotEvent : IEvent
+	public interface IIntegrationEvent : IEvent
 	{
 		Guid Id { get; }
 
@@ -12,6 +12,6 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		int SchemaVersion { get; }
 
-		string EventType { get; }
+		string Type { get; }
 	}
 }
