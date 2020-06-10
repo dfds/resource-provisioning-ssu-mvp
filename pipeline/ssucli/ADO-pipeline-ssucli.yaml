@@ -44,7 +44,8 @@ steps:
 - script: |
     ls
     echo "Eh"
-    ls ..
+    ls resource-provisioning-ssu-mvp
+    ls resource-provisioning-ssu-mvp/pipeline
     cd resource-provisioning-ssu-mvp/pipeline/ssucli
     pwsh test.ps1
   displayName: 'Run acceptance tests'
