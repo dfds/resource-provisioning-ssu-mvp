@@ -52,11 +52,6 @@ namespace ResourceProvisioning.Cli.RestClient.Core
             return actualState;
         }
 
-        public Task SubmitDesiredStateAsync(Guid environmentId, DesiredState desiredState)
-        {
-	        throw new NotImplementedException();
-        }
-
         public async Task SubmitDesiredStateAsync(
             Guid environmentId, 
             DesiredState desiredState

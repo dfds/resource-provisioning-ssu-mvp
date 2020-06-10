@@ -1,5 +1,4 @@
 using System.Net.Http;
-using RestClient.Core;
 
 namespace ResourceProvisioning.Cli.RestClient.Core
 {
