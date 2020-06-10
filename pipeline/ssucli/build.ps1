@@ -19,18 +19,18 @@ dotnet publish -p:Version="$appVersion" ../../src/ResourceProvisioning.Cli.Appli
 
 $publishedFileName
 
-$fileToCheck = $publishOutputFolder + "/SsuCli.exe"
+$fileToCheck = $publishOutputFolder + "/ResourceProvisioning.Cli.Application.exe"
 $destinationFile
 
 ## windows path
 if (Test-Path $fileToCheck -PathType leaf)
 {
-  $publishedFileName = "SsuCli.exe"
+  $publishedFileName = "ResourceProvisioning.Cli.Application.exe"
   $destinationFile = $outputFolder + "/SsuCli-" + $runtime + ".exe"
 }
 else
 {
-  $publishedFileName = "SsuCli"
+  $publishedFileName = "ResourceProvisioning.Cli.Application"
   $destinationFile = $outputFolder + "/SsuCli-" + $runtime
 }
 
