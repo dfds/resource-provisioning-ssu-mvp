@@ -1,0 +1,119 @@
+trigger: none
+pr: none
+resources:
+  repositories:
+  - repository: SsuCli
+    type: github
+    endpoint: ado_serviceconnection
+    name: dfds/SsuCli
+  - repository: ssp
+    type: github
+    endpoint: ado_serviceconnection
+    name: dfds/resource-provisioning-ssu-mvp
+
+variables:
+- group: GitHub-tokens
+    
+pool:
+  vmImage: 'ubuntu-18.04'
+
+steps:
+- checkout: SsuCli
+
+#- checkout: ssp
+
+- checkout: self
+
+- script: |
+    ls
+    cp -r resource-provisioning-ssu-mvp/.git .
+  displayName: Hacky alternative to GitVersion targetPath
+
+- task: UseGitVersion@5
+  inputs:
+#    workingDirectory: /
+#    targetPath: /SSP-resource-poc
+    versionSpec: '5.x'
+    # Take a look at https://stackoverflow.com/questions/49990026/how-can-i-get-gitversion-updateassemblyinfo-to-work-with-asp-net-core-2-0-proje
+    #updateAssemblyInfo: true
+
+
+# linux-musl-x64 is used for the Docker image created later on.
+- script: |
+    rm -rf .git
+  displayName: Hacky alternative to GitVersion targetPath 02    
+
+- script: |
+    ls
+    echo "Eh"
+    ls resource-provisioning-ssu-mvp
+    ls resource-provisioning-ssu-mvp/pipeline
+    cd resource-provisioning-ssu-mvp/pipeline/ssucli
+    pwsh test.ps1
+  displayName: 'Run acceptance tests'
+  enabled: false
+  # TO BE RE-ENABLED. CURRENTLY TESTS WILL FAIL IN PARALLEL.
+
+- task: PublishTestResults@2
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: 'resource-provisioning-ssu-mvp/pipeline/ssucli/test-results/*.trx'
+    failTaskOnFailedTests: true
+  displayName: 'Publish test results'
+
+- script: |
+    cd resource-provisioning-ssu-mvp/pipeline/ssucli
+    GIT_MSG=$(git log -1 --pretty=%B)
+    echo "##vso[task.setvariable variable=GIT_MSG]$GIT_MSG"
+    pwsh build.ps1 win-x64 $APP_VERSION
+    pwsh build.ps1 win-arm64 $APP_VERSION
+    pwsh build.ps1 linux-x64 $APP_VERSION
+    pwsh build.ps1 linux-musl-x64 $APP_VERSION
+    pwsh build.ps1 linux-arm64 $APP_VERSION
+    pwsh build.ps1 osx-x64 $APP_VERSION
+    mv output/* $ARTIFACT_STAGING_DIRECTORY/
+  displayName: 'Build'
+  env:
+    ARTIFACT_STAGING_DIRECTORY: $(Build.ArtifactStagingDirectory)
+    APP_VERSION: $(GitVersion.FullSemVer)
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Docker Cloud - dfdsazuredevops'
+    command: 'login'
+    addPipelineData: false
+
+- script: |
+    cd $SRC_DIR
+    docker build -f $SRC_DIR/SsuCli.Dockerfile -t ded/ssucli:latest $PAYLOAD_DIR
+    docker tag ded/ssucli:latest dfdsdk/ssucli:latest
+    docker tag ded/ssucli:latest dfdsdk/ssucli:$APP_VERSION
+    docker push dfdsdk/ssucli:latest
+    docker push dfdsdk/ssucli:$APP_VERSION
+  displayName: 'Build docker image'
+  env:
+    PAYLOAD_DIR: $(Build.ArtifactStagingDirectory)
+    SRC_DIR: $(Build.SourcesDirectory)/resource-provisioning-ssu-mvp
+    APP_VERSION: $(GitVersion.SemVer)
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: binaries
+  displayName: 'Publish artifacts'
+
+- script: |
+    cd SsuCli
+    git config --global user.email "github.devex@dfds.com"
+    git config --global user.name "Dev-Excellence Service Account"
+    echo "PRE git tag"
+    echo $APP_VERSION
+    git tag -a $APP_VERSION -m "$(GIT_MSG)"
+    echo "PRE release-to-github.ps1"
+    pwsh $SRC_DIR/resource-provisioning-ssu-mvp/pipeline/ssucli/release-to-github.ps1 -inputFolder $PAYLOAD_DIR -appVersion $APP_VERSION
+  displayName: 'Release'
+  env:
+    GITHUB_TOKEN: $(release_ado_pipeline)
+    APP_VERSION: $(GitVersion.FullSemVer)
+    PAYLOAD_DIR: $(Build.ArtifactStagingDirectory)
+    SRC_DIR: $(Build.SourcesDirectory)
