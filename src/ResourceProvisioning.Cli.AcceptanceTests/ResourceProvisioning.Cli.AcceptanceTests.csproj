@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ResourceProvisioning.Cli.Application\ResourceProvisioning.Cli.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Commands\TestMaterial\single-resource-manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

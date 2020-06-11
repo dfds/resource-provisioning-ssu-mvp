@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ResourceProvisioning.Cli.Infrastructure</AssemblyName>
+    <RootNamespace>ResourceProvisioning.Cli.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ResourceProvisioning.Abstractions\ResourceProvisioning.Abstractions.csproj" />
+    <ProjectReference Include="..\ResourceProvisioning.Cli.Core\ResourceProvisioning.Cli.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
