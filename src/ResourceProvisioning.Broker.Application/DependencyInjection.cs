@@ -22,16 +22,20 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddOptions();
 			services.Configure(configureOptions);
 
-			services.AddTelemetry();
-			services.AddBehaviors();
-			services.AddCommandHandlers();
-			services.AddEventHandlers();
-			services.AddIdempotency();
-			services.AddPersistancy(configureOptions);
-			services.AddRepositories();
-			services.AddServices();
+      //
+      /// Disabled due to it not working out of the box, and fixing it isn't in the scope of Story #2612 - CLI: login via OpenId
+      //
+      
+			//services.AddTelemetry();
+			//services.AddBehaviors();
+			//services.AddCommandHandlers();
+			//services.AddEventHandlers();
+			//services.AddIdempotency();
+			//services.AddPersistancy(configureOptions);
+			//services.AddRepositories();
+			//services.AddServices();
 
-			services.AddSingleton<IProvisioningBroker>();
+			//services.AddSingleton<IProvisioningBroker>();
 		}
 
 		private static void AddTelemetry(this IServiceCollection services)
