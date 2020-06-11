@@ -1,77 +1,71 @@
-﻿//using System;
-//using System.IO;
-//using System.Threading.Tasks;
-//using Microsoft.Extensions.DependencyInjection;
-//using Moq;
-//using Moq.AutoMock;
-//using ResourceProvisioning.Cli.Application;
-//using ResourceProvisioning.Cli.Core.Core.Models;
-//using ResourceProvisioning.Cli.RestClient.Core;
-//using Xunit;
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Moq.AutoMock;
+using ResourceProvisioning.Cli.Application;
+using ResourceProvisioning.Cli.Application.Models;
+using ResourceProvisioning.Cli.Infrastructure.Net.Http;
+using Xunit;
 
-//namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
-//{
-//    public class ApplyCommandWithFullyQualifiedPathScenario
-//    {
-//        [Fact]
-//        public async Task SubmitDesiredStateToBroker()
-//        {
-//            await Given_an_environment_id();
-//            await And_a_rest_client();
-//            await When_apply_is_given_a_fully_qualified_path();
-//            await Then_rest_client_posts_provisioning_request_to_broker();
-//        }
+namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
+{
+	public class ApplyCommandWithFullyQualifiedPathScenario
+	{
+		private Mock<IBrokerClient> _brokerClientMock;
+		private Guid _environmentId;
 
-//        private async Task Given_an_environment_id()
-//        {
-//            _environmentId = Guid.NewGuid();
-//        }
+		[Fact]
+		public async Task SubmitDesiredStateToBroker()
+		{
+			await Given_an_environment_id();
+			await And_a_rest_client();
+			await When_apply_is_given_a_fully_qualified_path();
+			await Then_rest_client_posts_provisioning_request_to_broker();
+		}
 
-//        private async Task And_a_rest_client()
-//        {
-//            var mocker = new AutoMocker();
-//            _stateClientMock = mocker.GetMock<IStateClient>();
+		private async Task Given_an_environment_id()
+		{
+			_environmentId = Guid.NewGuid();
+		}
 
-//            _stateClientMock.Setup(o => o.SubmitDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>()))
-//                .Returns(Task.CompletedTask);
+		private async Task And_a_rest_client()
+		{
+			var mocker = new AutoMocker();
+			_brokerClientMock = mocker.GetMock<IBrokerClient>();
 
-//            var restClientMock = mocker.GetMock<IRestClient>();
+			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()))
+				.Returns(Task.CompletedTask);
+		}
 
-//            restClientMock.Setup(o => o.State).Returns(_stateClientMock.Object);
+		private async Task When_apply_is_given_a_fully_qualified_path()
+		{
+			var serviceCollection = new ServiceCollection();
 
-//            _restClient = restClientMock.Object;
-//        }
+			serviceCollection.AddTransient(factory => _brokerClientMock.Object);
 
-//        private async Task When_apply_is_given_a_fully_qualified_path()
-//        {
-//            var serviceCollection = new ServiceCollection();
+			Program.RuntimeServices = serviceCollection;
 
-//            serviceCollection.AddTransient(factory => _restClient);
+			var manifestPath = Path.Combine(
+				Environment.CurrentDirectory,
+				@"Commands/TestMaterial",
+				"single-resource-manifest.json"
+			);
 
-//            Program.RuntimeServices = serviceCollection;
-
-//            var manifestPath = Path.Combine(
-//                Environment.CurrentDirectory,
-//                @"Commands/TestMaterial",
-//                "single-resource-manifest.json"
-//            );
-
-//            await Program.Main(
-//                "apply",
-//                manifestPath,
-//                $"-e={_environmentId.ToString()}"
-//            );
-//        }
+			await Program.Main(
+				"apply",
+				manifestPath,
+				$"-e={_environmentId.ToString()}"
+			);
+		}
 
 
-//        private async Task Then_rest_client_posts_provisioning_request_to_broker()
-//        {
-//            _stateClientMock.Verify(mock => mock.SubmitDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>()),
-//                Times.Once());
-//        }
-
-//        private IRestClient _restClient;
-//        private Mock<IStateClient> _stateClientMock;
-//        private Guid _environmentId;
-//    }
-//}
+		private async Task Then_rest_client_posts_provisioning_request_to_broker()
+		{
+			_brokerClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()),
+				Times.Once());
+		}
+	}
+}

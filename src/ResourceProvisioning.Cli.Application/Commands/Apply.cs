@@ -56,7 +56,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
             }
             else if (Directory.Exists(DesiredStateSource))
             {
-                return await new ManifestRepository<DesiredState>(DesiredStateSource).GetStatesByIdAsync(Guid.Parse(EnvironmentId));
+                return await new ManifestRepository<DesiredState>(DesiredStateSource).GetDesiredStatesByIdAsync(Guid.Parse(EnvironmentId));
             }
             else if (File.Exists(DesiredStateSource))
             {

@@ -10,10 +10,10 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 	{
         Task StoreDesiredStateAsync(
             Guid environmentId,
-            IDesiredState desiredState
+			T desiredState
         );
 
-		Task<IEnumerable<T>> GetStatesByIdAsync(
+		Task<IEnumerable<T>> GetDesiredStatesByIdAsync(
 			Guid environmentId
 		);
 	}

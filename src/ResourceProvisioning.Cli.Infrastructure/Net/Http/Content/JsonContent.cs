@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Net.Http;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
+namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Content
 {
 	internal class JsonContent : HttpContent, IJsonContent
 	{
@@ -55,7 +54,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 			{
 				length = JsonSerializer.Serialize(Document).Length;
 			}
-			catch (Exception)
+			catch (JsonException)
 			{
 				return false;
 			}

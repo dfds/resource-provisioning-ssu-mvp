@@ -7,7 +7,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Request
 	{
 		public GetEnvironmentRequest(Guid environmentId = default)
 		{
-			var targetUri = (environmentId != Guid.Empty) ? "state" : "state/{environmentId}";
+			var targetUri = (environmentId != Guid.Empty) ? "DECIDE_ON_CONTROLLERS_WITH_EMIL" : $"DECIDE_ON_CONTROLLERS_WITH_EMIL/{environmentId}";
 			
 			Method = HttpMethod.Get;
 			RequestUri = new Uri(targetUri, UriKind.Relative);

@@ -1,30 +1,27 @@
-﻿using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
-using ResourceProvisioning.Cli.Application.Commands;
+using ResourceProvisioning.Cli.Infrastructure.Net.Http;
 
 namespace ResourceProvisioning.Cli.Application
 {
-    [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
-    [Subcommand(typeof(Apply))]
-    public class Program : CliCommand
-    {
-        public static IServiceCollection RuntimeServices { get; set; }
+	public class Program
+	{
+		public static IServiceCollection RuntimeServices { get; set; }
 
-        public async static Task Main(params string[] args) 
+		public static async Task Main(params string[] args) 
         {
-            var app = new CliApplication(RuntimeServices);
+			var app = new CommandLineApplication<CliApplication>();
 
-            await app.ExecuteAsync(args);
-        }
+			if (RuntimeServices == null)
+			{
+				RuntimeServices = new ServiceCollection()
+								.AddSingleton<IBrokerClient>(new BrokerClient());
+			}
 
-        public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
-        {
-            return await Task.FromResult(0);
-        }
+			app.Conventions.UseDefaultConventions().UseConstructorInjection(RuntimeServices.BuildServiceProvider());
 
-        private static string GetVersion() => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+			await Task.FromResult(app.ExecuteAsync(args));
+		}
     }   
 }

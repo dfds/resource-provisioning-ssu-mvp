@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Net.Http;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
+namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Response
 {
 	internal class JsonResponse : HttpResponseMessage
 	{

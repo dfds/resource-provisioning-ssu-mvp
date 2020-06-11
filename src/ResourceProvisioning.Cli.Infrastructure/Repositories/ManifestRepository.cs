@@ -24,7 +24,7 @@ namespace ResourceProvisioning.Cli.Application.Repositories
             _serializerOptions = serializerOptions;
         }
 
-		public Task<IEnumerable<T>> GetStatesByIdAsync(Guid environmentId)
+		public Task<IEnumerable<T>> GetDesiredStatesByIdAsync(Guid environmentId)
         {
             var files = Directory.GetFiles(_rootDirectory, $"*{environmentId.ToString()}*");
             var desiredStates =
@@ -48,10 +48,5 @@ namespace ResourceProvisioning.Cli.Application.Repositories
 
             return Task.CompletedTask;
         }
-
-		public Task StoreDesiredStateAsync(Guid environmentId, IDesiredState desiredState)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

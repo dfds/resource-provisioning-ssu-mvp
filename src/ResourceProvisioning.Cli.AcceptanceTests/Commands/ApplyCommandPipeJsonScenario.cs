@@ -13,7 +13,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 {
 	public class ApplyCommandPipeJsonScenario
 	{
-		private Mock<IBrokerClient> _restClientMock;
+		private Mock<IBrokerClient> _brokerClientMock;
         private Apply _applyCommand;
         private Guid _environmentId;
         private DesiredState _payload;
@@ -45,21 +45,21 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 		{
 			var mocker = new AutoMocker();
 
-			_restClientMock = mocker.GetMock<IBrokerClient>();
+			_brokerClientMock = mocker.GetMock<IBrokerClient>();
 
-			_restClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 		}
 
 		private async Task When_create_an_apply_command()
         {
-            _applyCommand = new Apply(_restClientMock.Object) { DesiredStateSource = JsonSerializer.Serialize(_payload), EnvironmentId = _environmentId.ToString() };
+            _applyCommand = new Apply(_brokerClientMock.Object) { DesiredStateSource = JsonSerializer.Serialize(_payload), EnvironmentId = _environmentId.ToString() };
         }
 
         private async Task Then_rest_client_posts_provisioning_request_to_broker()
         {
             await _applyCommand.OnExecuteAsync();
 
-			_restClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()), Times.Once());
+			_brokerClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()), Times.Once());
         }
     }
     

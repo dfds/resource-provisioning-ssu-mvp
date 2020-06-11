@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Net.Http;
 using ResourceProvisioning.Cli.Infrastructure.Net.Http.Request;
+using ResourceProvisioning.Cli.Infrastructure.Net.Http.Response;
 
 namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 {
@@ -22,7 +23,12 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 		public async Task<dynamic> GetCurrentStateByEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
 		{
 			var request = new GetEnvironmentRequest(environmentId);
-			var response = (JsonResponse)await SendAsync(request, cancellationToken);
+			var response = await SendAsync(request, cancellationToken) as JsonResponse;
+
+			if (response == null)
+			{
+				return Task.CompletedTask;
+			}
 
 			response.EnsureSuccessStatusCode();
 
