@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace ResourceProvisioning.Cli.Core.Core.Errors
+namespace ResourceProvisioning.Cli.Application.Errors
 {
     public class EnvironmentDoesNotExistException : Exception
     {

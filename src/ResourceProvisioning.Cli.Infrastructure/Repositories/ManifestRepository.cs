@@ -4,45 +4,54 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ResourceProvisioning.Cli.Core.Core.Models;
-using ResourceProvisioning.Cli.Core.Core.Repositories;
+using ResourceProvisioning.Abstractions.Data;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Cli.Infrastructure.Repositories;
 
 namespace ResourceProvisioning.Cli.Application.Repositories
 {
-    public class ManifestRepository : IDesiredStateRepository, IStateRepository
-    {
+	public class ManifestRepository<T> : IManifestRepository<T> where T : class, IDesiredState
+	{
         private readonly string _rootDirectory;
         private readonly JsonSerializerOptions _serializerOptions;
 
-        public ManifestRepository(string manifestDirectory, JsonSerializerOptions serializerOptions = default) 
+		//TODO: Down the line we should introduce a unit of work concept for this. It could be done using virtual memory mapped files which stay in memory until save changes is called.
+		public IUnitOfWork UnitOfWork => null;
+
+		public ManifestRepository(string manifestDirectory, JsonSerializerOptions serializerOptions = default) 
         {
             _rootDirectory = manifestDirectory;
             _serializerOptions = serializerOptions;
         }
 
-        public Task<IEnumerable<ActualState>> GetStatesByIdAsync(Guid environmentId)
+		public Task<IEnumerable<T>> GetStatesByIdAsync(Guid environmentId)
         {
             var files = Directory.GetFiles(_rootDirectory, $"*{environmentId.ToString()}*");
             var desiredStates =
                 files.Select(path => 
-                    JsonSerializer.Deserialize<ActualState>(
+                    JsonSerializer.Deserialize<T>(
                         File.ReadAllText(path), _serializerOptions)
                     );
 
             return Task.FromResult(desiredStates);
         }
 
-        public Task StoreDesiredStateAsync(Guid environmentId, DesiredState desiredState)
+        public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
         {
             var fileName = $"{environmentId.ToString()}.json";
             var filePath = Path.Combine(_rootDirectory, fileName);
 
             if (!File.Exists(filePath))
             {
-                File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(DesiredState)));
+                File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(T)));
             }
 
             return Task.CompletedTask;
         }
-    }
+
+		public Task StoreDesiredStateAsync(Guid environmentId, IDesiredState desiredState)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

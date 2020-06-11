@@ -22,7 +22,7 @@ namespace ResourceProvisioning.Cli.Application
 
         public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
         {
-            return 0;
+            return await Task.FromResult(0);
         }
 
         private static string GetVersion() => typeof(Program).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;

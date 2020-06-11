@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>ResourceProvisioning.Cli.Application</AssemblyName>
+        <RootNamespace>ResourceProvisioning.Cli.Application</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ResourceProvisioning.Cli.Infrastructure\ResourceProvisioning.Cli.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

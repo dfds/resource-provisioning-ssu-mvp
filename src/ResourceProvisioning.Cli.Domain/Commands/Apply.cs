@@ -1,21 +1,20 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Datadog.Trace;
 using McMaster.Extensions.CommandLineUtils;
+using ResourceProvisioning.Cli.Application.Models;
 using ResourceProvisioning.Cli.Application.Repositories;
-using ResourceProvisioning.Cli.Core.Core.Models;
-using ResourceProvisioning.Cli.RestClient.Core;
+using ResourceProvisioning.Cli.Infrastructure.Net.Http;
 
 namespace ResourceProvisioning.Cli.Application.Commands
 {
-    [Command(Description = "Applies desired state to the given environment")]
+	[Command(Description = "Applies desired state to the given environment")]
     public sealed class Apply : CliCommand
     {
-        private readonly IRestClient _client;
+        private readonly IBrokerClient _client;
 
         [Argument(0)]
         public string DesiredStateSource {
@@ -23,7 +22,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
             set;
         }
 
-        public Apply(IRestClient client)
+        public Apply(IBrokerClient client)
         {
             _client = client;
         }
@@ -32,19 +31,11 @@ namespace ResourceProvisioning.Cli.Application.Commands
         {
             try
             {
-                using (var scope = Tracer.Instance.StartActive("web.request"))
+                foreach (var desiredState in await GetDesiredStateData())
                 {
-                    var span = scope.Span;
-                    span.Type = SpanTypes.Web;
-                    span.ResourceName = "Apply.OnExecuteAsync.SubmitDesiredStateAsync";
-                    span.SetTag(Tags.HttpMethod, "POST");
+                    Console.WriteLine($"Posting desiredState {JsonSerializer.Serialize(desiredState)} to broker");
 
-                    foreach (var desiredState in await GetDesiredStateData())
-                    {
-                        Console.WriteLine($"Posting desiredState {JsonSerializer.Serialize(desiredState)} to broker");
-
-                        await _client.State.SubmitDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState);
-                    }                    
+                    await _client.ApplyDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState);
                 }
             }
             catch(Exception e)
@@ -65,7 +56,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
             }
             else if (Directory.Exists(DesiredStateSource))
             {
-                return await new ManifestRepository(DesiredStateSource).GetStatesByIdAsync(Guid.Parse(EnvironmentId));
+                return await new ManifestRepository<DesiredState>(DesiredStateSource).GetStatesByIdAsync(Guid.Parse(EnvironmentId));
             }
             else if (File.Exists(DesiredStateSource))
             {

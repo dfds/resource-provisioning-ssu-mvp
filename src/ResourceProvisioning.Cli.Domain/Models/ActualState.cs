@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace ResourceProvisioning.Cli.Core.Core.Models
+namespace ResourceProvisioning.Cli.Application.Models
 {
     public class ActualState : DesiredState
     {

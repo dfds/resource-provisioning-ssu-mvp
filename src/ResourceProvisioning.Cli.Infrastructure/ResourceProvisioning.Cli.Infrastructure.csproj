@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ResourceProvisioning.Abstractions\ResourceProvisioning.Abstractions.csproj" />
-    <ProjectReference Include="..\ResourceProvisioning.Cli.Core\ResourceProvisioning.Cli.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace ResourceProvisioning.Cli.Core.Core.Models
+﻿namespace ResourceProvisioning.Cli.Application.Models
 {
     public class Status
     {
