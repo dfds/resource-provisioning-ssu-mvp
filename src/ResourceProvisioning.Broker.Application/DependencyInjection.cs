@@ -11,6 +11,7 @@ using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
+using ResourceProvisioning.Broker.Infrastructure.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application
 {
@@ -21,6 +22,7 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddOptions();
 			services.Configure(configureOptions);
 
+			services.AddTelemetry();
 			services.AddBehaviors();
 			services.AddCommandHandlers();
 			services.AddEventHandlers();
@@ -30,6 +32,12 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddServices();
 
 			services.AddSingleton<IProvisioningBroker>();
+		}
+
+		private static void AddTelemetry(this IServiceCollection services)
+		{
+			services.AddApplicationInsightsTelemetry();
+			services.AddTransient(typeof(ITelemetryProvider), typeof(ITelemetryProvider));
 		}
 
 		private static void AddBehaviors(this IServiceCollection services)

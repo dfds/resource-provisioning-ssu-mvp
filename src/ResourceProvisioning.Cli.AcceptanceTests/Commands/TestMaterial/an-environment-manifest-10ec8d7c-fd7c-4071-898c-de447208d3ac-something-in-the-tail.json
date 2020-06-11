@@ -1,0 +1,18 @@
+{
+  "name": "grafana-x11ah",
+  "apiVersion": "v3",
+  "labels": [
+    {
+      "key": "app-type",
+      "value": "dashboard"
+    },
+    {
+      "key": "owner",
+      "value": "sandbox-emcla-x7aj1"
+    }
+  ],
+  "properties": {
+    "ui-theme": "dark",
+    "timezone": "UTC"
+  }
+}

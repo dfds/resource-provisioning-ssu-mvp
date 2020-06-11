@@ -3,21 +3,65 @@
 
 This repository contains the complete source code for the ResourceProvisioning proof-of-concept and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out DevEx for any questions/comments.
 
-## Are you here for something besides the source code?
-
-[TODO]
-
 ## Getting started
 
-[TODO]
+The project is split up in quite a few sub-projects that can be found in the "src" directory.
+
+* ResourceProvisioning.Abstractions
+* ResourceProvisioning.Broker.Application
+* ResourceProvisioning.Broker.Domain
+* ResourceProvisioning.Broker.Host.Api
+* ResourceProvisioning.Broker.Host.Worker
+* ResourceProvisioning.Broker.Infrastructure
+* ResourceProvisioning.Cli.AcceptanceTests
+* ResourceProvisioning.Cli.Application
+* ResourceProvisioning.Cli.Core
+* ResourceProvisioning.Cli.Core.Tests
+* ResourceProvisioning.Cli.Rest.Api
+* ResourceProvisioning.Cli.Rest.Client
+* ResourceProvisioning.Cli.Rest.Shared
+* ResourceProvisioning.Cli.Tests
+* ResourceProvisioning.Handler.Application
+* ResourceProvisioning.Handler.Domain
+* ResourceProvisioning.Handler.Host.Worker
+
+
+Of those the following are applications that can be built to an executable:
+* ResourceProvisioning.Broker.Application
+* ResourceProvisioning.Cli.Application
+
 
 ### Prerequisites
 
-[TODO]
+* .Net Core 3.1 SDK - https://dotnet.microsoft.com/download/dotnet-core/3.1
+* Powershell Core - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7
+
+
+*If you want to release(**Optional**)*
+
+* Docker - https://www.docker.com/
+* GitHub Hub - https://hub.github.com/
 
 ### Installing
 
-[TODO]
+* **ResourceProvisioning.Broker.Application**
+
+  [TODO]
+
+* **ResourceProvisioning.Cli.Application**
+
+  Within the following path "pipeline/ssucli", run the following Powershell script like so:
+  
+  `pwsh build.ps1 OS_TARGET APP_VERSION`
+
+  Replace *OS_TARGET* with a value supported by the .NET Core SDK runtime targets. See [here](https://docs.microsoft.com/en-us/dotnet/core/rid-catalog#using-rids) for more information on runtime targets.
+
+  Replace *APP_VERSION* with a value that follow semver, e.g. `0.1.0`.
+
+  Thus if you were to build this for a Windows platform that runs 64-Bit, with the version 0.1.0, it would look like this:
+
+  `pwsh build.ps1 win10-x64 0.1.0`
+  
 
 ## Dependencies
 
