@@ -1,23 +1,9 @@
 {
-	"iisSettings": {
-		"windowsAuthentication": false,
-		"anonymousAuthentication": true,
-		"iisExpress": {
-			"applicationUrl": "http://localhost:50900/",
-			"sslPort": 44364
-		}
-	},
 	"profiles": {
-		"IIS Express": {
-			"commandName": "IISExpress",
-			"launchBrowser": true,
-			"environmentVariables": {
-				"ASPNETCORE_ENVIRONMENT": "Development"
-			}
-		},
-		"KafkaToSignalrRelay.RestApi": {
+		"ResourceProvisioning.Broker.Host.Api": {
 			"commandName": "Project",
 			"launchBrowser": true,
+			"launchUrl": "https://localhost:50901/controlplane",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			},

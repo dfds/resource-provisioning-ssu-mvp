@@ -20,7 +20,13 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		[HttpPost()]
+		[HttpGet]
+		public async Task<IActionResult> Get()
+		{
+			return Ok("Hello world");
+		}
+		
+		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic request)
 		{
 			var command = _mapper.Map<dynamic, IProvisioningRequest>(request);

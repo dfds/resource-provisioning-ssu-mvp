@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,9 +10,14 @@ using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Abstractions.Telemetry;
+using ResourceProvisioning.Broker.Application.Behaviors;
+using ResourceProvisioning.Broker.Application.Commands.Environment;
+using ResourceProvisioning.Broker.Application.Events;
+using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.Events;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
-using ResourceProvisioning.Broker.Infrastructure.Idempotency;
+using ResourceProvisioning.Broker.Infrastructure.Repositories;
 using ResourceProvisioning.Broker.Infrastructure.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application
@@ -20,14 +26,17 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{
+			//Setup external DI configurations.
+			services.AddLogging();
 			services.AddOptions();
-			services.Configure(configureOptions);
+			services.AddAutoMapper(Assembly.GetAssembly(typeof(DependencyInjection)));
+			services.AddMediatR(typeof(DependencyInjection));
 
+			//Setup application DI configuration.
 			services.AddTelemetry();
 			services.AddBehaviors();
 			services.AddCommandHandlers();
 			services.AddEventHandlers();
-			services.AddIdempotency();
 			services.AddPersistancy(configureOptions);
 			services.AddRepositories();
 			services.AddServices();
@@ -42,52 +51,56 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddBehaviors(this IServiceCollection services)
 		{
-			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TelemetryBehavior<,>));
 		}
 
 		private static void AddCommandHandlers(this IServiceCollection services)
 		{
-			services.AddTransient(typeof(ICommandHandler<,>), typeof(ICommandHandler<,>));
+			services.AddTransient<ICommandHandler<CreateEnvironmentCommand, EnvironmentRoot>, CreateEnvironmentCommandHandler>();
 		}
 
 		private static void AddEventHandlers(this IServiceCollection services)
 		{
-			services.AddTransient(typeof(IEventHandler<>), typeof(IEventHandler<>));
+			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentStartedEvent>, EnvironmentStartedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentStoppedEvent>, EnvironmentStoppedEventHandler>();
+			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
+			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
+			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
+			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningCompletedEvent>, ResourceProvisioningCompletedEventHandler>();
+			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningRequestedEvent>, ResourceProvisioningRequestedEventHandler>();
+			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningTerminatedEvent>, ResourceProvisioningTerminatedEventHandler>();
 		}
 
-		private static void AddIdempotency(this IServiceCollection services)
-		{
-			services.AddTransient<IRequestManager, RequestManager>();
-		}
-
-		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
+		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions = default)
 		{
 			var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
 			using var serviceProvider = services.BuildServiceProvider();
 			var brokerOptions = serviceProvider.GetService<IOptions<ProvisioningBrokerOptions>>()?.Value;
 
-			if (brokerOptions != null)
+			configureOptions?.Invoke(brokerOptions);
+
+			services.AddDbContext<DomainContext>(options =>
 			{
-				services.AddDbContext<DomainContext>(options =>
+				if (brokerOptions != null)
 				{
 					options.UseSqlite(brokerOptions.ConnectionStrings.GetValue<string>(nameof(DomainContext)),
-										sqliteOptionsAction: sqliteOptions =>
-										{
-											sqliteOptions.MigrationsAssembly(callingAssemblyName);
-											sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
-										});
-				});
-			}
-			else
-			{
-				throw new ProvisioningBrokerException("Could not resolve provision broker options");
-			}
+						sqliteOptions =>
+						{
+							sqliteOptions.MigrationsAssembly(callingAssemblyName);
+							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+						});
+				}
+			});
 		}
 
 		private static void AddRepositories(this IServiceCollection services)
 		{
-			services.AddTransient(typeof(IRepository<>), typeof(IRepository<>));
+			services.AddTransient<IRepository<EnvironmentRoot>, EnvironmentRepository>();
 		}
 
 		private static void AddServices(this IServiceCollection services)
