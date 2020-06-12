@@ -9,6 +9,7 @@ namespace ResourceProvisioning.Cli.Application
 {
     [VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
     [Subcommand(typeof(Apply))]
+    [Subcommand(typeof(Login))]
     public class Program : CliCommand
     {
         public static IServiceCollection RuntimeServices { get; set; }

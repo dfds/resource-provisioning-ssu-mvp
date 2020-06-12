@@ -6,4 +6,9 @@
         <RootNamespace>ResourceProvisioning.Cli.Core</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="EmbedIO" Version="3.4.3" />
+      <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    </ItemGroup>
+
 </Project>
