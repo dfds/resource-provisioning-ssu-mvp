@@ -23,9 +23,8 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 		public async Task<dynamic> GetCurrentStateByEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
 		{
 			var request = new GetEnvironmentRequest(environmentId);
-			var response = await SendAsync(request, cancellationToken) as JsonResponse;
 
-			if (response == null)
+			if (!(await SendAsync(request, cancellationToken) is JsonResponse response))
 			{
 				return Task.CompletedTask;
 			}
