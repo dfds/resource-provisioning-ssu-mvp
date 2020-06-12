@@ -1,7 +1,7 @@
 ﻿using Microsoft.ApplicationInsights;
 using ResourceProvisioning.Abstractions.Telemetry;
 
-namespace ResourceProvisioning.Broker.Infrastructure.Telemetry
+namespace ResourceProvisioning.Cli.Infrastructure.Telemetry
 {
 	public sealed class AppInsightsTelemetryProvider : ITelemetryProvider
 	{

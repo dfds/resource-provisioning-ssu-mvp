@@ -8,6 +8,7 @@ using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
+using ResourceProvisioning.Abstractions.Telemetry;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
@@ -30,14 +31,13 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddPersistancy(configureOptions);
 			services.AddRepositories();
 			services.AddServices();
-
-			services.AddSingleton<IProvisioningBroker>();
+			services.AddBroker();
 		}
 
 		private static void AddTelemetry(this IServiceCollection services)
 		{
 			services.AddApplicationInsightsTelemetry();
-			services.AddTransient(typeof(ITelemetryProvider), typeof(ITelemetryProvider));
+			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
 		}
 
 		private static void AddBehaviors(this IServiceCollection services)
@@ -57,7 +57,7 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddIdempotency(this IServiceCollection services)
 		{
-			services.AddTransient<IRequestManager>();
+			services.AddTransient<IRequestManager, RequestManager>();
 		}
 
 		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
@@ -77,7 +77,7 @@ namespace ResourceProvisioning.Broker.Application
 											sqliteOptions.MigrationsAssembly(callingAssemblyName);
 											sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
 										});
-				}, ServiceLifetime.Scoped);
+				});
 			}
 			else
 			{
@@ -92,7 +92,12 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddServices(this IServiceCollection services)
 		{
-			services.AddTransient<IDomainService>();
+			services.AddTransient<IControlPlaneService, ControlPlaneService>();
+		}
+
+		private static void AddBroker(this IServiceCollection services)
+		{
+			services.AddSingleton<IProvisioningBroker, ProvisioningBroker>();
 		}
 	}
 }

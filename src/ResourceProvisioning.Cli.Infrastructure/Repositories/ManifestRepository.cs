@@ -6,27 +6,27 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
-using ResourceProvisioning.Cli.Infrastructure.Repositories;
+using ResourceProvisioning.Cli.Domain.Repositories;
 
-namespace ResourceProvisioning.Cli.Application.Repositories
+namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 {
 	public class ManifestRepository<T> : IManifestRepository<T> where T : class, IDesiredState
 	{
-        private readonly string _rootDirectory;
-        private readonly JsonSerializerOptions _serializerOptions;
+		private readonly JsonSerializerOptions _serializerOptions;
 
 		//TODO: Down the line we should introduce a unit of work concept for this. It could be done using virtual memory mapped files which stay in memory until save changes is called.
 		public IUnitOfWork UnitOfWork => null;
 
-		public ManifestRepository(string manifestDirectory, JsonSerializerOptions serializerOptions = default) 
+		public string RootDirectory { get; set; } = Environment.CurrentDirectory;
+
+		public ManifestRepository(JsonSerializerOptions serializerOptions = default) 
         {
-            _rootDirectory = manifestDirectory;
             _serializerOptions = serializerOptions;
         }
 
 		public Task<IEnumerable<T>> GetDesiredStatesByIdAsync(Guid environmentId)
         {
-            var files = Directory.GetFiles(_rootDirectory, $"*{environmentId.ToString()}*");
+            var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
             var desiredStates =
                 files.Select(path => 
                     JsonSerializer.Deserialize<T>(
@@ -39,7 +39,7 @@ namespace ResourceProvisioning.Cli.Application.Repositories
         public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
         {
             var fileName = $"{environmentId.ToString()}.json";
-            var filePath = Path.Combine(_rootDirectory, fileName);
+            var filePath = Path.Combine(RootDirectory, fileName);
 
             if (!File.Exists(filePath))
             {

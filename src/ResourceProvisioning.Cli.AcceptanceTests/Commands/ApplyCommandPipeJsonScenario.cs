@@ -6,14 +6,15 @@ using Moq;
 using Moq.AutoMock;
 using ResourceProvisioning.Cli.Application.Commands;
 using ResourceProvisioning.Cli.Application.Models;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http;
+using ResourceProvisioning.Cli.Domain.Services;
+using ResourceProvisioning.Cli.Infrastructure.Repositories;
 using Xunit;
 
 namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 {
 	public class ApplyCommandPipeJsonScenario
 	{
-		private Mock<IBrokerClient> _brokerClientMock;
+		private Mock<IBrokerService> _brokerClientMock;
         private Apply _applyCommand;
         private Guid _environmentId;
         private DesiredState _payload;
@@ -45,14 +46,14 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 		{
 			var mocker = new AutoMocker();
 
-			_brokerClientMock = mocker.GetMock<IBrokerClient>();
+			_brokerClientMock = mocker.GetMock<IBrokerService>();
 
 			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 		}
 
 		private async Task When_create_an_apply_command()
         {
-            _applyCommand = new Apply(_brokerClientMock.Object) { DesiredStateSource = JsonSerializer.Serialize(_payload), EnvironmentId = _environmentId.ToString() };
+			_applyCommand = new Apply(_brokerClientMock.Object, new ManifestRepository<DesiredState>()) { DesiredStateSource = JsonSerializer.Serialize(_payload), EnvironmentId = _environmentId.ToString() };
         }
 
         private async Task Then_rest_client_posts_provisioning_request_to_broker()

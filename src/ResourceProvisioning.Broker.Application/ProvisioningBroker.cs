@@ -9,7 +9,7 @@ using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application
 {
-	public class ProvisioningBroker : IProvisioningProvider
+	public class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
 		private readonly IControlPlaneService _controlPlaneService;

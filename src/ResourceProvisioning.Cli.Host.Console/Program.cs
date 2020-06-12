@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http;
+using ResourceProvisioning.Cli.Application;
 
-namespace ResourceProvisioning.Cli.Application
+namespace ResourceProvisioning.Cli.Host.Console
 {
 	public class Program
 	{
@@ -15,9 +15,10 @@ namespace ResourceProvisioning.Cli.Application
 
 			if (RuntimeServices == null)
 			{
-				RuntimeServices = new ServiceCollection()
-								.AddSingleton<IBrokerClient>(new BrokerClient());
+				RuntimeServices = new ServiceCollection();
 			}
+
+			RuntimeServices.AddCli();
 
 			app.Conventions.UseDefaultConventions().UseConstructorInjection(RuntimeServices.BuildServiceProvider());
 

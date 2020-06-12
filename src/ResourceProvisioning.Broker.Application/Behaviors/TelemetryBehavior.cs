@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Logging;
-using ResourceProvisioning.Broker.Infrastructure.Telemetry;
+using ResourceProvisioning.Abstractions.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
@@ -22,7 +22,7 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 
 		public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
 		{
-			var response = default(TResponse);
+			TResponse response;
 			var client = _telemetryProvider.GetClient<TelemetryClient>();
 
 			try
@@ -32,8 +32,6 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 				response = await next();
 				
 				client.TrackTrace(System.Text.Json.JsonSerializer.Serialize(response, response.GetType()));
-
-				return response;
 			}
 			catch (Exception e)
 			{
@@ -41,6 +39,8 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 
 				throw;
 			}
+
+			return response;
 		}
 	}
 }

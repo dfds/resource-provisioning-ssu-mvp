@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Repositories
+namespace ResourceProvisioning.Cli.Domain.Repositories
 {
 	public interface IManifestRepository<T> : IRepository where T : class, IDesiredState
 	{
-        Task StoreDesiredStateAsync(
+		string RootDirectory { get; set; }
+
+		Task StoreDesiredStateAsync(
             Guid environmentId,
 			T desiredState
         );

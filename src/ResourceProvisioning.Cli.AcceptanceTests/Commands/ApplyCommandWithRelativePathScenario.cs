@@ -7,6 +7,8 @@ using Moq;
 using Moq.AutoMock;
 using ResourceProvisioning.Cli.Application;
 using ResourceProvisioning.Cli.Application.Models;
+using ResourceProvisioning.Cli.Domain.Services;
+using ResourceProvisioning.Cli.Host.Console;
 using ResourceProvisioning.Cli.Infrastructure.Net.Http;
 using Xunit;
 
@@ -14,7 +16,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 {
 	public class ApplyCommandWithRelativePathScenario
 	{
-		private Mock<IBrokerClient> _brokerClientMock;
+		private Mock<IBrokerService> _brokerClientMock;
 		private Guid _environmentId;
 
 		[Fact]
@@ -34,7 +36,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 		private async Task And_a_rest_client()
 		{
 			var mocker = new AutoMocker();
-			_brokerClientMock = mocker.GetMock<IBrokerClient>();
+			_brokerClientMock = mocker.GetMock<IBrokerService>();
 
 			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()))
 				.Returns(Task.CompletedTask);
@@ -52,16 +54,14 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 				@"Commands/TestMaterial",
 				"single-resource-manifest.json"
 			);
-
-
+			
 			await Program.Main(
 				"apply",
 				manifestPath,
 				$"-e={_environmentId.ToString()}"
 			);
 		}
-
-
+		
 		private async Task Then_rest_client_posts_provisioning_request_to_broker()
 		{
 			_brokerClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()),

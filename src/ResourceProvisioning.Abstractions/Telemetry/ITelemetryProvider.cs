@@ -1,4 +1,4 @@
-﻿namespace ResourceProvisioning.Broker.Infrastructure.Telemetry
+﻿namespace ResourceProvisioning.Abstractions.Telemetry
 {
 	public interface ITelemetryProvider
 	{

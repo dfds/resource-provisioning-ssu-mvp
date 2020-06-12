@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.AutoMock;
-using ResourceProvisioning.Cli.Application;
 using ResourceProvisioning.Cli.Application.Models;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http;
+using ResourceProvisioning.Cli.Domain.Services;
+using ResourceProvisioning.Cli.Host.Console;
 using Xunit;
 
 namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 {
 	public class ApplyCommandWithFullyQualifiedPathScenario
 	{
-		private Mock<IBrokerClient> _brokerClientMock;
+		private Mock<IBrokerService> _brokerClientMock;
 		private Guid _environmentId;
 
 		[Fact]
@@ -34,7 +34,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 		private async Task And_a_rest_client()
 		{
 			var mocker = new AutoMocker();
-			_brokerClientMock = mocker.GetMock<IBrokerClient>();
+			_brokerClientMock = mocker.GetMock<IBrokerService>();
 
 			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()))
 				.Returns(Task.CompletedTask);
