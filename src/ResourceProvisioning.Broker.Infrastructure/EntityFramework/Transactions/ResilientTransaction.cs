@@ -14,7 +14,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Transaction
 
 		public async Task ExecuteAsync(Func<Task> action)
 		{
-			//TODO: Use of an EF Core resiliency strategy when using multiple DbContexts (Ch2943)
+			//TODO: Use an EF Core resiliency strategy when using multiple DbContexts (Ch2943)
 			var strategy = _context.Database.CreateExecutionStrategy();
 
 			await strategy.ExecuteAsync(async () =>
