@@ -1,27 +1,20 @@
-﻿using System;
-using Datadog.Trace;
+﻿using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.DependencyInjection;
+using ResourceProvisioning.Cli.Application.Commands;
 
 namespace ResourceProvisioning.Cli.Application
 {
-    public class CliApplication : CommandLineApplication<Program>
-    {
-        public CliApplication(IServiceCollection services = default)
-        {
-            if (services == null)
-            {
-                services = new ServiceCollection()
-                                .AddSingleton(RestClient.Core.Factories.RestClientFactory.CreateFromBaseUri(new Uri("https://ssu-broker.hellman.oxygen.dfds.cloud/state")));
-            }
+	[VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
+	[Subcommand(typeof(Apply))]
+	public class CliApplication : CliCommand
+	{
+		public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
+		{
+			return await Task.FromResult(0);
+		}
 
-            var serviceProvider = services.BuildServiceProvider();
-
-            //Setup CommandLineUtils with inversion of control.
-            Conventions.UseDefaultConventions().UseConstructorInjection(serviceProvider);
-
-            //Setup DataDog tracer.
-            Tracer.Instance = serviceProvider.GetService<Tracer>() ?? Tracer.Instance;
-        }
-    }
+		private static string GetVersion() => typeof(CliApplication).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+	}
 }

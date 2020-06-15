@@ -1,50 +1,44 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Datadog.Trace;
 using McMaster.Extensions.CommandLineUtils;
-using ResourceProvisioning.Cli.Application.Repositories;
-using ResourceProvisioning.Cli.Core.Core.Models;
-using ResourceProvisioning.Cli.RestClient.Core;
+using ResourceProvisioning.Cli.Application.Models;
+using ResourceProvisioning.Cli.Domain.Repositories;
+using ResourceProvisioning.Cli.Domain.Services;
+using ResourceProvisioning.Cli.Infrastructure.Repositories;
 
 namespace ResourceProvisioning.Cli.Application.Commands
 {
-    [Command(Description = "Applies desired state to the given environment")]
+	[Command(Description = "Applies desired state to the given environment")]
     public sealed class Apply : CliCommand
     {
-        private readonly IRestClient _client;
+        private readonly IBrokerService _broker;
+        private readonly IManifestRepository<DesiredState> _manifestRepository;
 
-        [Argument(0)]
+		[Argument(0)]
         public string DesiredStateSource {
             get;
             set;
         }
 
-        public Apply(IRestClient client)
+        public Apply(IBrokerService broker, IManifestRepository<DesiredState> manifestRepository)
         {
-            _client = client;
+	        _broker = broker;
+	        _manifestRepository = manifestRepository;
         }
 
-        public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                using (var scope = Tracer.Instance.StartActive("web.request"))
+                foreach (var desiredState in await GetDesiredStateData())
                 {
-                    var span = scope.Span;
-                    span.Type = SpanTypes.Web;
-                    span.ResourceName = "Apply.OnExecuteAsync.SubmitDesiredStateAsync";
-                    span.SetTag(Tags.HttpMethod, "POST");
+                    Console.WriteLine($"Posting desiredState {JsonSerializer.Serialize(desiredState)} to broker");
 
-                    foreach (var desiredState in await GetDesiredStateData())
-                    {
-                        Console.WriteLine($"Posting desiredState {JsonSerializer.Serialize(desiredState)} to broker");
-
-                        await _client.State.SubmitDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState);
-                    }                    
+                    await _broker.ApplyDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState, cancellationToken);
                 }
             }
             catch(Exception e)
@@ -61,21 +55,22 @@ namespace ResourceProvisioning.Cli.Application.Commands
         {
             if (IsValidJson(DesiredStateSource))
             {
-                return new DesiredState[] { JsonSerializer.Deserialize<DesiredState>(DesiredStateSource) };
-            }
-            else if (Directory.Exists(DesiredStateSource))
-            {
-                return await new ManifestRepository(DesiredStateSource).GetStatesByIdAsync(Guid.Parse(EnvironmentId));
-            }
-            else if (File.Exists(DesiredStateSource))
-            {
-                return new DesiredState[] { JsonSerializer.Deserialize<DesiredState>(File.ReadAllText(DesiredStateSource)) };
+                return new[] { JsonSerializer.Deserialize<DesiredState>(DesiredStateSource) };
             }
 
-            return null;
+            if (!Directory.Exists(DesiredStateSource))
+            {
+	            return File.Exists(DesiredStateSource)
+		            ? new[] {JsonSerializer.Deserialize<DesiredState>(File.ReadAllText(DesiredStateSource))}
+		            : null;
+            }
+
+            _manifestRepository.RootDirectory = DesiredStateSource;
+
+            return await _manifestRepository.GetDesiredStatesByIdAsync(Guid.Parse(EnvironmentId));
         }
 
-        private bool IsValidJson(string json) 
+        private static bool IsValidJson(string json) 
         {
             try
             {

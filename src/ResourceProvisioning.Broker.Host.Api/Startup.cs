@@ -18,7 +18,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddLogging();
 			services.AddControllers();
 
 			services.AddCors(options =>
@@ -28,7 +27,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 				{
 					p.AllowAnyHeader();
 					p.AllowAnyMethod();
-					p.AllowAnyOrigin();
 					p.AllowCredentials();
 					p.WithExposedHeaders("X-Pagination");
 				});

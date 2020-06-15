@@ -1,4 +1,5 @@
 ﻿using Microsoft.ApplicationInsights;
+using ResourceProvisioning.Abstractions.Telemetry;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Telemetry
 {

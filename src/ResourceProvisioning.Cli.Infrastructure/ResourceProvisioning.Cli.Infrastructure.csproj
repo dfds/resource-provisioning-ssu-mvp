@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>ResourceProvisioning.Cli.Infrastructure</AssemblyName>
+    <RootNamespace>ResourceProvisioning.Cli.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ResourceProvisioning.Cli.Domain\ResourceProvisioning.Cli.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

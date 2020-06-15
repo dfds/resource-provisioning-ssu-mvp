@@ -2,24 +2,18 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware
 {
 	public class CustomExceptionMiddleware
 	{
-		private const string CustomExceptionMiddlewareExceptionResourceKey = "EXCEPTION";
-		private const string CustomExceptionMiddlewareMessageResourceKey = "MESSAGE";
-
 		private readonly RequestDelegate _next;
 		private readonly ILogger _logger;
-		private readonly IStringLocalizer<CustomExceptionMiddleware> _localizer;
 
-		public CustomExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory, IStringLocalizer<CustomExceptionMiddleware> localizer)
+		public CustomExceptionMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
 		{
 			_logger = loggerFactory.CreateLogger<CustomExceptionMiddleware>();
-			_localizer = localizer;
 			_next = next;
 		}
 
@@ -31,9 +25,9 @@ namespace ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError(string.Format(_localizer.GetString(CustomExceptionMiddlewareExceptionResourceKey), ex));
+				_logger.LogError("CustomException occured");
 
-				await HandleExceptionAsync(httpContext, ex, _localizer.GetString(CustomExceptionMiddlewareMessageResourceKey));
+				await HandleExceptionAsync(httpContext, ex, "Custom error");
 			}
 		}
 

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ResourceProvisioning.Cli.Application\ResourceProvisioning.Cli.Application.csproj" />
+    <ProjectReference Include="..\ResourceProvisioning.Cli.Host.Console\ResourceProvisioning.Cli.Host.Console.csproj" />
   </ItemGroup>
 
   <ItemGroup>

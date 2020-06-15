@@ -4,33 +4,33 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	public sealed class DesiredState : ValueObject, IDesiredState
+	public class DesiredState : ValueObject, IDesiredState
 	{
-		public string Option1 { get; private set; }
+		public string Name { get; protected set; }
 
-		public string Option2 { get; private set; }
+		public string ApiVersion { get; protected set; }
 
-		public string Option3 { get; private set; }
+		public IEnumerable<KeyValuePair<string, string>> Labels { get; protected set; }
 
-		public string Option4 { get; private set; }
+		public Dictionary<string, string> Properties { get; protected set; }
+		
+		protected DesiredState() { }
 
-		private DesiredState() { }
-
-		public DesiredState(string option1, string option2, string option3, string option4)
+		public DesiredState(string name, string apiVersion, IEnumerable<KeyValuePair<string, string>> labels = default, Dictionary<string, string> properties = default)
 		{
-			Option1 = option1;
-			Option2 = option2;
-			Option3 = option3;
-			Option4 = option4;
+			Name = name;
+			ApiVersion = apiVersion;
+			Labels = labels;
+			Properties = properties;
 		}
 
 		protected override IEnumerable<object> GetAtomicValues()
 		{
 			// Using a yield return statement to return each element one at a time
-			yield return Option1;
-			yield return Option2;
-			yield return Option3;
-			yield return Option4;
+			yield return Name;
+			yield return ApiVersion;
+			yield return Labels;
+			yield return Properties;
 		}
 	}
 }
