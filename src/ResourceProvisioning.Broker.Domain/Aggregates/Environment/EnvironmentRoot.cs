@@ -5,10 +5,10 @@ using System.Linq;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
 using ResourceProvisioning.Abstractions.Grid;
-using ResourceProvisioning.Broker.Domain.Events;
+using ResourceProvisioning.Broker.Domain.Events.Environment;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.Environment
 {
 	public sealed class EnvironmentRoot : Entity<Guid>, IAggregateRoot
 	{
@@ -42,7 +42,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			var existingResource = _resources.Where(o => o.ResourceId == resourceId).SingleOrDefault();
 
 			if (existingResource == null)
-			{        
+			{
 				var resource = new EnvironmentResourceReference(resourceId, provisioned, comment);
 
 				var validationResult = resource.Validate(new ValidationContext(resource));
@@ -60,7 +60,8 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			}
 		}
 
-		public void SetDesiredState(DesiredState desiredState) {
+		public void SetDesiredState(DesiredState desiredState)
+		{
 			DesiredState = desiredState;
 
 			Initialize();

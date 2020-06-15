@@ -7,7 +7,7 @@ using ResourceProvisioning.Abstractions.Data;
 
 namespace ResourceProvisioning.Abstractions.Repositories
 {
-	public abstract class Repository<TContext, TAggregate> : IRepository<TAggregate> 
+	public abstract class Repository<TContext, TAggregate> : IRepository<TAggregate>
 		where TContext : class, IUnitOfWork
 		where TAggregate : IAggregateRoot
 	{

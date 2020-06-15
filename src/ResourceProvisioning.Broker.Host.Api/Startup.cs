@@ -41,11 +41,12 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
-			Application.DependencyInjection.AddProvisioningBroker(services, options => {
+			Application.DependencyInjection.AddProvisioningBroker(services, options =>
+			{
 				Configuration.Bind(options);
 			});
 		}
-		
+
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseCors("open");

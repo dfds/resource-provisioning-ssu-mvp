@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Threading.Tasks;
-using ResourceProvisioning.Broker.Domain.ValueObjects;
-using ResourceProvisioning.Broker.Domain.Repository;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
-using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using System.Threading;
+using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Aggregates;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
+using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
+using ResourceProvisioning.Broker.Domain.Repository;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
@@ -42,7 +42,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 				await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
 		}
-		
+
 		public async Task<EnvironmentRoot> GetEnvironmentByIdAsync(Guid environmentId)
 		{
 			var results = await _environmentRepository.GetAsync(env => env.Id == environmentId);
@@ -97,7 +97,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 
 			return results.SingleOrDefault();
 		}
-		
+
 		public async Task<ResourceRoot> UpdateResourceAsync(Guid resourceId, DesiredState desiredState, CancellationToken cancellationToken = default)
 		{
 			var resource = await GetResourceByIdAsync(resourceId);

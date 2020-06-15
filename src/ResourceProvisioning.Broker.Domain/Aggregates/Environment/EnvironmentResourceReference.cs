@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ResourceProvisioning.Abstractions.Entities;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.Environment
 {
 	public sealed class EnvironmentResourceReference : Entity<Guid>
 	{
@@ -27,7 +27,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			if (Id == Guid.Empty)
-			{ 
+			{
 				yield return new ValidationResult($"Invalid resource id: {Id}");
 			}
 		}

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {

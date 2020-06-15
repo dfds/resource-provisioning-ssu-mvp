@@ -51,7 +51,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 			var manifestPath = Path.Combine(
 				@"Commands/TestMaterial"
 			);
-			
+
 			await Program.Main(
 				"apply",
 				manifestPath,

@@ -12,11 +12,11 @@ using ResourceProvisioning.Cli.Infrastructure.Net.Http.Response;
 namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 {
 	public class BrokerClient : RestClient, IBrokerService
-    {
-	    public BrokerClient() : base(new SocketsHttpHandler())
-	    {
+	{
+		public BrokerClient() : base(new SocketsHttpHandler())
+		{
 
-	    }
+		}
 
 		public async Task<ActualState> GetCurrentStateAsync(CancellationToken cancellationToken = default)
 		{
@@ -49,5 +49,5 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
 
 			response.EnsureSuccessStatusCode();
 		}
-    }
+	}
 }

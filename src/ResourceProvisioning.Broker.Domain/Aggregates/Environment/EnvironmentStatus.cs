@@ -2,7 +2,7 @@
 using System.Linq;
 using ResourceProvisioning.Abstractions.Grid;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.Environment
 {
 	public sealed class EnvironmentStatus : GridActorStatus
 	{
@@ -12,7 +12,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		{
 		}
 
-		public static new IEnumerable<EnvironmentStatus> List() 
+		public static new IEnumerable<EnvironmentStatus> List()
 		{
 			var result = GridActorStatus.List().Cast<EnvironmentStatus>().ToList();
 

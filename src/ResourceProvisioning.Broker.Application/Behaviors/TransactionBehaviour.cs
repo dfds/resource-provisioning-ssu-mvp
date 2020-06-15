@@ -28,7 +28,7 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 			{
 				var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-				await strategy.ExecuteAsync(async () => 
+				await strategy.ExecuteAsync(async () =>
 				{
 					_logger.LogInformation($"Begin transaction {typeof(TRequest).Name}");
 

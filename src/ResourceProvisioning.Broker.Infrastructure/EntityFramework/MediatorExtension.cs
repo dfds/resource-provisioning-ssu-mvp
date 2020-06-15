@@ -21,7 +21,8 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 			domainEntities.ToList().ForEach(entity => entity.Entity.ClearDomainEvents());
 
 			var tasks = domainEvents
-				.Select(async (domainEvent) => {
+				.Select(async (domainEvent) =>
+				{
 					await mediator.Publish(domainEvent);
 				});
 

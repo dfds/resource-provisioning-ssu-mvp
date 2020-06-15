@@ -2,7 +2,7 @@
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
-namespace ResourceProvisioning.Broker.Application.Events
+namespace ResourceProvisioning.Broker.Application.Events.Resource
 {
 	public class ResourceProvisioningRequestedEvent : IntegrationEvent, IProvisioningEvent
 	{

@@ -29,12 +29,12 @@ namespace ResourceProvisioning.Abstractions.Events
 			}
 
 			if (createDate.HasValue)
-			{ 
+			{
 				CreationDate = createDate.Value;
 			}
 
-			if(version.HasValue)
-			{ 
+			if (version.HasValue)
+			{
 				Version = version.Value;
 			}
 		}

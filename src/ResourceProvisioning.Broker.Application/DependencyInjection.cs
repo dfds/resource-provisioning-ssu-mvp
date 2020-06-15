@@ -12,9 +12,10 @@ using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Abstractions.Telemetry;
 using ResourceProvisioning.Broker.Application.Behaviors;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
-using ResourceProvisioning.Broker.Application.Events;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
-using ResourceProvisioning.Broker.Domain.Events;
+using ResourceProvisioning.Broker.Application.Events.Environment;
+using ResourceProvisioning.Broker.Application.Events.Resource;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
+using ResourceProvisioning.Broker.Domain.Events.Environment;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Infrastructure.Repositories;
@@ -65,7 +66,6 @@ namespace ResourceProvisioning.Broker.Application
 		{
 			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentStartedEvent>, EnvironmentRequestedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();

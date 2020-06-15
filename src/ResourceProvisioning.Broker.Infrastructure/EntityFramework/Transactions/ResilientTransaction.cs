@@ -10,7 +10,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Transaction
 
 		private ResilientTransaction(DbContext context) => _context = context ?? throw new ArgumentNullException(nameof(context));
 
-		public static ResilientTransaction New (DbContext context) => new ResilientTransaction(context);        
+		public static ResilientTransaction New(DbContext context) => new ResilientTransaction(context);
 
 		public async Task ExecuteAsync(Func<Task> action)
 		{

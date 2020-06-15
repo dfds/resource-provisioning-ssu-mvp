@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Abstractions.Commands
 	{
 		protected readonly IMediator _mediator;
 
-		protected CommandHandler(IMediator mediator) 
+		protected CommandHandler(IMediator mediator)
 		{
 			_mediator = mediator;
 		}

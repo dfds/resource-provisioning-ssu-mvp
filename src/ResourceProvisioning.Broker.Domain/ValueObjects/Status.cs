@@ -14,14 +14,14 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 
 		public Uri ReasonUri { get; private set; }
 
-		public Status(string value, bool isAvailable, string reasonPhrase = default, Uri reasonUri = default) 
+		public Status(string value, bool isAvailable, string reasonPhrase = default, Uri reasonUri = default)
 		{
 			Value = value;
 			IsAvailable = isAvailable;
 			ReasonPhrase = reasonPhrase;
 			ReasonUri = reasonUri;
 		}
-		
+
 		protected override IEnumerable<object> GetAtomicValues()
 		{
 			// Using a yield return statement to return each element one at a time

@@ -2,7 +2,7 @@
 using System.Linq;
 using ResourceProvisioning.Abstractions.Grid;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.Resource
 {
 	public sealed class ResourceStatus : GridActorStatus
 	{

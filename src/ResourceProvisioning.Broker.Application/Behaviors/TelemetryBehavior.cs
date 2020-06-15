@@ -28,9 +28,9 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 			try
 			{
 				client.TrackTrace(System.Text.Json.JsonSerializer.Serialize(request, request.GetType()));
-				
+
 				response = await next();
-				
+
 				client.TrackTrace(System.Text.Json.JsonSerializer.Serialize(response, response.GetType()));
 			}
 			catch (Exception e)

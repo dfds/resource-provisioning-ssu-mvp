@@ -25,12 +25,12 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		{
 			return Ok("Hello world");
 		}
-		
+
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic request)
 		{
 			var command = _mapper.Map<dynamic, IProvisioningRequest>(request);
-			
+
 			await _mediator.Send(command);
 
 			return Ok();

@@ -1,7 +1,7 @@
 ﻿using ResourceProvisioning.Abstractions.Events;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 
-namespace ResourceProvisioning.Broker.Domain.Events
+namespace ResourceProvisioning.Broker.Domain.Events.Environment
 {
 	public sealed class EnvironmentRequestedEvent : IPivotEvent
 	{

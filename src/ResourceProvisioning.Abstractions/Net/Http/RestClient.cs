@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Abstractions.Net.Http
 	{
 		protected RestClient(HttpMessageHandler handler) : base(handler)
 		{
-			
+
 		}
 
 		protected RestClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler)

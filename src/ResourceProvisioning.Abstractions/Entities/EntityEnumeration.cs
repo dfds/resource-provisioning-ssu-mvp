@@ -32,7 +32,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 		public override bool Equals(object obj)
 		{
 			if (!(obj is EntityEnumeration otherValue))
-			{ 
+			{
 				return false;
 			}
 
@@ -67,7 +67,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 			var matchingItem = GetAll<T>().FirstOrDefault(predicate);
 
 			if (matchingItem == null)
-			{ 
+			{
 				throw new InvalidOperationException($"'{value}' is not a valid {description} in {typeof(T)}");
 			}
 

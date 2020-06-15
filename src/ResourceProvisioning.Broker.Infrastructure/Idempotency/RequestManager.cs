@@ -19,11 +19,11 @@ namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 		}
 
 		public async Task CreateRequestForCommandAsync<T>(Guid id)
-		{ 
+		{
 			var exists = await ExistAsync(id);
 
-			var request = exists ? 
-				throw new Exception($"Request with {id} already exists") : 
+			var request = exists ?
+				throw new Exception($"Request with {id} already exists") :
 				new ClientRequest()
 				{
 					Id = id,

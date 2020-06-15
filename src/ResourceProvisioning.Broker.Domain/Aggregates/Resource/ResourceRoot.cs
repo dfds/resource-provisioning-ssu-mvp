@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
 using ResourceProvisioning.Abstractions.Grid;
-using ResourceProvisioning.Broker.Domain.Events;
+using ResourceProvisioning.Broker.Domain.Events.Environment;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
 
-namespace ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate
+namespace ResourceProvisioning.Broker.Domain.Aggregates.Resource
 {
 	public sealed class ResourceRoot : Entity<Guid>, IAggregateRoot
 	{

@@ -5,8 +5,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResourceProvisioning.Abstractions.Data;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
-using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
+using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
@@ -22,8 +22,8 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
-		public DomainContext() : this(new DbContextOptions<DomainContext>(){}, null) { }
-		
+		public DomainContext() : this(new DbContextOptions<DomainContext>() { }, null) { }
+
 		public DomainContext(DbContextOptions<DomainContext> options, IMediator mediator) : base(options)
 		{
 			_mediator = mediator;

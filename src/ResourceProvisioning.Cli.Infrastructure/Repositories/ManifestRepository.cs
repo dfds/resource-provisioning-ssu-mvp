@@ -19,34 +19,34 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 
 		public string RootDirectory { get; set; } = Environment.CurrentDirectory;
 
-		public ManifestRepository(JsonSerializerOptions serializerOptions = default) 
-        {
-            _serializerOptions = serializerOptions;
-        }
+		public ManifestRepository(JsonSerializerOptions serializerOptions = default)
+		{
+			_serializerOptions = serializerOptions;
+		}
 
 		public Task<IEnumerable<T>> GetDesiredStatesByIdAsync(Guid environmentId)
-        {
-            var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
-            var desiredStates =
-                files.Select(path => 
-                    JsonSerializer.Deserialize<T>(
-                        File.ReadAllText(path), _serializerOptions)
-                    );
+		{
+			var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
+			var desiredStates =
+				files.Select(path =>
+					JsonSerializer.Deserialize<T>(
+						File.ReadAllText(path), _serializerOptions)
+					);
 
-            return Task.FromResult(desiredStates);
-        }
+			return Task.FromResult(desiredStates);
+		}
 
-        public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
-        {
-            var fileName = $"{environmentId.ToString()}.json";
-            var filePath = Path.Combine(RootDirectory, fileName);
+		public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
+		{
+			var fileName = $"{environmentId.ToString()}.json";
+			var filePath = Path.Combine(RootDirectory, fileName);
 
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(T)));
-            }
+			if (!File.Exists(filePath))
+			{
+				File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(T)));
+			}
 
-            return Task.CompletedTask;
-        }
+			return Task.CompletedTask;
+		}
 	}
 }

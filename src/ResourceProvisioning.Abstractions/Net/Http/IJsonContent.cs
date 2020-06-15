@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.Json;
-using System.Threading;
+﻿using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ResourceProvisioning.Abstractions.Net.Http

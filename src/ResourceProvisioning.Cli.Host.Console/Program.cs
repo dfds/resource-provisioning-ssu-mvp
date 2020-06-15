@@ -9,8 +9,8 @@ namespace ResourceProvisioning.Cli.Host.Console
 	{
 		public static IServiceCollection RuntimeServices { get; set; }
 
-		public static async Task Main(params string[] args) 
-        {
+		public static async Task Main(params string[] args)
+		{
 			var app = new CommandLineApplication<CliApplication>();
 
 			if (RuntimeServices == null)
@@ -24,5 +24,5 @@ namespace ResourceProvisioning.Cli.Host.Console
 
 			await Task.FromResult(app.ExecuteAsync(args));
 		}
-    }   
+	}
 }

@@ -13,7 +13,7 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 		public IEnumerable<KeyValuePair<string, string>> Labels { get; protected set; }
 
 		public Dictionary<string, string> Properties { get; protected set; }
-		
+
 		protected DesiredState() { }
 
 		public DesiredState(string name, string apiVersion, IEnumerable<KeyValuePair<string, string>> labels = default, Dictionary<string, string> properties = default)

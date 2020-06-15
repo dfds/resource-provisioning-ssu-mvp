@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Broker.Application.Commands.Idempotency;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.Idempotency;
 
@@ -20,7 +20,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 		}
 
 		public override async Task<EnvironmentRoot> Handle(CreateEnvironmentCommand command, CancellationToken cancellationToken)
-		{						
+		{
 			return await _controlPlaneService.AddEnvironmentAsync(command.DesiredState);
 		}
 	}
@@ -35,7 +35,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 		protected override EnvironmentRoot CreateResultForDuplicateRequest()
 		{
-			return null;               
+			return null;
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Telemetry
 	{
 		private readonly TelemetryClient _client;
 
-		public AppInsightsTelemetryProvider(TelemetryClient client) 
+		public AppInsightsTelemetryProvider(TelemetryClient client)
 		{
 			_client = client;
 		}
