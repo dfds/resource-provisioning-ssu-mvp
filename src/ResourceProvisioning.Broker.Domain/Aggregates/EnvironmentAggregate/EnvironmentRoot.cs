@@ -84,21 +84,9 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			AddDomainEvent(new EnvironmentCreatedEvent(Id));
 		}
 
-		public void Start()
+		public void Terminated()
 		{
-			if (_statusId != EnvironmentStatus.Created.Id)
-			{
-				return;
-			}
-
-			_statusId = GridActorStatus.Started.Id;
-
-			AddDomainEvent(new EnvironmentStartedEvent(Id));
-		}
-
-		public void Stop()
-		{
-			_statusId = GridActorStatus.Stopped.Id;
+			_statusId = GridActorStatus.Terminated.Id;
 
 			AddDomainEvent(new EnvironmentStoppedEvent(Id));
 		}
