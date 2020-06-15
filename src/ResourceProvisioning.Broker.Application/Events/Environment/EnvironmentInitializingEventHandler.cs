@@ -6,7 +6,7 @@ using ResourceProvisioning.Broker.Domain.Events.Environment;
 
 namespace ResourceProvisioning.Broker.Application.Events.Environment
 {
-	public class EnvironmentInitializingEventHandler : IDomainEventHandler<EnvironmentInitializingEvent>
+	public sealed class EnvironmentInitializingEventHandler : IDomainEventHandler<EnvironmentInitializingEvent>
 	{
 		public async Task Handle(EnvironmentInitializingEvent @event, CancellationToken cancellationToken)
 		{

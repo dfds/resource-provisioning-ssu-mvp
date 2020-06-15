@@ -3,7 +3,7 @@ using ResourceProvisioning.Abstractions.Commands;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Idempotency
 {
-	public class IdentifiedCommand<T, R> : ICommand<R> where T : ICommand<R>
+	public sealed class IdentifiedCommand<T, R> : ICommand<R> where T : ICommand<R>
 	{
 		public T Command { get; }
 

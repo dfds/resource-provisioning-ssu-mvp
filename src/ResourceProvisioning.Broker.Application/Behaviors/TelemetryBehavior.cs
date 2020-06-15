@@ -8,7 +8,7 @@ using ResourceProvisioning.Abstractions.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
-	public class TelemetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class TelemetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 	{
 		private readonly ILogger<TelemetryBehavior<TRequest, TResponse>> _logger;
 		private readonly ITelemetryProvider _telemetryProvider;

@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
-	class EnvironmentRootEntityTypeConfiguration : IEntityTypeConfiguration<Domain.Aggregates.Environment.EnvironmentRoot>
+	class EnvironmentRootEntityTypeConfiguration : IEntityTypeConfiguration<EnvironmentRoot>
 	{
-		public void Configure(EntityTypeBuilder<Domain.Aggregates.Environment.EnvironmentRoot> configuration)
+		public void Configure(EntityTypeBuilder<EnvironmentRoot> configuration)
 		{
 			configuration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
 			configuration.HasKey(o => o.Id);
@@ -20,7 +21,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 
 			configuration.OwnsOne(o => o.DesiredState);
 
-			var navigation = configuration.Metadata.FindNavigation(nameof(Domain.Aggregates.Environment.EnvironmentRoot.Resources));
+			var navigation = configuration.Metadata.FindNavigation(nameof(EnvironmentRoot.Resources));
 
 			navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}

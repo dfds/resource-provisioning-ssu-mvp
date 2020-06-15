@@ -6,6 +6,6 @@ namespace ResourceProvisioning.Abstractions.Grid
 	{
 		Guid Id { get; }
 
-		GridActorType Type { get; }
+		GridActorType ActorType { get; }
 	}
 }

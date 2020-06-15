@@ -52,7 +52,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 			// After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
 			// performed through the DbContext will be committed
-			var result = await base.SaveChangesAsync();
+			await base.SaveChangesAsync();
 
 			return true;
 		}

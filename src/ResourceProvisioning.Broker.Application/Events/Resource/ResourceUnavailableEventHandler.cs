@@ -6,7 +6,7 @@ using ResourceProvisioning.Broker.Domain.Events.Environment;
 
 namespace ResourceProvisioning.Broker.Application.Events.Resource
 {
-	public class ResourceUnavailableEventHandler : IDomainEventHandler<ResourceUnavailableEvent>
+	public sealed class ResourceUnavailableEventHandler : IDomainEventHandler<ResourceUnavailableEvent>
 	{
 		public async Task Handle(ResourceUnavailableEvent @event, CancellationToken cancellationToken)
 		{

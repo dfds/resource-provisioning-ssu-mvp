@@ -23,7 +23,7 @@ using ResourceProvisioning.Broker.Infrastructure.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application
 {
-	public static class DependencyInjection
+	public sealed static class DependencyInjection
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{

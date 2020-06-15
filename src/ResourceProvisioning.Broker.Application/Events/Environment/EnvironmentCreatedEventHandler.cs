@@ -6,7 +6,7 @@ using ResourceProvisioning.Broker.Domain.Events.Environment;
 
 namespace ResourceProvisioning.Broker.Application.Events.Environment
 {
-	public class EnvironmentCreatedEventHandler : IDomainEventHandler<EnvironmentCreatedEvent>
+	public sealed class EnvironmentCreatedEventHandler : IDomainEventHandler<EnvironmentCreatedEvent>
 	{
 		public Task Handle(EnvironmentCreatedEvent @event, CancellationToken cancellationToken)
 		{

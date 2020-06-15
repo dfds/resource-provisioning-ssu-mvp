@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	public sealed class ActualState : DesiredState
+	public sealed class ActualState : DesiredState, IActualState
 	{
 		public DateTime Created { get; private set; }
 

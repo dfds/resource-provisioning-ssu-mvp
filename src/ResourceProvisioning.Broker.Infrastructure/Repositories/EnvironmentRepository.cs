@@ -5,19 +5,20 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ResourceProvisioning.Abstractions.Repositories;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Repository;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 {
-	public class EnvironmentRepository : Repository<DomainContext, Domain.Aggregates.Environment.EnvironmentRoot>, IEnvironmentRepository
+	public class EnvironmentRepository : Repository<DomainContext, EnvironmentRoot>, IEnvironmentRepository
 	{
 		public EnvironmentRepository(DomainContext context) : base(context)
 		{
 
 		}
 
-		public override async Task<IEnumerable<Domain.Aggregates.Environment.EnvironmentRoot>> GetAsync(Expression<Func<Domain.Aggregates.Environment.EnvironmentRoot, bool>> filter)
+		public override async Task<IEnumerable<EnvironmentRoot>> GetAsync(Expression<Func<EnvironmentRoot, bool>> filter)
 		{
 			return await Task.Factory.StartNew(() =>
 			{
@@ -31,7 +32,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 			});
 		}
 
-		public async Task<Domain.Aggregates.Environment.EnvironmentRoot> GetByIdAsync(Guid contextId)
+		public async Task<EnvironmentRoot> GetByIdAsync(Guid contextId)
 		{
 			var environment = await _context.Environment.FindAsync(contextId);
 
@@ -50,12 +51,12 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 			return environment;
 		}
 
-		public override Domain.Aggregates.Environment.EnvironmentRoot Add(Domain.Aggregates.Environment.EnvironmentRoot aggregate)
+		public override EnvironmentRoot Add(EnvironmentRoot aggregate)
 		{
 			return _context.Add(aggregate).Entity;
 		}
 
-		public override Domain.Aggregates.Environment.EnvironmentRoot Update(Domain.Aggregates.Environment.EnvironmentRoot aggregate)
+		public override EnvironmentRoot Update(EnvironmentRoot aggregate)
 		{
 			var changeTracker = _context.Entry(aggregate);
 
@@ -64,7 +65,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Repositories
 			return changeTracker.Entity;
 		}
 
-		public override void Delete(Domain.Aggregates.Environment.EnvironmentRoot aggregate)
+		public override void Delete(EnvironmentRoot aggregate)
 		{
 			_context.Entry(aggregate).State = EntityState.Deleted;
 		}

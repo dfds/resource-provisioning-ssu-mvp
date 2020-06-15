@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Broker.Application
 {
-	public class ProvisioningBrokerOptions
+	public sealed class ProvisioningBrokerOptions
 	{
 		public IConfigurationSection ConnectionStrings { get; set; }
 	}

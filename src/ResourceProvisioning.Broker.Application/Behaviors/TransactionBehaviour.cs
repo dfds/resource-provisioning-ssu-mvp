@@ -8,7 +8,7 @@ using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
-	public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 	{
 		private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
 		private readonly DomainContext _dbContext;

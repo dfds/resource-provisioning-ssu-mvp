@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Abstractions.Net.Http;
 
 namespace ResourceProvisioning.Broker.Application
 {
@@ -15,7 +16,7 @@ namespace ResourceProvisioning.Broker.Application
 
 		public Guid Id => Guid.NewGuid();
 
-		public GridActorType Type => GridActorType.System;
+		public GridActorType ActorType => GridActorType.System;
 
 		public ProvisioningBroker(IMediator mediator, IMapper mapper)
 		{
@@ -25,12 +26,12 @@ namespace ResourceProvisioning.Broker.Application
 
 		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
 		{
+			//TODO: Implement automapper maps / profiles
 			var provisioningEvent = _mapper.Map<IProvisioningRequest, IProvisioningEvent>(request);
 
 			_mediator.Publish(provisioningEvent, cancellationToken);
 
-			//TODO: Implement ProvisioningRequest (Action-result'ish)
-			throw new NotImplementedException();
+			return Task.FromResult<IProvisioningResponse>(new ProvisionBrokerResponse());
 		}
 
 		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)

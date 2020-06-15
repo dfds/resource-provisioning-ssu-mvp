@@ -4,7 +4,7 @@ using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Application.Events.Resource
 {
-	public class ResourceProvisioningRequestedEventHandler : IIntegrationEventHandler<ResourceProvisioningRequestedEvent>
+	public sealed class ResourceProvisioningRequestedEventHandler : IIntegrationEventHandler<ResourceProvisioningRequestedEvent>
 	{
 		public Task Handle(ResourceProvisioningRequestedEvent @event, CancellationToken cancellationToken = default)
 		{

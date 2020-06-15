@@ -4,7 +4,7 @@ using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Idempotency
 {
-	public class RequestManager : IRequestManager
+	public sealed class RequestManager : IRequestManager
 	{
 		private readonly DomainContext _context;
 

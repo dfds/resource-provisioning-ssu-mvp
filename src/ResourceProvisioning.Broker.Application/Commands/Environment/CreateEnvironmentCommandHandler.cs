@@ -10,7 +10,7 @@ using ResourceProvisioning.Broker.Infrastructure.Idempotency;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
-	public class CreateEnvironmentCommandHandler : CommandHandler<CreateEnvironmentCommand, EnvironmentRoot>
+	public sealed class CreateEnvironmentCommandHandler : CommandHandler<CreateEnvironmentCommand, EnvironmentRoot>
 	{
 		private readonly IControlPlaneService _controlPlaneService;
 
@@ -27,7 +27,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 
 	//TODO: Finalize Idempotency concept
-	public class CreateEnvironmentIdentifiedCommandHandler : IdentifiedCommandHandler<CreateEnvironmentCommand, EnvironmentRoot>
+	public sealed class CreateEnvironmentIdentifiedCommandHandler : IdentifiedCommandHandler<CreateEnvironmentCommand, EnvironmentRoot>
 	{
 		public CreateEnvironmentIdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager) : base(mediator, requestManager)
 		{

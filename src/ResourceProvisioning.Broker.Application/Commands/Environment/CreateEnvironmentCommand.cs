@@ -7,7 +7,7 @@ using ResourceProvisioning.Broker.Domain.ValueObjects;
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
 	[DataContract]
-	public class CreateEnvironmentCommand : ICommand<EnvironmentRoot>, IProvisioningRequest
+	public sealed class CreateEnvironmentCommand : ICommand<EnvironmentRoot>, IProvisioningRequest
 	{
 		[DataMember]
 		public DesiredState DesiredState { get; private set; }
