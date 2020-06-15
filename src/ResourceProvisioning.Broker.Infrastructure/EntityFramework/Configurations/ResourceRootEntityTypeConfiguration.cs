@@ -20,8 +20,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 				.HasForeignKey("StatusId");
 
 			configuration.OwnsOne(o => o.DesiredState);
-
-			//TODO: Configure cascading delete of related EnvironmentResourceReference entries.
 		}
 	}
 }

@@ -14,8 +14,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 	{
 		private readonly JsonSerializerOptions _serializerOptions;
 
-		//TODO: Down the line we should introduce a unit of work concept for this. It could be done using virtual memory mapped files which stay in memory until save changes is called.
-		public IUnitOfWork UnitOfWork => null;
+		public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
 		public string RootDirectory { get; set; } = Environment.CurrentDirectory;
 

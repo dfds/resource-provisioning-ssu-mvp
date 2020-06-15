@@ -26,7 +26,6 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 		{
 			base.GetAtomicValues();
 
-			// Using a yield return statement to return each element one at a time
 			yield return Created;
 			yield return LastUpdated;
 			yield return ResourcePrincipal;

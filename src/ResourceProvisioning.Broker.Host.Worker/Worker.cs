@@ -10,7 +10,6 @@ namespace ResourceProvisioning.Broker.Host.Worker
 	{
 		private readonly ILogger<Worker> _logger;
 
-		//TODO: Finish this
 		public Worker(ILogger<Worker> logger)
 		{
 			_logger = logger;
@@ -18,15 +17,7 @@ namespace ResourceProvisioning.Broker.Host.Worker
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			while (!stoppingToken.IsCancellationRequested)
-			{
-				_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-				//TODO: Implement worker logic.
-
-				//TODO: Make delay configurable.
-				await Task.Delay(1000, stoppingToken);
-			}
+			throw new NotImplementedException();
 		}
 	}
 }

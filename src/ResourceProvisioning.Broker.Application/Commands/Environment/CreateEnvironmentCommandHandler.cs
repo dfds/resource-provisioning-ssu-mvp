@@ -25,8 +25,6 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 		}
 	}
 
-
-	//TODO: Finalize Idempotency concept
 	public sealed class CreateEnvironmentIdentifiedCommandHandler : IdentifiedCommandHandler<CreateEnvironmentCommand, EnvironmentRoot>
 	{
 		public CreateEnvironmentIdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager) : base(mediator, requestManager)
@@ -35,7 +33,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 		protected override EnvironmentRoot CreateResultForDuplicateRequest()
 		{
-			return null;
+			throw new NotImplementedException();
 		}
 	}
 }

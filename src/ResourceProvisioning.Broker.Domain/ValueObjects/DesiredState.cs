@@ -26,7 +26,6 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 
 		protected override IEnumerable<object> GetAtomicValues()
 		{
-			// Using a yield return statement to return each element one at a time
 			yield return Name;
 			yield return ApiVersion;
 			yield return Labels;
