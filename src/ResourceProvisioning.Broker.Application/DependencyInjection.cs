@@ -27,13 +27,10 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{
-			//Setup external DI configurations.
-			services.AddLogging();
-			services.AddOptions();
 			services.AddAutoMapper(Assembly.GetAssembly(typeof(DependencyInjection)));
 			services.AddMediatR(typeof(DependencyInjection));
-
-			//Setup application DI configuration.
+			services.AddLogging();
+			services.AddOptions();
 			services.AddTelemetry();
 			services.AddBehaviors();
 			services.AddCommandHandlers();
@@ -64,14 +61,15 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddEventHandlers(this IServiceCollection services)
 		{
-			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
-			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningCompletedEvent>, ResourceProvisioningCompletedEventHandler>();
 			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningRequestedEvent>, ResourceProvisioningRequestedEventHandler>();
+			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningCompletedEvent>, ResourceProvisioningCompletedEventHandler>();
 			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningTerminatedEvent>, ResourceProvisioningTerminatedEventHandler>();
 		}
 
@@ -111,6 +109,8 @@ namespace ResourceProvisioning.Broker.Application
 		private static void AddBroker(this IServiceCollection services)
 		{
 			services.AddSingleton<IProvisioningBroker, ProvisioningBroker>();
+			services.AddSingleton<ICommandHandler<IProvisioningRequest, IProvisioningResponse>>(factory => factory.GetRequiredService<IProvisioningBroker>());
+			services.AddSingleton<IEventHandler<IProvisioningEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 	}
 }
