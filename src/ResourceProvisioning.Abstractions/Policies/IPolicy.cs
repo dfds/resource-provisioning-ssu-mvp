@@ -1,10 +1,8 @@
 ﻿using ResourceProvisioning.Abstractions.Events;
-using ResourceProvisioning.Abstractions.Rules;
 
 namespace ResourceProvisioning.Abstractions.Policies
 {
-	public interface IPolicy : IEventHandler<IEvent>
+	public interface IPolicy : IDomainEventHandler<IDomainEvent>
 	{
-		IRuleEvaluator Evaluator { get; }
 	}
 }
