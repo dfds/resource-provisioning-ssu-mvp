@@ -4,6 +4,8 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
+	//TODO: Review existing implementation (Ch3086)
+	//TODO: Finalize value object(s) (Ch3086)
 	public sealed class Status : ValueObject
 	{
 		public string Value { get; private set; }
@@ -24,7 +26,6 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 
 		protected override IEnumerable<object> GetAtomicValues()
 		{
-			// Using a yield return statement to return each element one at a time
 			yield return Value;
 			yield return IsAvailable;
 			yield return ReasonPhrase;

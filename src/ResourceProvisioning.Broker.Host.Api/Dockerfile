@@ -1,4 +1,5 @@
-﻿#Setup build image
+﻿#TODO: Finalize docker container (Ch3022)
+#Setup build image
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
 #Set container filesystem to /build (and create folder if it doesnt exist)

@@ -4,6 +4,8 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
+	//TODO: Review existing implementation (Ch3086)
+	//TODO: Finalize value object(s) (Ch3086)
 	public sealed class ActualState : DesiredState, IActualState
 	{
 		public DateTime Created { get; private set; }
