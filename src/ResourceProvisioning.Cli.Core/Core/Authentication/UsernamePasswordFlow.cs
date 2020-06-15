@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 
 namespace ResourceProvisioning.Cli.Core.Core.Authentication
 {
-	public class InteractiveFlow : IAuthentication
+	// Doesn't work with MFA. Intended for legacy ServiceAccount usage.
+	public class UsernamePasswordFlow : IAuthentication
 	{
 		private HttpClient _httpClient;
 
-		public InteractiveFlow()
+		public UsernamePasswordFlow()
 		{
 			_httpClient = new HttpClient();
 		}
@@ -36,7 +37,16 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			Console.Write("Username: ");
 			userData.Username = Console.ReadLine();
 			Console.Write("Password: ");
-			userData.Password = Console.ReadLine();			
+			string password = null;
+			while (true)
+			{
+				var key = Console.ReadKey(true);
+				if (key.Key == ConsoleKey.Enter)
+					break;
+				password += key.KeyChar;
+			}
+			userData.Password = password;
+			Console.Write("\n");
 			return userData;
 		}
 
