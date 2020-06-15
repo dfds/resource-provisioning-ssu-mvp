@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Commands;
+using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
@@ -93,7 +94,9 @@ namespace ResourceProvisioning.Broker.Application
 							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
 						});
 				}
-			});
+			}, ServiceLifetime.Transient);
+
+			services.AddTransient<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
 		}
 
 		private static void AddRepositories(this IServiceCollection services)
