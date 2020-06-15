@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ResourceProvisioning.Abstractions.Aggregates;
 using ResourceProvisioning.Abstractions.Entities;
+using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Broker.Domain.Events;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
 
@@ -11,7 +12,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate
 	public sealed class ResourceRoot : Entity<Guid>, IAggregateRoot
 	{
 		public ResourceStatus Status { get; private set; }
-		private int _statusId = ResourceStatus.Initializing.Id;
+		private int _statusId;
 
 		public DesiredState DesiredState { get; private set; }
 
@@ -19,13 +20,14 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate
 
 		private ResourceRoot() : base()
 		{
+			_statusId = GridActorStatus.Initializing.Id;
+
+			AddDomainEvent(new ResourceInitializingEvent(this));
 		}
 
 		public ResourceRoot(DesiredState desiredState) : base()
 		{
 			DesiredState = desiredState;
-
-			AddDomainEvent(new ResourceInitializingEvent(this));
 		}
 
 		public void SetDesiredState(DesiredState desiredState)

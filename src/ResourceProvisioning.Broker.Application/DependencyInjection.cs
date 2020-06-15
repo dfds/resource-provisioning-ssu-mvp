@@ -65,8 +65,8 @@ namespace ResourceProvisioning.Broker.Application
 		{
 			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentStartedEvent>, EnvironmentStartedEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentStoppedEvent>, EnvironmentStoppedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentStartedEvent>, EnvironmentRequestedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();

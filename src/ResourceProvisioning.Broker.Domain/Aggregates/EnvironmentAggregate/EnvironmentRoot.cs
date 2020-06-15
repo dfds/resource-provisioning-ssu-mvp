@@ -17,22 +17,23 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		public DesiredState DesiredState { get; private set; }
 
 		public EnvironmentStatus Status { get; private set; }
-		private int _statusId = EnvironmentStatus.Requested.Id;
+		private int _statusId;
 
-		public DateTime CreateDate { get; private set; } = DateTime.Now;
+		public DateTime CreateDate { get; private set; }
 
 		public IEnumerable<EnvironmentResourceReference> Resources => _resources.AsReadOnly();
 
 		private EnvironmentRoot()
 		{
+			CreateDate = DateTime.Now;
 			_statusId = EnvironmentStatus.Requested.Id;
 			_resources = new List<EnvironmentResourceReference>();
+
+			AddDomainEvent(new EnvironmentRequestedEvent(this));
 		}
 
 		public EnvironmentRoot(DesiredState desiredState) : this()
 		{
-			AddDomainEvent(new EnvironmentRequestedEvent(this));
-
 			SetDesiredState(desiredState);
 		}
 
@@ -88,7 +89,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		{
 			_statusId = GridActorStatus.Terminated.Id;
 
-			AddDomainEvent(new EnvironmentStoppedEvent(Id));
+			AddDomainEvent(new EnvironmentTerminatedEvent(Id));
 		}
 
 		public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
