@@ -17,22 +17,23 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 		public DesiredState DesiredState { get; private set; }
 
 		public EnvironmentStatus Status { get; private set; }
-		private int _statusId = EnvironmentStatus.Created.Id;
+		private int _statusId = EnvironmentStatus.Requested.Id;
 
 		public DateTime CreateDate { get; private set; } = DateTime.Now;
 
 		public IEnumerable<EnvironmentResourceReference> Resources => _resources.AsReadOnly();
 
-		private EnvironmentRoot() : base()
+		private EnvironmentRoot()
 		{
+			_statusId = EnvironmentStatus.Requested.Id;
 			_resources = new List<EnvironmentResourceReference>();
 		}
 
 		public EnvironmentRoot(DesiredState desiredState) : this()
 		{
-			DesiredState = desiredState;
-			
-			AddDomainEvent(new EnvironmentCreatedEvent(this));
+			AddDomainEvent(new EnvironmentRequestedEvent(this));
+
+			SetDesiredState(desiredState);
 		}
 
 		public void AddResource(Guid resourceId, DateTime provisioned, string comment)
@@ -71,14 +72,28 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate
 			AddDomainEvent(new EnvironmentInitializingEvent(Id));
 		}
 
+		public void Created()
+		{
+			if (_statusId != GridActorStatus.Initializing.Id)
+			{
+				return;
+			}
+
+			_statusId = EnvironmentStatus.Created.Id;
+
+			AddDomainEvent(new EnvironmentCreatedEvent(Id));
+		}
+
 		public void Start()
 		{
-			if (_statusId == GridActorStatus.Initializing.Id)
+			if (_statusId != EnvironmentStatus.Created.Id)
 			{
-				_statusId = GridActorStatus.Started.Id;
-
-				AddDomainEvent(new EnvironmentStartedEvent(Id));
+				return;
 			}
+
+			_statusId = GridActorStatus.Started.Id;
+
+			AddDomainEvent(new EnvironmentStartedEvent(Id));
 		}
 
 		public void Stop()

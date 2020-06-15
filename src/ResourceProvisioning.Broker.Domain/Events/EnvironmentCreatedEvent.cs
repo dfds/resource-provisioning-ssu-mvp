@@ -1,15 +1,15 @@
-﻿using ResourceProvisioning.Abstractions.Events;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+﻿using System;
+using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Broker.Domain.Events
 {
-	public sealed class EnvironmentCreatedEvent : IDomainEvent
+	public sealed class EnvironmentCreatedEvent : IPivotEvent
 	{
-		public EnvironmentRoot Environment { get; }
+		public Guid EnvironmentId { get; }
 
-		public EnvironmentCreatedEvent(EnvironmentRoot environment)
+		public EnvironmentCreatedEvent(Guid environmentId)
 		{
-			Environment = environment;
+			EnvironmentId = environmentId;
 		}
 	}
 }
