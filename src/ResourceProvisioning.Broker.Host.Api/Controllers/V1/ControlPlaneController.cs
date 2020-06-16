@@ -2,6 +2,8 @@
 using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
@@ -30,6 +32,7 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			return Ok(await _broker.Handle(cmd));
 		}
 
+		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic payload)
 		{
