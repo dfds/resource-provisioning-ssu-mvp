@@ -17,7 +17,7 @@ namespace ResourceProvisioning.Abstractions.Net.Http
 
 		async Task<HttpResponseMessage> IRestClient.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
-			return await SendAsync(request, cancellationToken);
+			return await SendAsync(request, cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

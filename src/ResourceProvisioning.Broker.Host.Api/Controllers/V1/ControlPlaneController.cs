@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +23,7 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic request)
 		{
-			//TODO: Map http request payload (dynamic - json) to IProvisioningRequest (Ch3022)
-			var provisioningRequest = _mapper.Map<dynamic, IProvisioningRequest>(request);
+			var provisioningRequest = _mapper.Map<ExpandoObject, IProvisioningRequest>(request);
 
 			var result = await _broker.Handle(provisioningRequest);
 

@@ -28,8 +28,11 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{
-			services.AddAutoMapper(Assembly.GetAssembly(typeof(DependencyInjection)));
-			services.AddMediatR(typeof(DependencyInjection));
+			var thisType = typeof(DependencyInjection);
+			var thisAssembly = Assembly.GetAssembly(thisType);
+
+			services.AddAutoMapper(thisAssembly);
+			services.AddMediatR(thisType);
 			services.AddLogging();
 			services.AddOptions();
 			services.AddTelemetry();

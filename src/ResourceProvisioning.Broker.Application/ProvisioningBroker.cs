@@ -5,7 +5,6 @@ using AutoMapper;
 using MediatR;
 using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
-using ResourceProvisioning.Abstractions.Net.Http;
 
 namespace ResourceProvisioning.Broker.Application
 {
@@ -26,14 +25,14 @@ namespace ResourceProvisioning.Broker.Application
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
+		public async Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
 		{
-			//TODO: Map IProvisioningRequest to IProvisioningEvent (Ch2139)
-			var provisioningEvent = _mapper.Map<IProvisioningRequest, IProvisioningEvent>(request);
+			var response = await _mediator.Send(request, cancellationToken);
+			var provisioningEvent = _mapper.Map<IProvisioningResponse, IProvisioningEvent>(response);
 
-			_mediator.Publish(provisioningEvent, cancellationToken);
+			await _mediator.Publish(provisioningEvent, cancellationToken);
 
-			return Task.FromResult<IProvisioningResponse>(new ProvisionBrokerResponse());
+			return response;
 		}
 
 		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)
