@@ -4,9 +4,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ResourceProvisioning.Abstractions.Net.Http;
+using ResourceProvisioning.Abstractions.Protocols.Http;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Content
+namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Content
 {
 	internal class JsonContent : HttpContent, IJsonContent
 	{

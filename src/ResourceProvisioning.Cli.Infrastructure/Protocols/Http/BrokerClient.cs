@@ -3,13 +3,14 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using ResourceProvisioning.Abstractions.Net.Http;
+using ResourceProvisioning.Abstractions.Protocols.Http;
 using ResourceProvisioning.Cli.Application.Models;
 using ResourceProvisioning.Cli.Domain.Services;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http.Request;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http.Response;
+using ResourceProvisioning.Cli.Infrastructure.Net.Protocols.Request;
+using ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Request;
+using ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Response;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http
+namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 {
 	public class BrokerClient : RestClient, IBrokerService
 	{

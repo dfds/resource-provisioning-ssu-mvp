@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Request
+namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Request
 {
 	public class GetEnvironmentRequest : HttpRequestMessage
 	{

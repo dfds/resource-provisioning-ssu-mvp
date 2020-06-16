@@ -1,9 +1,9 @@
 ﻿using System.Dynamic;
 using AutoMapper;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
-using ResourceProvisioning.Broker.Application.Mapping.Converters;
+using ResourceProvisioning.Broker.Application.Mappings.Converters;
 
-namespace ResourceProvisioning.Broker.Application.Mapping.Profiles
+namespace ResourceProvisioning.Broker.Application.Mappings.Profiles
 {
 	public class DefaultProfile : Profile
 	{

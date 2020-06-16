@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
-namespace ResourceProvisioning.Broker.Application.Mapping.Converters
+namespace ResourceProvisioning.Broker.Application.Mappings.Converters
 {
 	//TODO: Map IProvisioningResponse to IProvisioningEvent (Ch2139)
 	public class ProvisioningResponseConverter : ITypeConverter<IProvisioningResponse, IProvisioningEvent>

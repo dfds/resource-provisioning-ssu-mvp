@@ -1,8 +1,8 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using ResourceProvisioning.Abstractions.Net.Http;
+using ResourceProvisioning.Abstractions.Protocols.Http;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Response
+namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Response
 {
 	internal class JsonResponse : HttpResponseMessage
 	{

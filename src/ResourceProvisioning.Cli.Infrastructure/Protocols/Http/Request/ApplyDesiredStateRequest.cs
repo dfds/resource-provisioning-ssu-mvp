@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http.Content;
+using ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Content;
 
-namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Request
+namespace ResourceProvisioning.Cli.Infrastructure.Net.Protocols.Request
 {
 	public class ApplyDesiredStateRequest : HttpRequestMessage
 	{
