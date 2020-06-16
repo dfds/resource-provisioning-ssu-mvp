@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Broker.Application.Commands.Environment;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 {
@@ -20,9 +22,11 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		}
 
 		[HttpGet]
-		public Task<IActionResult> Get()
+		public async Task<IActionResult> Get()
 		{
-			return Task.FromResult<IActionResult>(Ok("Hello world"));
+			var cmd = new CreateEnvironmentCommand(new DesiredState("foo", "1"));
+			
+			return Ok(await _broker.Handle(cmd));
 		}
 
 		[HttpPost]

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
@@ -12,15 +13,17 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		private readonly IMediator _mediator;
 		private readonly IMapper _mapper;
+		private readonly ILogger<ProvisioningBroker> _logger;
 
 		public Guid Id => Guid.NewGuid();
 
 		public GridActorType ActorType => GridActorType.System;
 
-		public ProvisioningBroker(IMediator mediator, IMapper mapper)
+		public ProvisioningBroker(IMediator mediator, IMapper mapper, ILogger<ProvisioningBroker> logger)
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
 		public async Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken = default)
@@ -35,7 +38,8 @@ namespace ResourceProvisioning.Broker.Application
 
 		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)
 		{
-			//TODO: Implement simple event handler logic for ProvisioningBroker (Ch2139)
+			_logger.LogInformation("Simple event handler logic!", @event);
+
 			return Task.CompletedTask;
 		}
 	}
