@@ -57,7 +57,10 @@ namespace ResourceProvisioning.Cli.Application.Commands
 
 			if (Interactive)
 			{
-				throw new NotImplementedException();
+				var interactive = new InteractiveFlow();
+				var response = await interactive.Auth();
+				Console.WriteLine(response.IdToken);
+				return 0;
 			}
 
 			if (UsernamePassword)
