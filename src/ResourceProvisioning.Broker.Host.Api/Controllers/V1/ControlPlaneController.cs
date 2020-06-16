@@ -30,7 +30,6 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			return Ok(await _broker.Handle(cmd));
 		}
 
-		//TODO: Test ControlPlaneController POST action. (Ch2139)
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic payload)
 		{

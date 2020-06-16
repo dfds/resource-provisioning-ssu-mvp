@@ -3,6 +3,7 @@ using System.Dynamic;
 using AutoMapper;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Application.Mapping.Converters
 {
@@ -16,7 +17,10 @@ namespace ResourceProvisioning.Broker.Application.Mapping.Converters
 
 				if (dynamicSource.HttpRequest.Path == "/ControlPlane" && dynamicSource.HttpRequest.Method == "POST")
 				{
-					return new CreateEnvironmentCommand(dynamicSource.Payload);
+					if (dynamicSource.Payload is DesiredState desiredState)
+					{
+						return new CreateEnvironmentCommand(desiredState);
+					}
 				}
 			}
 
