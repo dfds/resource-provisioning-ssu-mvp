@@ -14,6 +14,7 @@ using ResourceProvisioning.Abstractions.Telemetry;
 using ResourceProvisioning.Broker.Application.Behaviors;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
 using ResourceProvisioning.Broker.Application.Events.Environment;
+using ResourceProvisioning.Broker.Application.Events.Provisioning;
 using ResourceProvisioning.Broker.Application.Events.Resource;
 using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
@@ -62,6 +63,7 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddCommandHandlers(this IServiceCollection services)
 		{
+			services.AddTransient<ICommandHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<IProvisioningRequest, IProvisioningResponse>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
@@ -75,7 +77,7 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
-			services.AddTransient<IEventHandler<IProvisioningEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
+			services.AddTransient<IProvisioningEventHandler>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 
 		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions = default)

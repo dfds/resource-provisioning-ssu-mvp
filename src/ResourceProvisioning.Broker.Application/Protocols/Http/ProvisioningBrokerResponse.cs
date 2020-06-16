@@ -6,10 +6,14 @@ namespace ResourceProvisioning.Broker.Application.Protocols.Http
 {
 	public sealed class ProvisioningBrokerResponse : HttpResponseMessage, IProvisioningResponse
 	{
-		public ProvisioningBrokerResponse(dynamic content, JsonSerializerOptions options = default)
+		public ProvisioningBrokerResponse(dynamic content = null, JsonSerializerOptions options = default)
 		{
 			StatusCode = System.Net.HttpStatusCode.OK;
-			Content = new StringContent(JsonSerializer.Serialize(content, options));
+			
+			if(content != null)
+			{ 
+				Content = new StringContent(JsonSerializer.Serialize(content, options));
+			}
 		}
 	}
 }

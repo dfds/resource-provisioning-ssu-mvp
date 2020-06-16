@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
-using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 {
@@ -24,15 +24,30 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			var cmd = new CreateEnvironmentCommand(new DesiredState("foo", "1"));
-			
-			return Ok(await _broker.Handle(cmd));
+			try
+			{
+				//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
+				var cmd = new GetEnvironmentCommand(Guid.Empty);
+
+				return Ok(await _broker.Handle(cmd));
+			}
+			catch (Exception e)
+			{
+				var x = e;
+			}
+
+			return Ok();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] dynamic request)
+		public async Task<IActionResult> Post([FromBody] dynamic payload)
 		{
-			IProvisioningRequest provisioningRequest = _mapper.Map<IProvisioningRequest>(request);
+			dynamic requestWrapper = new ExpandoObject();
+
+			requestWrapper.HttpRequest = Request;
+			requestWrapper.Payload = payload;
+
+			IProvisioningRequest provisioningRequest = _mapper.Map<IProvisioningRequest>(requestWrapper);
 
 			var result = await _broker.Handle(provisioningRequest);
 

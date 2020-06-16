@@ -9,19 +9,19 @@ using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
-	public sealed class CreateEnvironmentCommandHandler : CommandHandler<CreateEnvironmentCommand, IProvisioningResponse>
+	public sealed class GetEnvironmentCommandHandler : CommandHandler<GetEnvironmentCommand, IProvisioningResponse>
 	{
 		private readonly IControlPlaneService _controlPlaneService;
 
-		public CreateEnvironmentCommandHandler(IMediator mediator, IControlPlaneService controlPlaneService) : base(mediator)
+		public GetEnvironmentCommandHandler(IMediator mediator, IControlPlaneService controlPlaneService) : base(mediator)
 		{
 			_controlPlaneService = controlPlaneService ?? throw new ArgumentNullException(nameof(controlPlaneService));
 		}
 
-		public override async Task<IProvisioningResponse> Handle(CreateEnvironmentCommand command, CancellationToken cancellationToken)
+		public override async Task<IProvisioningResponse> Handle(GetEnvironmentCommand command, CancellationToken cancellationToken)
 		{
-			//TODO: Re-enable CreateEnvironmentCommandHandler logic once db is working. (Ch2943)
-			//var aggregate = await _controlPlaneService.AddEnvironmentAsync(command.DesiredState);
+			//TODO: Re-enable GetEnvironmentCommandHandler logic once db is working. (Ch2943)
+			//var aggregate = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
 
 			return new ProvisioningBrokerResponse("{}");
 		}

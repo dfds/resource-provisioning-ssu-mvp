@@ -12,19 +12,22 @@ namespace ResourceProvisioning.Broker.Application.Mapping.Converters
 		{
 			if (source is ProvisioningBrokerResponse brokerResponse)
 			{
-				var getContentTask = brokerResponse.Content.ReadAsStringAsync();
+				var getContentTask = brokerResponse.Content?.ReadAsStringAsync();
 
-				getContentTask.Wait();
+				if(getContentTask != null)
+				{ 
+					getContentTask.Wait();
 
-				var reader = new Utf8JsonReader(new System.ReadOnlySpan<byte>(System.Text.Encoding.UTF8.GetBytes(getContentTask.Result)));
+					var reader = new Utf8JsonReader(new System.ReadOnlySpan<byte>(System.Text.Encoding.UTF8.GetBytes(getContentTask.Result)));
 
-				if (JsonDocument.TryParseValue(ref reader, out var document))
-				{
-					return new ProvisioningRequestedEvent(document.RootElement);
+					if (JsonDocument.TryParseValue(ref reader, out var document))
+					{
+						return new ProvisioningRequestedEvent(document.RootElement);
+					}
 				}
 			}
 
-			return null;
+			throw new ProvisioningBrokerException("Unsupported IProvisioningResponse mapping");
 		}
 	}
 }

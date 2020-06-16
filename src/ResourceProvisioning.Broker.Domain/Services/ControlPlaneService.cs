@@ -27,8 +27,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 		{
 			var environment = _environmentRepository.Add(new EnvironmentRoot((DesiredState)desiredState));
 
-			//TODO: Re-enable ControlPlaneService logic once db is working. (Ch2943)
-			//await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+			await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
 			return environment;
 		}
