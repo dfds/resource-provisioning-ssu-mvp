@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace ResourceProvisioning.Abstractions.Net.Http
+namespace ResourceProvisioning.Abstractions.Protocols.Http
 {
 	public interface IHttpResponse
 	{

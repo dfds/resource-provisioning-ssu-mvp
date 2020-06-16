@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
-namespace ResourceProvisioning.Broker.Application.Net.Http
+namespace ResourceProvisioning.Broker.Application.Protocols.Http
 {
 	public sealed class ProvisionBrokerResponse : HttpResponseMessage, IProvisioningResponse
 	{

@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace ResourceProvisioning.Abstractions.Net.Http
+namespace ResourceProvisioning.Abstractions.Protocols.Http
 {
 	public interface IHttpRequest
 	{

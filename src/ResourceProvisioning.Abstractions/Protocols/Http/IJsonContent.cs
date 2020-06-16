@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace ResourceProvisioning.Abstractions.Net.Http
+namespace ResourceProvisioning.Abstractions.Protocols.Http
 {
 	public interface IJsonContent
 	{
