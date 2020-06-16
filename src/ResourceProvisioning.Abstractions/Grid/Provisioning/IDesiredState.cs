@@ -10,6 +10,6 @@ namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 
 		IEnumerable<KeyValuePair<string, string>> Labels { get; }
 
-		Dictionary<string, string> Properties { get; }
+		IEnumerable<KeyValuePair<string, string>> Properties { get; }
 	}
 }

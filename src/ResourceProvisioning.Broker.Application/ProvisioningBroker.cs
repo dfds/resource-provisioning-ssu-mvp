@@ -8,8 +8,6 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Application
 {
-	//TODO: Implement application commands & commandhandlers (Ch2139)
-	//TODO: Implement integration events & eventhandlers (Ch2139)
 	public sealed class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
@@ -25,7 +23,7 @@ namespace ResourceProvisioning.Broker.Application
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		public async Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
+		public async Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken = default)
 		{
 			var response = await _mediator.Send(request, cancellationToken);
 			var provisioningEvent = _mapper.Map<IProvisioningResponse, IProvisioningEvent>(response);
@@ -38,7 +36,7 @@ namespace ResourceProvisioning.Broker.Application
 		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)
 		{
 			//TODO: Implement simple event handler logic for ProvisioningBroker (Ch2139)
-			throw new NotImplementedException();
+			return Task.CompletedTask;
 		}
 	}
 }

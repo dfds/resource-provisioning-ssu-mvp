@@ -11,6 +11,6 @@ namespace ResourceProvisioning.Cli.Application.Models
 
 		public IEnumerable<KeyValuePair<string, string>> Labels { get; set; }
 
-		public Dictionary<string, string> Properties { get; set; }
+		public IEnumerable<KeyValuePair<string, string>> Properties { get; set; }
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public interface IDomainEvent : IEvent, INotification
+	public interface IDomainEvent : IEvent
 	{
 
 	}

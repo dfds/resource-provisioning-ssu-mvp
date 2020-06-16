@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 {
@@ -7,5 +8,7 @@ namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 		DateTime Created { get; }
 
 		DateTime LastUpdated { get; }
+
+		KeyValuePair<string, string> ResourcePrincipal { get;}
 	}
 }

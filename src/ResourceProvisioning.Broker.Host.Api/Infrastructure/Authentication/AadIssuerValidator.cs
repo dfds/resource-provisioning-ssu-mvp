@@ -20,8 +20,6 @@ namespace ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication
 	{
 		private const string AzureAdIssuerMetadataUrl = "https://login.microsoftonline.com/common/discovery/instance?authorization_endpoint=https://login.microsoftonline.com/common/oauth2/v2.0/authorize&api-version=1.1";
 		private const string FallbackAuthority = "https://login.microsoftonline.com/";
-
-		// TODO: separate AadIssuerValidator creation logic from the validation logic in order to unit test it
 		private static readonly IDictionary<string, AadIssuerValidator> IssuerValidators = new ConcurrentDictionary<string, AadIssuerValidator>();
 		private static readonly ConfigurationManager<IssuerMetadata> ConfigManager = new ConfigurationManager<IssuerMetadata>(AzureAdIssuerMetadataUrl, new IssuerConfigurationRetriever());
 
@@ -114,8 +112,6 @@ namespace ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication
 			if (IsValidIssuer(validationParameters.ValidIssuer, tenantId, actualIssuer))
 				return actualIssuer;
 
-			// If a valid issuer is not found, throw
-			// brentsch - todo, create a list of all the possible valid issuers in TokenValidationParameters
 			throw new SecurityTokenInvalidIssuerException($"Issuer: '{actualIssuer}', does not match any of the valid issuers provided for this application.");
 		}
 

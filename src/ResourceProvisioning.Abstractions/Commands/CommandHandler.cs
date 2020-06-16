@@ -13,6 +13,6 @@ namespace ResourceProvisioning.Abstractions.Commands
 			_mediator = mediator;
 		}
 
-		public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
+		public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken = default);
 	}
 }

@@ -1,11 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using MediatR;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public interface IEventHandler<in TEvent> : IEventHandler where TEvent : IEvent
+	public interface IEventHandler<in TEvent> : IEventHandler, INotificationHandler<TEvent> where TEvent : IEvent
 	{
-		Task Handle(TEvent @event, CancellationToken cancellationToken = default);
+
 	}
 
 	public interface IEventHandler

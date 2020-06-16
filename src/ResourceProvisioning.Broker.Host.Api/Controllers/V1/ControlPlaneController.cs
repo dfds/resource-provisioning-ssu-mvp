@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +19,16 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
+		[HttpGet]
+		public Task<IActionResult> Get()
+		{
+			return Task.FromResult<IActionResult>(Ok("Hello world"));
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic request)
 		{
-			var provisioningRequest = _mapper.Map<ExpandoObject, IProvisioningRequest>(request);
+			IProvisioningRequest provisioningRequest = _mapper.Map<IProvisioningRequest>(request);
 
 			var result = await _broker.Handle(provisioningRequest);
 

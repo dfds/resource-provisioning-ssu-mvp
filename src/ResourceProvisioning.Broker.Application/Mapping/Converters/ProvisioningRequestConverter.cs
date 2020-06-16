@@ -2,7 +2,7 @@
 using AutoMapper;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
-namespace ResourceProvisioning.Broker.Application.Mappings.Converters
+namespace ResourceProvisioning.Broker.Application.Mapping.Converters
 {
 	//TODO: Map http request payload (dynamic - json) to IProvisioningRequest (Ch3022)
 	public class ProvisioningRequestConverter : ITypeConverter<ExpandoObject, IProvisioningRequest>

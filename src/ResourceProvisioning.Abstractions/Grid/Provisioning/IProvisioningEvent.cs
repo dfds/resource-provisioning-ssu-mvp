@@ -1,8 +1,9 @@
-﻿using ResourceProvisioning.Abstractions.Events;
+﻿using MediatR;
+using ResourceProvisioning.Abstractions.Events;
 
 namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 {
-	public interface IProvisioningEvent : IEvent
+	public interface IProvisioningEvent : IEvent, INotification
 	{
 	}
 }

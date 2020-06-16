@@ -37,7 +37,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 
 			var payload = await response.Content;
 
-			return JsonSerializer.Deserialize<ActualState>(payload.Document.RootElement.GetRawText());
+			return JsonSerializer.Deserialize<ActualState>(payload.GetRawText());
 		}
 
 		public async Task ApplyDesiredStateAsync(
