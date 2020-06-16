@@ -14,39 +14,38 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 	{
 		private readonly JsonSerializerOptions _serializerOptions;
 
-		//TODO: Down the line we should introduce a unit of work concept for this. It could be done using virtual memory mapped files which stay in memory until save changes is called.
-		public IUnitOfWork UnitOfWork => null;
+		public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
 		public string RootDirectory { get; set; } = Environment.CurrentDirectory;
 
-		public ManifestRepository(JsonSerializerOptions serializerOptions = default) 
-        {
-            _serializerOptions = serializerOptions;
-        }
+		public ManifestRepository(JsonSerializerOptions serializerOptions = default)
+		{
+			_serializerOptions = serializerOptions;
+		}
 
 		public Task<IEnumerable<T>> GetDesiredStatesByIdAsync(Guid environmentId)
-        {
-            var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
-            var desiredStates =
-                files.Select(path => 
-                    JsonSerializer.Deserialize<T>(
-                        File.ReadAllText(path), _serializerOptions)
-                    );
+		{
+			var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
+			var desiredStates =
+				files.Select(path =>
+					JsonSerializer.Deserialize<T>(
+						File.ReadAllText(path), _serializerOptions)
+					);
 
-            return Task.FromResult(desiredStates);
-        }
+			return Task.FromResult(desiredStates);
+		}
 
-        public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
-        {
-            var fileName = $"{environmentId.ToString()}.json";
-            var filePath = Path.Combine(RootDirectory, fileName);
+		public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
+		{
+			var fileName = $"{environmentId.ToString()}.json";
+			var filePath = Path.Combine(RootDirectory, fileName);
 
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(T)));
-            }
+			if (!File.Exists(filePath))
+			{
+				File.WriteAllText(filePath, JsonSerializer.Serialize(desiredState, typeof(T)));
+			}
 
-            return Task.CompletedTask;
-        }
+			return Task.CompletedTask;
+		}
 	}
 }

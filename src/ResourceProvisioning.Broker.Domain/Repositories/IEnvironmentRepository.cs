@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Repositories;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 
 namespace ResourceProvisioning.Broker.Domain.Repository
 {

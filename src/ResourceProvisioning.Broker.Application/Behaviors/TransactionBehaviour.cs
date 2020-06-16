@@ -8,7 +8,7 @@ using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
-	public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 	{
 		private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
 		private readonly DomainContext _dbContext;
@@ -28,7 +28,7 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 			{
 				var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-				await strategy.ExecuteAsync(async () => 
+				await strategy.ExecuteAsync(async () =>
 				{
 					_logger.LogInformation($"Begin transaction {typeof(TRequest).Name}");
 

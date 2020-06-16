@@ -11,9 +11,9 @@ namespace ResourceProvisioning.Cli.Domain.Repositories
 		string RootDirectory { get; set; }
 
 		Task StoreDesiredStateAsync(
-            Guid environmentId,
+			Guid environmentId,
 			T desiredState
-        );
+		);
 
 		Task<IEnumerable<T>> GetDesiredStatesByIdAsync(
 			Guid environmentId

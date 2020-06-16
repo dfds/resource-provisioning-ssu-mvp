@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Threading.Tasks;
-using ResourceProvisioning.Broker.Domain.ValueObjects;
-using ResourceProvisioning.Broker.Domain.Repository;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
-using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using System.Threading;
+using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Aggregates;
+using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
+using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
+using ResourceProvisioning.Broker.Domain.Repository;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
@@ -22,9 +23,9 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			_resourceRepository = resourceRepository;
 		}
 
-		public async Task<EnvironmentRoot> AddEnvironmentAsync(DesiredState desiredState, CancellationToken cancellationToken = default)
+		public async Task<EnvironmentRoot> AddEnvironmentAsync(IDesiredState desiredState, CancellationToken cancellationToken = default)
 		{
-			var environment = _environmentRepository.Add(new EnvironmentRoot(desiredState));
+			var environment = _environmentRepository.Add(new EnvironmentRoot((DesiredState)desiredState));
 
 			await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -42,7 +43,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 				await _environmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 			}
 		}
-		
+
 		public async Task<EnvironmentRoot> GetEnvironmentByIdAsync(Guid environmentId)
 		{
 			var results = await _environmentRepository.GetAsync(env => env.Id == environmentId);
@@ -57,11 +58,11 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			return results;
 		}
 
-		public async Task<EnvironmentRoot> UpdateEnvironmentAsync(Guid environmentId, DesiredState desiredState, CancellationToken cancellationToken = default)
+		public async Task<EnvironmentRoot> UpdateEnvironmentAsync(Guid environmentId, IDesiredState desiredState, CancellationToken cancellationToken = default)
 		{
 			var environment = await GetEnvironmentByIdAsync(environmentId);
 
-			environment.SetDesiredState(desiredState);
+			environment.SetDesiredState((DesiredState)desiredState);
 
 			_environmentRepository.Update(environment);
 
@@ -70,9 +71,9 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			return environment;
 		}
 
-		public async Task<ResourceRoot> AddResourceAsync(DesiredState desiredState, CancellationToken cancellationToken = default)
+		public async Task<ResourceRoot> AddResourceAsync(IDesiredState desiredState, CancellationToken cancellationToken = default)
 		{
-			var resource = _resourceRepository.Add(new ResourceRoot(desiredState));
+			var resource = _resourceRepository.Add(new ResourceRoot((DesiredState)desiredState));
 
 			await _resourceRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -97,12 +98,12 @@ namespace ResourceProvisioning.Broker.Domain.Services
 
 			return results.SingleOrDefault();
 		}
-		
-		public async Task<ResourceRoot> UpdateResourceAsync(Guid resourceId, DesiredState desiredState, CancellationToken cancellationToken = default)
+
+		public async Task<ResourceRoot> UpdateResourceAsync(Guid resourceId, IDesiredState desiredState, CancellationToken cancellationToken = default)
 		{
 			var resource = await GetResourceByIdAsync(resourceId);
 
-			resource.SetDesiredState(desiredState);
+			resource.SetDesiredState((DesiredState)desiredState);
 
 			_resourceRepository.Update(resource);
 
@@ -111,7 +112,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			return resource;
 		}
 
-		public async Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(DesiredState desiredState)
+		public async Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(IDesiredState desiredState)
 		{
 			var resources = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
 			var environments = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));

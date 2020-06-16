@@ -6,8 +6,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 {
 	public abstract class Entity<TKey> : IEntity<TKey> where TKey : struct
 	{
-		int? _requestedHashCode;
-
+		private int? _requestedHashCode;
 		private List<IDomainEvent> _domainEvents;
 
 		public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents?.AsReadOnly();
@@ -56,8 +55,8 @@ namespace ResourceProvisioning.Abstractions.Entities
 
 			if (item.IsTransient() || this.IsTransient())
 				return false;
-			else
-				return item.Id.Equals(this.Id);
+
+			return item.Id.Equals(this.Id);
 		}
 
 		public override int GetHashCode()
@@ -76,9 +75,9 @@ namespace ResourceProvisioning.Abstractions.Entities
 		public static bool operator ==(Entity<TKey> left, Entity<TKey> right)
 		{
 			if (Equals(left, null))
-				return Equals(right, null) ? true : false;
-			else
-				return left.Equals(right);
+				return Equals(right, null);
+
+			return left.Equals(right);
 		}
 
 		public static bool operator !=(Entity<TKey> left, Entity<TKey> right)

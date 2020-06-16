@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
@@ -11,29 +11,23 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 	[Route("[controller]")]
 	public class ControlPlaneController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly IProvisioningBroker _broker;
 		private readonly IMapper _mapper;
 
-		public ControlPlaneController(IMediator mediator, IMapper mapper)
+		public ControlPlaneController(IProvisioningBroker broker, IMapper mapper)
 		{
-			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+			_broker = broker ?? throw new ArgumentNullException(nameof(broker));
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		[HttpGet]
-		public async Task<IActionResult> Get()
-		{
-			return Ok("Hello world");
-		}
-		
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic request)
 		{
-			var command = _mapper.Map<dynamic, IProvisioningRequest>(request);
-			
-			await _mediator.Send(command);
+			var provisioningRequest = _mapper.Map<ExpandoObject, IProvisioningRequest>(request);
 
-			return Ok();
+			var result = await _broker.Handle(provisioningRequest);
+
+			return Ok(result);
 		}
 	}
 }

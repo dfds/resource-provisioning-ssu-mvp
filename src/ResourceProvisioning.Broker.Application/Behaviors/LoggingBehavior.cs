@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
-	public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 	{
 		private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 

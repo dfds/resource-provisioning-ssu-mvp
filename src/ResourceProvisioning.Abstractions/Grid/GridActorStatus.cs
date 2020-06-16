@@ -8,8 +8,8 @@ namespace ResourceProvisioning.Abstractions.Grid
 	public class GridActorStatus : EntityEnumeration
 	{
 		public static GridActorStatus Initializing = new GridActorStatus(1, nameof(Initializing).ToLowerInvariant());
-		public static GridActorStatus Started = new GridActorStatus(2, nameof(Started).ToLowerInvariant());
-		public static GridActorStatus Stopped = new GridActorStatus(4, nameof(Stopped).ToLowerInvariant());
+		public static GridActorStatus Created = new GridActorStatus(2, nameof(Created).ToLowerInvariant());
+		public static GridActorStatus Terminated = new GridActorStatus(4, nameof(Terminated).ToLowerInvariant());
 
 		protected GridActorStatus()
 		{
@@ -20,7 +20,7 @@ namespace ResourceProvisioning.Abstractions.Grid
 		{
 		}
 
-		public static IEnumerable<GridActorStatus> List() => new[] { Initializing, Started, Stopped };
+		public static IEnumerable<GridActorStatus> List() => new[] { Initializing, Created, Terminated };
 
 		public static GridActorStatus FromName(string name)
 		{

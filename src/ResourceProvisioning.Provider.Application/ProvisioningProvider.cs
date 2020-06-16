@@ -10,7 +10,7 @@ namespace ResourceProvisioning.Provider.Application
 	{
 		public Guid Id => Guid.NewGuid();
 
-		public GridActorType Type => GridActorType.System;
+		public GridActorType ActorType => GridActorType.System;
 
 		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
 		{

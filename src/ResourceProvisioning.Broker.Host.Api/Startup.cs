@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware;
 
 namespace ResourceProvisioning.Broker.Host.Api
@@ -41,11 +45,14 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
-			Application.DependencyInjection.AddProvisioningBroker(services, options => {
+			Application.DependencyInjection.AddProvisioningBroker(services, options =>
+			{
 				Configuration.Bind(options);
 			});
+
+            ConfigureAuth(services);
 		}
-		
+
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseCors("open");
@@ -59,6 +66,29 @@ namespace ResourceProvisioning.Broker.Host.Api
 			});
 
 			app.UseMiddleware<CustomExceptionMiddleware>();
+		}
+
+		protected virtual void ConfigureAuth(IServiceCollection services)
+		{
+			services.AddAuthentication(AzureADDefaults.JwtBearerAuthenticationScheme)
+					.AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
+
+			services.Configure<JwtBearerOptions>(AzureADDefaults.JwtBearerAuthenticationScheme, options =>
+			{
+				options.Authority += "/v2.0";
+
+				// The web API accepts as audiences both the Client ID (options.Audience) and api://{ClientID}.
+				options.TokenValidationParameters.ValidAudiences = new[]
+				{
+					options.Audience,
+					$"api://{options.Audience}"
+				};
+				
+				// Instead of using the default validation (validating against a single tenant,
+				// as we do in line-of-business apps),
+				// we inject our own multitenant validation logic (which even accepts both v1 and v2 tokens).
+				options.TokenValidationParameters.IssuerValidator = AadIssuerValidator.GetIssuerValidator(options.Authority).Validate; ;
+			});
 		}
 	}
 }

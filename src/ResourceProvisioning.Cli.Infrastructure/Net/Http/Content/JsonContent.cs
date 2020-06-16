@@ -39,7 +39,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Http.Content
 
 				jsonWriter.Flush();
 			}
-			
+
 			return Task.CompletedTask;
 		}
 

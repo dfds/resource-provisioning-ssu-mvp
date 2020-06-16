@@ -36,7 +36,7 @@ namespace ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware
 			context.Response.ContentType = "application/json";
 			context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-			return context.Response.WriteAsync(new 
+			return context.Response.WriteAsync(new
 			{
 				context.Response.StatusCode,
 				Message = message

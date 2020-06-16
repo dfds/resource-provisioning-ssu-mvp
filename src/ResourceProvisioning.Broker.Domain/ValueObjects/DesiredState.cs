@@ -4,6 +4,8 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
+	//TODO: Review existing implementation (Ch3086)
+	//TODO: Finalize value object(s) (Ch3086)
 	public class DesiredState : ValueObject, IDesiredState
 	{
 		public string Name { get; protected set; }
@@ -13,7 +15,7 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 		public IEnumerable<KeyValuePair<string, string>> Labels { get; protected set; }
 
 		public Dictionary<string, string> Properties { get; protected set; }
-		
+
 		protected DesiredState() { }
 
 		public DesiredState(string name, string apiVersion, IEnumerable<KeyValuePair<string, string>> labels = default, Dictionary<string, string> properties = default)
@@ -26,7 +28,6 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 
 		protected override IEnumerable<object> GetAtomicValues()
 		{
-			// Using a yield return statement to return each element one at a time
 			yield return Name;
 			yield return ApiVersion;
 			yield return Labels;

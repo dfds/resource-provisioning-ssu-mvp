@@ -1,51 +1,43 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
-using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application
 {
-	public class ProvisioningBroker : IProvisioningBroker
+	//TODO: Implement application commands & commandhandlers (Ch2139)
+	//TODO: Implement integration events & eventhandlers (Ch2139)
+	public sealed class ProvisioningBroker : IProvisioningBroker
 	{
 		private readonly IMediator _mediator;
-		private readonly IControlPlaneService _controlPlaneService;
-		private readonly ProvisioningBrokerOptions _options;
+		private readonly IMapper _mapper;
 
 		public Guid Id => Guid.NewGuid();
 
-		public GridActorType Type => GridActorType.System;
+		public GridActorType ActorType => GridActorType.System;
 
-		public IDesiredState DesiredState => throw new NotImplementedException();
-
-		public ProvisioningBroker(IMediator mediator, IControlPlaneService controlPlaneService, IOptions<ProvisioningBrokerOptions> options = default) 
+		public ProvisioningBroker(IMediator mediator, IMapper mapper)
 		{
 			_mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-			_controlPlaneService = controlPlaneService ?? throw new ArgumentNullException(nameof(controlPlaneService));
-			_options = options?.Value;
+			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		public Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
+		public async Task<IProvisioningResponse> Handle(IProvisioningRequest request, CancellationToken cancellationToken)
 		{
-			//TODO: Map request to event.
-			//TODO: Implement provisioning event.
-			IProvisioningEvent provisioningEvent = null;
+			var response = await _mediator.Send(request, cancellationToken);
+			var provisioningEvent = _mapper.Map<IProvisioningResponse, IProvisioningEvent>(response);
 
-			_mediator.Publish(provisioningEvent, cancellationToken);
+			await _mediator.Publish(provisioningEvent, cancellationToken);
 
-			//TODO: Decide expected result for broker.
-			throw new NotImplementedException();
+			return response;
 		}
 
 		public Task Handle(IProvisioningEvent @event, CancellationToken cancellationToken = default)
 		{
-			//TODO: Query environments affected by EnvironmentResourceCreatedEvent		
-			//TODO: Implement UpdateEnvironmentCommand
-			//TODO: Send UpdateEnvironmentCommand to associated command handler via mediator.
-			//TODO: Emit EnvironmentUpdatedEvents.
+			//TODO: Implement simple event handler logic for ProvisioningBroker (Ch2139)
 			throw new NotImplementedException();
 		}
 	}

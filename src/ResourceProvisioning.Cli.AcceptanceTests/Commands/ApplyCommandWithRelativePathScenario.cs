@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.AutoMock;
-using ResourceProvisioning.Cli.Application;
 using ResourceProvisioning.Cli.Application.Models;
 using ResourceProvisioning.Cli.Domain.Services;
 using ResourceProvisioning.Cli.Host.Console;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http;
 using Xunit;
 
 namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
@@ -54,14 +52,14 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 				@"Commands/TestMaterial",
 				"single-resource-manifest.json"
 			);
-			
+
 			await Program.Main(
 				"apply",
 				manifestPath,
 				$"-e={_environmentId.ToString()}"
 			);
 		}
-		
+
 		private async Task Then_rest_client_posts_provisioning_request_to_broker()
 		{
 			_brokerClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()),

@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Abstractions.Net.Http
 	{
 		protected RestClient(HttpMessageHandler handler) : base(handler)
 		{
-			
+
 		}
 
 		protected RestClient(HttpMessageHandler handler, bool disposeHandler) : base(handler, disposeHandler)
@@ -17,7 +17,7 @@ namespace ResourceProvisioning.Abstractions.Net.Http
 
 		async Task<HttpResponseMessage> IRestClient.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
-			return await SendAsync(request, cancellationToken);
+			return await SendAsync(request, cancellationToken).ConfigureAwait(false);
 		}
 	}
 }

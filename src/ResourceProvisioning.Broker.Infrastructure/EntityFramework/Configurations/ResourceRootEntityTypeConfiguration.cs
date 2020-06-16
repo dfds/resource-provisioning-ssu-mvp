@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ResourceProvisioning.Broker.Domain.Aggregates.ResourceAggregate;
+using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations
 {
@@ -20,8 +20,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 				.HasForeignKey("StatusId");
 
 			configuration.OwnsOne(o => o.DesiredState);
-
-			//TODO: Configure cascading delete of related EnvironmentResourceReference entries.
 		}
 	}
 }

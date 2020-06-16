@@ -6,15 +6,17 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Commands;
+using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Abstractions.Telemetry;
 using ResourceProvisioning.Broker.Application.Behaviors;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
-using ResourceProvisioning.Broker.Application.Events;
-using ResourceProvisioning.Broker.Domain.Aggregates.EnvironmentAggregate;
-using ResourceProvisioning.Broker.Domain.Events;
+using ResourceProvisioning.Broker.Application.Events.Environment;
+using ResourceProvisioning.Broker.Application.Events.Resource;
+using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
+using ResourceProvisioning.Broker.Domain.Events.Environment;
 using ResourceProvisioning.Broker.Domain.Services;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Infrastructure.Repositories;
@@ -26,13 +28,13 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{
-			//Setup external DI configurations.
+			var thisType = typeof(DependencyInjection);
+			var thisAssembly = Assembly.GetAssembly(thisType);
+
+			services.AddAutoMapper(thisAssembly);
+			services.AddMediatR(thisType);
 			services.AddLogging();
 			services.AddOptions();
-			services.AddAutoMapper(Assembly.GetAssembly(typeof(DependencyInjection)));
-			services.AddMediatR(typeof(DependencyInjection));
-
-			//Setup application DI configuration.
 			services.AddTelemetry();
 			services.AddBehaviors();
 			services.AddCommandHandlers();
@@ -63,15 +65,15 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddEventHandlers(this IServiceCollection services)
 		{
-			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
 			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentStartedEvent>, EnvironmentStartedEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentStoppedEvent>, EnvironmentStoppedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<IDomainEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
 			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
-			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningCompletedEvent>, ResourceProvisioningCompletedEventHandler>();
 			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningRequestedEvent>, ResourceProvisioningRequestedEventHandler>();
+			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningCompletedEvent>, ResourceProvisioningCompletedEventHandler>();
 			services.AddTransient<IIntegrationEventHandler<ResourceProvisioningTerminatedEvent>, ResourceProvisioningTerminatedEventHandler>();
 		}
 
@@ -95,7 +97,9 @@ namespace ResourceProvisioning.Broker.Application
 							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
 						});
 				}
-			});
+			}, ServiceLifetime.Transient);
+
+			services.AddTransient<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
 		}
 
 		private static void AddRepositories(this IServiceCollection services)
@@ -111,6 +115,8 @@ namespace ResourceProvisioning.Broker.Application
 		private static void AddBroker(this IServiceCollection services)
 		{
 			services.AddSingleton<IProvisioningBroker, ProvisioningBroker>();
+			services.AddSingleton<ICommandHandler<IProvisioningRequest, IProvisioningResponse>>(factory => factory.GetRequiredService<IProvisioningBroker>());
+			services.AddSingleton<IEventHandler<IProvisioningEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 	}
 }

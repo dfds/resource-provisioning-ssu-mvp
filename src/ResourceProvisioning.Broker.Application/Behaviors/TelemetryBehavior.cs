@@ -8,7 +8,7 @@ using ResourceProvisioning.Abstractions.Telemetry;
 
 namespace ResourceProvisioning.Broker.Application.Behaviors
 {
-	public class TelemetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	public sealed class TelemetryBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 	{
 		private readonly ILogger<TelemetryBehavior<TRequest, TResponse>> _logger;
 		private readonly ITelemetryProvider _telemetryProvider;
@@ -28,9 +28,9 @@ namespace ResourceProvisioning.Broker.Application.Behaviors
 			try
 			{
 				client.TrackTrace(System.Text.Json.JsonSerializer.Serialize(request, request.GetType()));
-				
+
 				response = await next();
-				
+
 				client.TrackTrace(System.Text.Json.JsonSerializer.Serialize(response, response.GetType()));
 			}
 			catch (Exception e)
