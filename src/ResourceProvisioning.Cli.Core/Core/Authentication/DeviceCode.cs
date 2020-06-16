@@ -19,9 +19,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 		public async Task<AuthenticationToken> Auth()
 		{
 			var response = await InitialiseFlow();
-			Console.WriteLine(response.Message);
 			var tokenResponse = await Poll(response);
-			Console.WriteLine(tokenResponse.IdToken);
 			
 			return new AuthenticationToken
 			{
@@ -59,7 +57,14 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			while (true)
 			{
 				// TODO: Don't hardcode URI
-				var resp = await _httpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
+				var req = new HttpRequestMessage(HttpMethod.Post,
+					"https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token")
+				{
+					Content = new FormUrlEncodedContent(dict)
+				};
+				req.Headers.Add("Origin", "localhost");
+				
+				var resp = await _httpClient.SendAsync(req);
 				var respPayload = await resp.Content.ReadAsStringAsync();
 
 				if (resp.IsSuccessStatusCode)

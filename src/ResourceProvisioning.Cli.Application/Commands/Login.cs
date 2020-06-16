@@ -50,8 +50,8 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			if (DeviceCode)
 			{
 				var deviceCode = new DeviceCode();
-				await deviceCode.Auth();
-				Console.WriteLine(DeviceCode);
+				var response = await deviceCode.Auth();
+				Console.WriteLine(response.IdToken);
 				return 0;
 			}
 
