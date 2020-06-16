@@ -5,7 +5,7 @@ using ResourceProvisioning.Broker.Domain.Events.Environment;
 
 namespace ResourceProvisioning.Broker.Application.Events.Resource
 {
-	public sealed class ResourceReadyEventHandler : IDomainEventHandler<ResourceReadyEvent>
+	public sealed class ResourceReadyEventHandler : IEventHandler<ResourceReadyEvent>
 	{
 		public Task Handle(ResourceReadyEvent @event, CancellationToken cancellationToken)
 		{

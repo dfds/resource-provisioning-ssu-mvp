@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
 using MediatR;
+using Microsoft.ApplicationInsights;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,14 +32,11 @@ namespace ResourceProvisioning.Broker.Application
 	{
 		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
 		{
-			var targetAssembly = Assembly.GetExecutingAssembly();
-			
-			services.AddAutoMapper(targetAssembly);
-			services.AddMediatR(targetAssembly);
+			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			services.AddLogging();
 			services.AddOptions();
-			services.AddTelemetry();
-			services.AddBehaviors();
+			services.AddMediator();
+			services.AddTelemetryProviders();
 			services.AddCommandHandlers();
 			services.AddEventHandlers();
 			services.AddPersistancy(configureOptions);
@@ -47,18 +45,36 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddBroker();
 		}
 
-		private static void AddTelemetry(this IServiceCollection services)
+		private static void AddMediator(this IServiceCollection services)
 		{
-			services.AddApplicationInsightsTelemetry();
-			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
-		}
-
-		private static void AddBehaviors(this IServiceCollection services)
-		{
+			services.AddTransient<ServiceFactory>(p => p.GetService);
+			services.AddTransient<IMediator>(p =>
+			{
+				return new Mediator(p.GetService<ServiceFactory>());
+			});
+			
 			//TODO: Re-enable TransactionBehaviour once db is working. (Ch2943)
 			//services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TelemetryBehavior<,>));
+
+			services.AddTransient<IRequestHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
+			services.AddTransient<IRequestHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
+
+			services.AddTransient<INotificationHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
+			services.AddTransient<INotificationHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
+			services.AddTransient<INotificationHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<INotificationHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
+			services.AddTransient<INotificationHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
+			services.AddTransient<INotificationHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
+			services.AddTransient<INotificationHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
+			services.AddTransient<INotificationHandler<ProvisioningRequestedEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
+		}
+
+		private static void AddTelemetryProviders(this IServiceCollection services)
+		{
+			services.AddTransient<TelemetryClient>();
+			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
 		}
 
 		private static void AddCommandHandlers(this IServiceCollection services)
@@ -70,14 +86,14 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddEventHandlers(this IServiceCollection services)
 		{
-			services.AddTransient<IDomainEventHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
-			services.AddTransient<IDomainEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
-			services.AddTransient<IDomainEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
-			services.AddTransient<IDomainEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
-			services.AddTransient<IDomainEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
-			services.AddTransient<IProvisioningEventHandler>(factory => factory.GetRequiredService<IProvisioningBroker>());
+			services.AddTransient<IEventHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
+			services.AddTransient<IEventHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
+			services.AddTransient<IEventHandler<EnvironmentCreatedEvent>, EnvironmentCreatedEventHandler>();
+			services.AddTransient<IEventHandler<EnvironmentTerminatedEvent>, EnvironmentTerminatedEventHandler>();
+			services.AddTransient<IEventHandler<ResourceInitializingEvent>, ResourceInitializingEventHandler>();
+			services.AddTransient<IEventHandler<ResourceReadyEvent>, ResourceReadyEventHandler>();
+			services.AddTransient<IEventHandler<ResourceUnavailableEvent>, ResourceUnavailableEventHandler>();
+			services.AddTransient<IEventHandler<IProvisioningEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 
 		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions = default)

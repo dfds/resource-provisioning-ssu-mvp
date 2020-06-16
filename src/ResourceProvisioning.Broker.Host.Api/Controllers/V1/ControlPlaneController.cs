@@ -24,21 +24,13 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			try
-			{
-				//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
-				var cmd = new GetEnvironmentCommand(Guid.Empty);
+			//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
+			var cmd = new GetEnvironmentCommand(Guid.Empty);
 
-				return Ok(await _broker.Handle(cmd));
-			}
-			catch (Exception e)
-			{
-				var x = e;
-			}
-
-			return Ok();
+			return Ok(await _broker.Handle(cmd));
 		}
 
+		//TODO: Test ControlPlaneController POST action. (Ch2139)
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] dynamic payload)
 		{

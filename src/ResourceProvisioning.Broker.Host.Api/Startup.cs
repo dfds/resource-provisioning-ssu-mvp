@@ -45,6 +45,8 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
+			services.AddApplicationInsightsTelemetry();
+
 			Application.DependencyInjection.AddProvisioningBroker(services, options =>
 			{
 				Configuration.Bind(options);
