@@ -33,6 +33,18 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 
 		private UserData GetUserData()
 		{
+			var envUser = System.Environment.GetEnvironmentVariable("SSU_USER");
+			var envPass = System.Environment.GetEnvironmentVariable("SSU_PASSWORD");
+
+			if (envUser != null && envPass != null)
+			{
+				return new UserData
+				{
+					Username = envUser,
+					Password = envPass
+				};
+			}
+			
 			var userData = new UserData();
 			Console.Write("Username: ");
 			userData.Username = Console.ReadLine();
@@ -46,6 +58,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 				password += key.KeyChar;
 			}
 			userData.Password = password;
+
 			Console.Write("\n");
 			return userData;
 		}
