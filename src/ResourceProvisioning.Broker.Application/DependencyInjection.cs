@@ -125,7 +125,10 @@ namespace ResourceProvisioning.Broker.Application
 
 				using var context = new DomainContext(dbOptions, new FakeMediator());
 
-				context.Database.EnsureCreated();
+				if(context.Database.EnsureCreated() && brokerOptions.EnableAutoMigrations)
+				{ 
+					context.Database.Migrate();
+				}
 			});
 
 			services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
