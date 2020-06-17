@@ -18,12 +18,11 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 			_controlPlaneService = controlPlaneService ?? throw new ArgumentNullException(nameof(controlPlaneService));
 		}
 
-		public override async Task<IProvisioningResponse> Handle(GetEnvironmentCommand command, CancellationToken cancellationToken)
+		public override async Task<IProvisioningResponse> Handle(GetEnvironmentCommand command, CancellationToken cancellationToken = default)
 		{
-			//TODO: Re-enable GetEnvironmentCommandHandler logic once db is working. (Ch2943)
-			//var aggregate = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
+			var aggregate = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
 
-			return new ProvisioningBrokerResponse("{}");
+			return new ProvisioningBrokerResponse(aggregate);
 		}
 	}
 }

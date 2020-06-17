@@ -5,7 +5,7 @@ using MediatR;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 {
-	internal class NoMediator : IMediator
+	public class FakeMediator : IMediator
 	{
 		public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification
 		{

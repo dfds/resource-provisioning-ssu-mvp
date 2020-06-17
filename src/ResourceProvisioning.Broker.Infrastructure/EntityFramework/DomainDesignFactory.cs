@@ -21,7 +21,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 			var optionsBuilder = new DbContextOptionsBuilder<DomainContext>()
 				.UseSqlite(CreateDatabaseConnection(config.GetConnectionString(nameof(DomainContext))));
 
-			return new DomainContext(optionsBuilder.Options, new NoMediator());
+			return new DomainContext(optionsBuilder.Options, new FakeMediator());
 		}
 
 		private static DbConnection CreateDatabaseConnection(string connectionString)

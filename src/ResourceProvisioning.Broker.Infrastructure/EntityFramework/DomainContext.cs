@@ -22,9 +22,9 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		public IDbContextTransaction GetCurrentTransaction { get; private set; }
 
-		public DomainContext() : this(new DbContextOptions<DomainContext>() { }, null) { }
+		public DomainContext() : this(new DbContextOptions<DomainContext>() { }, new FakeMediator()) { }
 
-		public DomainContext(DbContextOptions<DomainContext> options, IMediator mediator) : base(options)
+		public DomainContext(DbContextOptions options, IMediator mediator) : base(options)
 		{
 			_mediator = mediator;
 
