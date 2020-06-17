@@ -77,7 +77,7 @@ stages:
   displayName: 'Continuous Deployment'
   dependsOn: CI
   # Run CD only if CI succeeds and if pipeline runs from Master branch
-  #condition: and(succeeded('CI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
+  condition: and(succeeded('CI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
 
   jobs:
   - deployment: K8s
