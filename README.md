@@ -21,7 +21,7 @@ The project is split up in quite a few sub-projects that can be found in the "sr
 
 Of those the following are applications that can be built to an executable:
 
-* ResourceProvisioning.Broker.Application
+* ResourceProvisioning.Broker.Host.Api
 * ResourceProvisioning.Cli.Host.Console
 
 
@@ -38,7 +38,7 @@ Of those the following are applications that can be built to an executable:
 
 ### Installing
 
-* **ResourceProvisioning.Broker.Application**
+* **ResourceProvisioning.Broker.Host.Api**
 
   [TODO]
 
