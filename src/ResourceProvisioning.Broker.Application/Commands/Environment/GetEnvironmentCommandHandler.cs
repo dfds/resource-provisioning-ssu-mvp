@@ -20,9 +20,18 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 		public override async Task<IProvisioningResponse> Handle(GetEnvironmentCommand command, CancellationToken cancellationToken = default)
 		{
-			var aggregate = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
+			dynamic result;
 
-			return new ProvisioningBrokerResponse(aggregate);
+			if (command.EnvironmentId != Guid.Empty)
+			{
+				result = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
+			}
+			else 
+			{
+				result = await _controlPlaneService.GetEnvironmentsAsync();
+			}
+
+			return new ProvisioningBrokerResponse(result);
 		}
 	}
 }

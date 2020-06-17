@@ -122,14 +122,15 @@ namespace ResourceProvisioning.Broker.Application
 					{
 						sqliteOptions.MigrationsAssembly(callingAssemblyName);
 						sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+						
 					}).Options;
 
 				using var context = new DomainContext(dbOptions, new FakeMediator());
 
 				context.Database.EnsureCreated();
-			}, ServiceLifetime.Transient);
+			});
 
-			services.AddTransient<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
+			services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
 		}
 
 		private static void AddRepositories(this IServiceCollection services)
