@@ -15,9 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\ResourceProvisioning.Abstractions\ResourceProvisioning.Abstractions.csproj" />
-      <ProjectReference Include="..\src\ResourceProvisioning.Broker.Application\ResourceProvisioning.Broker.Application.csproj" />
-      <ProjectReference Include="..\src\ResourceProvisioning.Broker.Domain\ResourceProvisioning.Broker.Domain.csproj" />
+      <ProjectReference Include="..\ResourceProvisioning.Broker.Application\ResourceProvisioning.Broker.Application.csproj" />
     </ItemGroup>
 
 </Project>
