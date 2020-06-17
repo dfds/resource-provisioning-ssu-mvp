@@ -1,7 +1,7 @@
-﻿ResourceProvisioning proof-of-concept
+﻿ResourceProvisioning v. 0.1
 ======================================
 
-This repository contains the complete source code for the ResourceProvisioning proof-of-concept and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out DevEx for any questions/comments.
+This repository contains the complete source code for the ResourceProvisioning MVP and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out to DevEx with any questions/comments or create an issue on GitHub.
 
 ## Getting started
 
