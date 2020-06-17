@@ -4,8 +4,7 @@ using ResourceProvisioning.Abstractions.Grid.Provisioning;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	//TODO: Review existing implementation (Ch3086)
-	//TODO: Finalize value object(s) (Ch3086)
+	//TODO: Review implementation with Kim (Ch3086)
 	public sealed class ActualState : DesiredState, IActualState
 	{
 		public DateTime Created { get; private set; }
@@ -14,10 +13,12 @@ namespace ResourceProvisioning.Broker.Domain.ValueObjects
 
 		public Status Status { get; private set; }
 
-		public KeyValuePair<string, string> ResourcePrincipal { get; private set; }
+		public ResourcePrincipal ResourcePrincipal { get; private set; }
 
-		public ActualState(string name, string apiVersion, IEnumerable<KeyValuePair<string, string>> labels = default, Dictionary<string, string> properties = default,
-			DateTime created = default, DateTime lastUpdated = default, KeyValuePair<string, string> resourcePrincipal = default) : base(name, apiVersion, labels, properties)
+		KeyValuePair<string, string> IActualState.ResourcePrincipal => new KeyValuePair<string, string>(ResourcePrincipal.PrincipalType, ResourcePrincipal.Value);
+
+		public ActualState(string name, string apiVersion, IEnumerable<Label> labels = default, IEnumerable<Property> properties = default,
+			DateTime created = default, DateTime lastUpdated = default, ResourcePrincipal resourcePrincipal = default) : base(name, apiVersion, labels, properties)
 		{
 			Created = created;
 			LastUpdated = lastUpdated;

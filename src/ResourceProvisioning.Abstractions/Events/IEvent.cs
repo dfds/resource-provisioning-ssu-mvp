@@ -1,6 +1,8 @@
-﻿namespace ResourceProvisioning.Abstractions.Events
+﻿using MediatR;
+
+namespace ResourceProvisioning.Abstractions.Events
 {
-	public interface IEvent
+	public interface IEvent : INotification
 	{
 	}
 }

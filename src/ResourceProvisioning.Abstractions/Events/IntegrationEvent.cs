@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
@@ -10,17 +11,27 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public int Version { get; protected set; } = 1;
 
-		public Guid CorrelationId => throw new NotImplementedException();
+		public Guid CorrelationId { get; private set; } = Guid.NewGuid();
 
 		public int SchemaVersion => 1;
 
-		public string Type => throw new NotImplementedException();
+		public string Type { get; protected set; }
 
-		protected IntegrationEvent(Guid? id = null, DateTime? createDate = null, int? version = null)
+		public JsonElement Payload { get; protected set; }
+
+		protected IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default)
 		{
+			Type = type;
+			Payload = payload;
+
 			if (id.HasValue)
 			{
 				Id = id.Value;
+			}
+
+			if (correlationId.HasValue)
+			{
+				CorrelationId = correlationId.Value;
 			}
 
 			if (createDate.HasValue)

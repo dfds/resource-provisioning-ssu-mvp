@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
@@ -14,7 +15,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 
 		public CreateEnvironmentCommand(DesiredState desiredState)
 		{
-			DesiredState = desiredState;
+			DesiredState = desiredState ?? throw new ArgumentNullException(nameof(desiredState));
 		}
 	}
 }

@@ -4,7 +4,7 @@ using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Abstractions.Repositories;
 using ResourceProvisioning.Abstractions.Telemetry;
 using ResourceProvisioning.Cli.Domain.Services;
-using ResourceProvisioning.Cli.Infrastructure.Net.Http;
+using ResourceProvisioning.Cli.Infrastructure.Protocols.Http;
 using ResourceProvisioning.Cli.Infrastructure.Telemetry;
 
 namespace ResourceProvisioning.Cli.Application

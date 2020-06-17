@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Policies
 {
-	public interface IPolicy : IDomainEventHandler<IDomainEvent>
+	public interface IPolicy : IEventHandler<IDomainEvent>
 	{
 	}
 }

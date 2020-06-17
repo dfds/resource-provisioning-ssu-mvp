@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
@@ -13,5 +14,7 @@ namespace ResourceProvisioning.Abstractions.Events
 		int SchemaVersion { get; }
 
 		string Type { get; }
+
+		JsonElement Payload { get; }
 	}
 }

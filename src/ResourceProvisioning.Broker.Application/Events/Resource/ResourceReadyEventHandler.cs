@@ -1,16 +1,15 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Events;
 using ResourceProvisioning.Broker.Domain.Events.Environment;
 
 namespace ResourceProvisioning.Broker.Application.Events.Resource
 {
-	public sealed class ResourceReadyEventHandler : IDomainEventHandler<ResourceReadyEvent>
+	public sealed class ResourceReadyEventHandler : IEventHandler<ResourceReadyEvent>
 	{
-		public async Task Handle(ResourceReadyEvent @event, CancellationToken cancellationToken)
+		public Task Handle(ResourceReadyEvent @event, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			return Task.CompletedTask;
 		}
 	}
 }

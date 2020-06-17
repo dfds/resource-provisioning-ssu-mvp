@@ -40,7 +40,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 			modelBuilder.ApplyConfiguration(new EnvironmentResourceReferenceEntityTypeConfiguration());
 		}
 
-		public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
 		{
 			// Dispatch Domain Events collection. 
 			// Choices:

@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Data.Common;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -20,37 +19,18 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 				.Build();
 
 			var optionsBuilder = new DbContextOptionsBuilder<DomainContext>()
-				.UseSqlite(config.GetConnectionString(nameof(DomainContext)));
+				.UseSqlite(CreateDatabaseConnection(config.GetConnectionString(nameof(DomainContext))));
 
 			return new DomainContext(optionsBuilder.Options, new NoMediator());
 		}
 
-		class NoMediator : IMediator
+		private static DbConnection CreateDatabaseConnection(string connectionString)
 		{
-			public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
-			{
-				return Task.CompletedTask;
-			}
+			var connection = new SqliteConnection(connectionString);
 
-			public Task Publish(object notification, CancellationToken cancellationToken = default(CancellationToken))
-			{
-				throw new NotImplementedException();
-			}
+			connection.Open();
 
-			public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
-			{
-				return Task.FromResult(default(TResponse));
-			}
-
-			public Task Send(IRequest request, CancellationToken cancellationToken = default(CancellationToken))
-			{
-				return Task.CompletedTask;
-			}
-
-			public Task<object> Send(object request, CancellationToken cancellationToken = default)
-			{
-				return Task.FromResult(default(object));
-			}
+			return connection;
 		}
 	}
 }

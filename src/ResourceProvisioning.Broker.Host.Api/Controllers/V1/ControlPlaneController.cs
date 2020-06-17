@@ -2,8 +2,11 @@
 using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
+using ResourceProvisioning.Broker.Application.Commands.Environment;
 
 namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 {
@@ -20,10 +23,25 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			_mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] dynamic request)
+		[HttpGet]
+		public async Task<IActionResult> Get()
 		{
-			var provisioningRequest = _mapper.Map<ExpandoObject, IProvisioningRequest>(request);
+			//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
+			var cmd = new GetEnvironmentCommand(Guid.Empty);
+
+			return Ok(await _broker.Handle(cmd));
+		}
+
+		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]
+		[HttpPost]
+		public async Task<IActionResult> Post([FromBody] dynamic payload)
+		{
+			dynamic requestWrapper = new ExpandoObject();
+
+			requestWrapper.HttpRequest = Request;
+			requestWrapper.Payload = payload;
+
+			IProvisioningRequest provisioningRequest = _mapper.Map<IProvisioningRequest>(requestWrapper);
 
 			var result = await _broker.Handle(provisioningRequest);
 
