@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ssp-resource-poc
+  namespace: $(kubernetes-namespace)
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+  labels:
+    project: SSU
+    department: devex
+spec:
+  rules:
+    - host: ssu-broker.hellman.oxygen.dfds.cloud
+      http:
+        paths:
+          - backend:
+              serviceName: ssp-resource-poc
+              servicePort: pubweb

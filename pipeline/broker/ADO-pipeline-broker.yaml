@@ -1,0 +1,120 @@
+name: $(Build.BuildId)
+
+# Triggers Pipeline only on Master
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - README.md
+    - LICENSE
+
+# Disables triggering Pipeline run at creation of every Pull Request
+pr: none
+
+# Global variables for the pipeline
+variables:
+- group: 'AWS ECR-PUSH PROD'
+- name: 'vmImage'
+  value: 'ubuntu-latest'
+- name: 'k8s-service-connection'
+  value: 'Kubernetes-Hellman'
+- name: 'kubernetes-namespace'
+  value: 'selfservice'
+
+stages:
+# Continuous Integration steps
+- stage: CI
+  displayName: 'Continuous Integration'
+  # Validation jobs
+  jobs:
+  # Build jobs
+  - job: Build
+    pool: 
+      vmImage: $(vmImage)
+
+    steps:
+    - bash: |
+        set -eu -o pipefail
+        sudo pip install setuptools
+        sudo pip install awscli
+
+        echo "Login to docker..."
+        $(aws ecr get-login --no-include-email)
+
+        REGION=${AWS_DEFAULT_REGION:-"eu-central-1"}
+
+
+        REGION=${AWS_DEFAULT_REGION:-"eu-central-1"}
+        BUILD_NUMBER=$(Build.BuildId)
+        account_id=$(aws sts get-caller-identity --output text --query 'Account')
+        IMAGE_NAME=${account_id}.dkr.ecr.${REGION}.amazonaws.com/ded/ssp-resource-poc:${BUILD_NUMBER}
+        
+        echo "##vso[task.setvariable variable=IMAGE_NAME]${IMAGE_NAME}"
+      displayName: Pipeline Bash Script
+      env:
+        AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)   
+
+    - bash: |
+        echo "I have an image with name: " + $IMAGE_NAME
+    
+        echo "Building container image..."
+        docker build -f ./SsuBroker.Dockerfile -t ${IMAGE_NAME} .
+
+        echo "Pushing container image to ECR..."
+        docker push ${IMAGE_NAME}
+      displayName: Build docker image
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifact: manifests"
+      inputs:
+        PathtoPublish: pipeline/broker/k8s
+        ArtifactName: manifests
+        
+# Continuous Deployment steps
+- stage: CD
+  displayName: 'Continuous Deployment'
+  dependsOn: CI
+  # Run CD only if CI succeeds and if pipeline runs from Master branch
+  condition: and(succeeded('CI'), eq(variables['Build.SourceBranch'], 'refs/heads/master')) 
+
+  jobs:
+  - deployment: K8s
+    displayName: 'Deploy to Kubernetes'
+    pool: 
+      vmImage: $(vmImage)
+    environment: 'Hellman'
+
+    strategy: 
+      runOnce:
+        deploy:
+          steps:
+          # Download manifest from current artifacts pipeline
+          - download: current
+            artifact: manifests
+            displayName: 'Download Artifact: manifests'
+          
+          # Replace token values in yaml files with pipeline variables
+          - task: qetza.replacetokens.replacetokens-task.replacetokens@3
+            displayName: 'Replace tokens in yaml files'
+            inputs:
+              rootDirectory: '$(Pipeline.Workspace)/manifests/'
+              targetFiles: '*.yml'
+              tokenPrefix: '$('
+              tokenSuffix: ')'
+          
+          # Upload the modified Kubernetes manifests to current Pipeline for easy debugging
+          - publish: $(Pipeline.Workspace)/manifests/
+            artifact: deployed-manifests
+            displayName: 'Publish Artifact: manifests'
+
+          # Apply Kubernetes manifests
+          - task: Kubernetes@1
+            displayName: 'Apply manifests'
+            inputs:
+              connectionType: Kubernetes Service Connection
+              kubernetesServiceEndpoint: '$(k8s-service-connection)'
+              namespace: '$(kubernetes-namespace)'
+              command: apply
+              arguments: '-f $(Pipeline.Workspace)/manifests/'

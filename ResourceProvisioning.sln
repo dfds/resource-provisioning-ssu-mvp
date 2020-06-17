@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".test", ".test", "{D9E615C8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceProvisioning.Cli.Application", "src\ResourceProvisioning.Cli.Application\ResourceProvisioning.Cli.Application.csproj", "{5DE73E7C-6AEB-4D68-95C3-72943AA13E99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceProvisioning.Broker.AcceptanceTests", "ResourceProvisioning.Broker.AcceptanceTests\ResourceProvisioning.Broker.AcceptanceTests.csproj", "{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{5DE73E7C-6AEB-4D68-95C3-72943AA13E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DE73E7C-6AEB-4D68-95C3-72943AA13E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DE73E7C-6AEB-4D68-95C3-72943AA13E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{4B8E4C93-662F-464A-9627-34807ACC9025} = {5E61229F-0831-4C14-A3DC-F0A84C7B44CA}
 		{D9E615C8-FF3D-4016-9F30-2B2EE375B1E3} = {5E61229F-0831-4C14-A3DC-F0A84C7B44CA}
 		{5DE73E7C-6AEB-4D68-95C3-72943AA13E99} = {5E61229F-0831-4C14-A3DC-F0A84C7B44CA}
+		{16AEF3F4-60E3-46BF-92B2-2ACF12BDD208} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06880FAD-1B9E-4E55-B800-04BEC6803345}
