@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ssp-resource-poc
+  name: ssp-resource-poc
+  namespace: $(kubernetes-namespace)
+spec:
+  ports:
+  - name: pubweb
+    port: 50900
+    protocol: TCP
+    targetPort: 50900
+  selector:
+    app: ssp-resource-poc
+  type: ClusterIP
+status:
+  loadBalancer: {}
