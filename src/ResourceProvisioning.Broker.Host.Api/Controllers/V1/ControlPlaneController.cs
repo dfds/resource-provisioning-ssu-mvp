@@ -26,10 +26,17 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
-			var cmd = new GetEnvironmentCommand(Guid.Empty);
+			try
+			{
+				//TODO: Finalize Get method on ControlPlaneController. (Ch3022)
+				var cmd = new GetEnvironmentCommand(Guid.Empty);
 
-			return Ok(await _broker.Handle(cmd));
+				return Ok(await _broker.Handle(cmd));
+			}
+			catch (Exception e)
+			{
+				return BadRequest(e);
+			}
 		}
 
 		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]
