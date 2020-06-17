@@ -58,8 +58,8 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			if (Interactive)
 			{
 				var interactive = new InteractiveFlow();
-				var response = await interactive.Auth();
-				Console.WriteLine(response.IdToken);
+				await interactive.Auth();
+				//Console.WriteLine(response.IdToken);
 				return 0;
 			}
 

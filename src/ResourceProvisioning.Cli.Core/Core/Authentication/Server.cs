@@ -1,15 +1,16 @@
 using System;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using EmbedIO;
 using EmbedIO.Routing;
 using EmbedIO.WebApi;
-using Swan.Logging;
 
 namespace ResourceProvisioning.Cli.Core.Core.Authentication
 {
 	public class Server
 	{
+		public static CancellationTokenSource cts;
 		public static WebServer CreateWebServer()
 		{
 			var server = new WebServer(o => o
@@ -65,8 +66,10 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			";
 			HttpContext.Response.ContentType = "text/html";
 			HttpContext.Response.Headers.Set("Content-Type", "text/html");
-			HttpContext.SendStringAsync(payload, "text/html", Encoding.Default);
-			Environment.Exit(0);
+			await HttpContext.SendStringAsync(payload, "text/html", Encoding.Default);
+
+			Server.cts.Cancel();
+			//Environment.Exit(0);
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Swan;
 using Swan.Logging;
 
 namespace ResourceProvisioning.Cli.Core.Core.Authentication
@@ -21,12 +22,18 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			
 			Logger.UnregisterLogger<ConsoleLogger>();
 			Logger.NoLogging();
+			//Terminal.Flush();
+			//Terminal.BacklineCursor();
+			
 			using (var server = Server.CreateWebServer())
 			{
-				await server.RunAsync().ConfigureAwait(false);
+				var cts = new CancellationTokenSource();
+				Server.cts = cts;
+				await server.RunAsync(cts.Token).ConfigureAwait(false);
 			}
-
-			throw new NotImplementedException();
+			
+			
+			return new AuthenticationToken();
 		}
 
 		private async Task Login(UserData input)
