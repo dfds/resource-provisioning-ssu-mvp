@@ -19,6 +19,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 		public async Task<AuthenticationToken> Auth()
 		{
 			var response = await InitialiseFlow();
+			Console.WriteLine(response.Message);
 			var tokenResponse = await Poll(response);
 			
 			return new AuthenticationToken
@@ -34,7 +35,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 		private async Task<DeviceCodeResponse> InitialiseFlow()
 		{
 			var dict = new Dictionary<string, string>();
-			// TODO: Don't hardcode client_id 
+			// TODO: Don't hardcode client_id
 			dict.Add("client_id", "72d0443b-ff34-4568-8eb9-1d81849c5462");
 			dict.Add("scope", "user.read openid profile");
 			// TODO: Don't hardcode URI
