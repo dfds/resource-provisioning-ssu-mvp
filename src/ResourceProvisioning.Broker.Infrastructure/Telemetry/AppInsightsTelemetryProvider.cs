@@ -1,21 +1,22 @@
 ﻿using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Telemetry;
 
 namespace ResourceProvisioning.Broker.Infrastructure.Telemetry
 {
-	//TODO: Setup Azure AppInsight Telemetry account (Ch2943)
 	public sealed class AppInsightsTelemetryProvider : ITelemetryProvider
 	{
-		private readonly TelemetryClient _client;
+		private readonly TelemetryConfiguration _telemetryConfiguration;
 
-		public AppInsightsTelemetryProvider(TelemetryClient client)
+		public AppInsightsTelemetryProvider(IOptions<TelemetryConfiguration> telemetryConfiguration)
 		{
-			_client = client;
+			_telemetryConfiguration = telemetryConfiguration?.Value;
 		}
 
 		public T GetClient<T>() where T : class
 		{
-			return _client as T;
+			return new TelemetryClient(_telemetryConfiguration) as T;
 		}
 	}
 }

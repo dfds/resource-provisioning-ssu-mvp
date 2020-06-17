@@ -2,6 +2,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.ApplicationInsights;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,8 +54,7 @@ namespace ResourceProvisioning.Broker.Application
 				return new Mediator(p.GetService<ServiceFactory>());
 			});
 			
-			//TODO: Re-enable TransactionBehaviour once db is working. (Ch2943)
-			//services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TelemetryBehavior<,>));
 
@@ -73,7 +73,6 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddTelemetryProviders(this IServiceCollection services)
 		{
-			services.AddTransient<TelemetryClient>();
 			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
 		}
 
@@ -98,8 +97,6 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions = default)
 		{
-			var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-
 			using var serviceProvider = services.BuildServiceProvider();
 			var brokerOptions = serviceProvider.GetService<IOptions<ProvisioningBrokerOptions>>()?.Value;
 
@@ -107,18 +104,32 @@ namespace ResourceProvisioning.Broker.Application
 
 			services.AddDbContext<DomainContext>(options =>
 			{
-				if (brokerOptions != null)
-				{
-					options.UseSqlite(brokerOptions.ConnectionStrings.GetValue<string>(nameof(DomainContext)),
-						sqliteOptions =>
-						{
-							sqliteOptions.MigrationsAssembly(callingAssemblyName);
-							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
-						});
-				}
-			});			
+				var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+				var connectionString = brokerOptions?.ConnectionStrings.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
 
-			services.AddTransient<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
+				services.AddSingleton(factory =>
+				{
+					var connection = new SqliteConnection(connectionString);
+
+					connection.Open();
+
+					return connection;
+				});
+
+				var dbOptions = options.UseSqlite(services.BuildServiceProvider().GetService<SqliteConnection>(),
+					sqliteOptions =>
+					{
+						sqliteOptions.MigrationsAssembly(callingAssemblyName);
+						sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+						
+					}).Options;
+
+				using var context = new DomainContext(dbOptions, new FakeMediator());
+
+				context.Database.EnsureCreated();
+			});
+
+			services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());
 		}
 
 		private static void AddRepositories(this IServiceCollection services)

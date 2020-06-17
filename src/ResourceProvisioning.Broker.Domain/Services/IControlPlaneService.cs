@@ -13,6 +13,8 @@ namespace ResourceProvisioning.Broker.Domain.Services
 	public interface IControlPlaneService : IDomainService
 	{
 		Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(IDesiredState desiredState);
+		
+		Task<IEnumerable<EnvironmentRoot>> GetEnvironmentsAsync();
 
 		Task<EnvironmentRoot> GetEnvironmentByIdAsync(Guid environmentId);
 

@@ -115,9 +115,14 @@ namespace ResourceProvisioning.Broker.Domain.Services
 		public async Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(IDesiredState desiredState)
 		{
 			var resources = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
-			var environments = await _resourceRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
+			var environments = await _environmentRepository.GetAsync(o => o.DesiredState.Equals(desiredState));
 
 			return resources.Cast<IAggregateRoot>().Concat(environments);
+		}
+
+		public Task<IEnumerable<EnvironmentRoot>> GetEnvironmentsAsync()
+		{
+			return _environmentRepository.GetAsync(o => true);
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.ApplicationInsights;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -45,7 +46,7 @@ namespace ResourceProvisioning.Broker.Host.Api
 				});
 			});
 
-			services.AddApplicationInsightsTelemetry();
+			services.AddApplicationInsightsTelemetry("2ded7a03-d47a-4872-9886-08776ddfd311");
 
 			Application.DependencyInjection.AddProvisioningBroker(services, options =>
 			{
