@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using AutoMapper;
 using MediatR;
-using Microsoft.ApplicationInsights;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -72,7 +71,7 @@ namespace ResourceProvisioning.Broker.Application
 		}
 
 		private static void AddTelemetryProviders(this IServiceCollection services)
-		{
+		{		
 			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
 		}
 
@@ -105,7 +104,7 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddDbContext<DomainContext>(options =>
 			{
 				var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-				var connectionString = brokerOptions?.ConnectionStrings.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
+				var connectionString = brokerOptions?.ConnectionStrings?.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
 
 				services.AddSingleton(factory =>
 				{
