@@ -73,7 +73,6 @@ namespace ResourceProvisioning.Broker.Application
 
 		private static void AddTelemetryProviders(this IServiceCollection services)
 		{
-			services.AddTransient<TelemetryClient>();
 			services.AddTransient<ITelemetryProvider, AppInsightsTelemetryProvider>();
 		}
 
