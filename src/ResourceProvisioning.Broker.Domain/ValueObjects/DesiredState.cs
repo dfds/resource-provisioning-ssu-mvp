@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	//TODO: Review implementation with Kim (Ch3086)
 	public class DesiredState : ValueObject, IDesiredState
 	{
 		public string Name { get; protected set; }

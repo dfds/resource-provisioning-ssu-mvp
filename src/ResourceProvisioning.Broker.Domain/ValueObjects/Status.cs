@@ -4,7 +4,6 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	//TODO: Review implementation with Kim (Ch3086)
 	public sealed class Status : ValueObject
 	{
 		public string Value { get; private set; }
