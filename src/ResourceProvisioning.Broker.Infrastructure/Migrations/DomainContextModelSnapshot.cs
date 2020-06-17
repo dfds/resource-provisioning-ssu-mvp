@@ -105,22 +105,29 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     b.ToTable("Resource","DomainContext");
                 });
 
-            modelBuilder.Entity("ResourceProvisioning.Broker.Infrastructure.Idempotency.ClientRequest", b =>
+            modelBuilder.Entity("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Time")
+                    b.Property<string>("ApiVersion")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.Property<Guid?>("EnvironmentRootId")
+                        .HasColumnType("TEXT");
 
-                    b.ToTable("Request","DomainContext");
+                    b.Property<Guid?>("ResourceRootId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("EnvironmentRootId")
+                        .IsUnique();
+
+                    b.HasIndex("ResourceRootId")
+                        .IsUnique();
+
+                    b.ToTable("State","DomainContext");
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.Aggregates.Environment.EnvironmentStatus", b =>
@@ -151,25 +158,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", "DesiredState", b1 =>
-                        {
-                            b1.Property<Guid>("EnvironmentRootId")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("ApiVersion")
-                                .HasColumnType("TEXT");
-
-                            b1.Property<string>("Name")
-                                .HasColumnType("TEXT");
-
-                            b1.HasKey("EnvironmentRootId");
-
-                            b1.ToTable("Environment");
-
-                            b1.WithOwner()
-                                .HasForeignKey("EnvironmentRootId");
-                        });
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.Aggregates.Resource.ResourceRoot", b =>
@@ -179,24 +167,62 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.OwnsOne("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", "DesiredState", b1 =>
+            modelBuilder.Entity("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", b =>
+                {
+                    b.HasOne("ResourceProvisioning.Broker.Domain.Aggregates.Environment.EnvironmentRoot", null)
+                        .WithOne("DesiredState")
+                        .HasForeignKey("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", "EnvironmentRootId");
+
+                    b.HasOne("ResourceProvisioning.Broker.Domain.Aggregates.Resource.ResourceRoot", null)
+                        .WithOne("DesiredState")
+                        .HasForeignKey("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", "ResourceRootId");
+
+                    b.OwnsMany("ResourceProvisioning.Broker.Domain.ValueObjects.Label", "Labels", b1 =>
                         {
-                            b1.Property<Guid>("ResourceRootId")
+                            b1.Property<string>("DesiredStateName")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<string>("ApiVersion")
-                                .HasColumnType("TEXT");
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
 
                             b1.Property<string>("Name")
                                 .HasColumnType("TEXT");
 
-                            b1.HasKey("ResourceRootId");
+                            b1.Property<string>("Value")
+                                .HasColumnType("TEXT");
 
-                            b1.ToTable("Resource");
+                            b1.HasKey("DesiredStateName", "Id");
+
+                            b1.ToTable("Label");
 
                             b1.WithOwner()
-                                .HasForeignKey("ResourceRootId");
+                                .HasForeignKey("DesiredStateName");
+                        });
+
+                    b.OwnsMany("ResourceProvisioning.Broker.Domain.ValueObjects.Property", "Properties", b1 =>
+                        {
+                            b1.Property<string>("DesiredStateName")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER");
+
+                            b1.Property<string>("Key")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("Value")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("DesiredStateName", "Id");
+
+                            b1.ToTable("Property");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DesiredStateName");
                         });
                 });
 #pragma warning restore 612, 618

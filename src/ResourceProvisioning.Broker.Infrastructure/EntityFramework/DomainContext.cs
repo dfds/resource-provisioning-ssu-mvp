@@ -8,8 +8,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ResourceProvisioning.Abstractions.Data;
+using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
+using ResourceProvisioning.Broker.Domain.ValueObjects;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurations;
 
 namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
@@ -18,6 +20,10 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 	{
 		public const string DEFAULT_SCHEMA = nameof(DomainContext);
 		private readonly IMediator _mediator;
+
+		public virtual DbSet<DesiredState> State { get; set; }
+		
+		public virtual DbSet<GridActorStatus> Status { get; set; }
 
 		public virtual DbSet<EnvironmentRoot> Environment { get; set; }
 
@@ -36,8 +42,8 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.ApplyConfiguration(new ClientRequestEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new GridActorStatusEntityTypeConfiguration());
+			modelBuilder.ApplyConfiguration(new DesiredStateEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new ResourceRootEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new EnvironmentRootEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new EnvironmentResourceReferenceEntityTypeConfiguration());

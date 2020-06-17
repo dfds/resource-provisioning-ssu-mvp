@@ -18,8 +18,10 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 			configuration.HasOne(o => o.Status)
 				.WithMany()
 				.HasForeignKey("StatusId");
-
-			configuration.OwnsOne(o => o.DesiredState);
+			
+			configuration.HasOne(o => o.DesiredState)
+				.WithOne()
+				.HasForeignKey("DesiredState");
 		}
 	}
 }
