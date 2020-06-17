@@ -37,6 +37,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".test", ".test", "{8A2B452A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceProvisioning.Broker.AcceptanceTests", "src\ResourceProvisioning.Broker.AcceptanceTests\ResourceProvisioning.Broker.AcceptanceTests.csproj", "{BD3FC227-8A20-40DC-9B1F-AE8EF38EFC18}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96025C44-720F-4072-A4CB-2B4228F49F05}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{3E1B923A-626E-4066-B37F-5F01220A7C54}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SsuCli", "SsuCli", "{FAE68C26-D080-42E1-9B63-AD1651C6C8F6}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline\ssucli\ADO-pipeline-ssucli.yaml = pipeline\ssucli\ADO-pipeline-ssucli.yaml
+		pipeline\ssucli\build.ps1 = pipeline\ssucli\build.ps1
+		pipeline\ssucli\release-to-github.ps1 = pipeline\ssucli\release-to-github.ps1
+		pipeline\ssucli\test.ps1 = pipeline\ssucli\test.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Broker", "Broker", "{50045882-7BB1-4616-BED6-54EC54A752FE}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline\broker\ADO-pipeline-broker.yaml = pipeline\broker\ADO-pipeline-broker.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{48602A99-969B-4C5B-8991-6FE7898F355F}"
+	ProjectSection(SolutionItems) = preProject
+		pipeline\broker\k8s\deployment.yml = pipeline\broker\k8s\deployment.yml
+		pipeline\broker\k8s\ingress.yml = pipeline\broker\k8s\ingress.yml
+		pipeline\broker\k8s\service.yml = pipeline\broker\k8s\service.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +137,10 @@ Global
 		{5DE73E7C-6AEB-4D68-95C3-72943AA13E99} = {5E61229F-0831-4C14-A3DC-F0A84C7B44CA}
 		{8A2B452A-8B9D-407C-A361-A859EE3172B0} = {6D75FFD1-B66C-4C29-993F-5B273B31A8DA}
 		{BD3FC227-8A20-40DC-9B1F-AE8EF38EFC18} = {8A2B452A-8B9D-407C-A361-A859EE3172B0}
+		{3E1B923A-626E-4066-B37F-5F01220A7C54} = {96025C44-720F-4072-A4CB-2B4228F49F05}
+		{FAE68C26-D080-42E1-9B63-AD1651C6C8F6} = {3E1B923A-626E-4066-B37F-5F01220A7C54}
+		{50045882-7BB1-4616-BED6-54EC54A752FE} = {3E1B923A-626E-4066-B37F-5F01220A7C54}
+		{48602A99-969B-4C5B-8991-6FE7898F355F} = {50045882-7BB1-4616-BED6-54EC54A752FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06880FAD-1B9E-4E55-B800-04BEC6803345}

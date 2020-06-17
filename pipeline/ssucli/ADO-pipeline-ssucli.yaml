@@ -85,7 +85,7 @@ steps:
 
 - script: |
     cd $SRC_DIR
-    docker build -f $SRC_DIR/SsuCli.Dockerfile -t ded/ssucli:latest $PAYLOAD_DIR
+    docker build -f $SRC_DIR/src/ResourceProvisioning.Cli.Host.Console/Dockerfile -t ded/ssucli:latest $PAYLOAD_DIR
     docker tag ded/ssucli:latest dfdsdk/ssucli:latest
     docker tag ded/ssucli:latest dfdsdk/ssucli:$APP_VERSION
     docker push dfdsdk/ssucli:latest

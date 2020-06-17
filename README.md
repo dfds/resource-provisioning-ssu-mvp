@@ -8,27 +8,21 @@ This repository contains the complete source code for the ResourceProvisioning p
 The project is split up in quite a few sub-projects that can be found in the "src" directory.
 
 * ResourceProvisioning.Abstractions
-* ResourceProvisioning.Broker.Application
 * ResourceProvisioning.Broker.Domain
+* ResourceProvisioning.Broker.Infrastructure
+* ResourceProvisioning.Broker.Application
 * ResourceProvisioning.Broker.Host.Api
 * ResourceProvisioning.Broker.Host.Worker
-* ResourceProvisioning.Broker.Infrastructure
-* ResourceProvisioning.Cli.AcceptanceTests
+* ResourceProvisioning.Broker.AcceptanceTests
+* ResourceProvisioning.Cli.Domain
+* ResourceProvisioning.Cli.Infrastructure
 * ResourceProvisioning.Cli.Application
-* ResourceProvisioning.Cli.Core
-* ResourceProvisioning.Cli.Core.Tests
-* ResourceProvisioning.Cli.Rest.Api
-* ResourceProvisioning.Cli.Rest.Client
-* ResourceProvisioning.Cli.Rest.Shared
-* ResourceProvisioning.Cli.Tests
-* ResourceProvisioning.Handler.Application
-* ResourceProvisioning.Handler.Domain
-* ResourceProvisioning.Handler.Host.Worker
-
+* ResourceProvisioning.Cli.Host.Console
 
 Of those the following are applications that can be built to an executable:
+
 * ResourceProvisioning.Broker.Application
-* ResourceProvisioning.Cli.Application
+* ResourceProvisioning.Cli.Host.Console
 
 
 ### Prerequisites
@@ -65,12 +59,11 @@ Of those the following are applications that can be built to an executable:
 
 ## Dependencies
 
-The following is non-exhustive list of the various dependencies that is utilized in the repository:
+The following is non-exhustive list of the various third-party dependencies that is utilized in the repository:
 
 * [AutoMapper](https://automapper.readthedocs.io/en/latest/Getting-started.html)
 * [Mediatr](https://github.com/jbogard/MediatR/wiki)
 * [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio#add-and-configure-swagger-middleware)
-* [Polly](http://www.thepollyproject.org/)
 
 ## Contributing
 Please read [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
