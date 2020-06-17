@@ -1,4 +1,3 @@
-﻿#TODO: Finalize docker container (Ch3022)
 #Setup build image
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 
@@ -6,16 +5,18 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /build
 
 #Copy files to container file system.
-COPY ./src/ ./src/
+COPY ./ ./src/
 
 #Set workdir to current project folder
-WORKDIR /build/src/ResourceProvisioning.Broker.Host.Api
+WORKDIR /build/src
 
 #Restore csproj packages.
 RUN dotnet restore
 
+#RUN dotnet test Tests/AcceptanceTests/AcceptanceTests.csproj 
+
 #Compile source code using standard Release profile
-RUN dotnet publish -c Release -o /build/out
+RUN dotnet publish -c Release -o /build/out src/ResourceProvisioning.Broker.Host.Api/ResourceProvisioning.Broker.Host.Api.csproj
 
 #Setup final container images.
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime

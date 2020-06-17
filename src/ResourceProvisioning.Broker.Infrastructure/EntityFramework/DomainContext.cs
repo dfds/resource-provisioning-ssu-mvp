@@ -1,4 +1,7 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -52,9 +55,30 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 
 			// After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
 			// performed through the DbContext will be committed
-			await base.SaveChangesAsync();
+			await base.SaveChangesAsync(cancellationToken);
 
 			return true;
+		}
+
+		public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+		{
+			var recordsToValidate = ChangeTracker.Entries();
+
+			foreach (var recordToValidate in recordsToValidate)
+			{
+				var entity = recordToValidate.Entity;
+				var validationContext = new ValidationContext(entity);
+				var results = new List<ValidationResult>();
+
+				if (!Validator.TryValidateObject(entity, validationContext, results, true))
+				{
+					var messages = results.Select(r => r.ErrorMessage).ToList().Aggregate((message, nextMessage) => message + ", " + nextMessage);
+
+					throw new System.Exception($"Unable to save changes for {entity.GetType().FullName} due to error(s): {messages}");
+				}
+			}
+
+			return await base.SaveChangesAsync(cancellationToken);
 		}
 
 		public async Task BeginTransactionAsync()

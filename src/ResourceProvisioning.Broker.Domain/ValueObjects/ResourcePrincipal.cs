@@ -3,7 +3,6 @@ using ResourceProvisioning.Abstractions.Entities;
 
 namespace ResourceProvisioning.Broker.Domain.ValueObjects
 {
-	//TODO: Review implementation with Kim (Ch3086)
 	public sealed class ResourcePrincipal : ValueObject
 	{
 		public string PrincipalType { get; private set; }
