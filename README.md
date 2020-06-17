@@ -70,10 +70,13 @@ Please read [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for details on our code of
 
 ## Authors
 
-* **Tobias Andersen** - *Initial work*
-* **Kim Lindhard** - *Initial work*
-* **Emil H.** - *Initial work*
+* **Emil H.** - *Omnistack-developer-god*
+* **Kim Lindhard** - *DDD-champion-and-quality-assurance-expert*
+* **Tobias Andersen** - *Lazy-guy-on-the-couch*
 
 ## Related information
 
-[TODO]
+* [Microservice Architecture and Design Patterns for Microservices](https://medium.com/@madhukaudantha/microservice-architecture-and-design-patterns-for-microservices-e0e5013fd58a)
+* [Desired state versus actual state in distributed systems](https://downey.io/blog/desired-state-vs-actual-state-in-kubernetes/)
+* [Kubernetes Patterns : The Stateful Service Pattern](https://www.magalix.com/blog/kubernetes-patterns-the-stateful-service-pattern)
+
