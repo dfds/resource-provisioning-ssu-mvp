@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -34,15 +35,14 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			{
 				foreach (var desiredState in await GetDesiredStateData())
 				{
-					Console.WriteLine($"Posting desiredState {JsonSerializer.Serialize(desiredState)} to broker");
+					Debug.WriteLine(_broker);
+					Debug.WriteLine(desiredState);
 
 					await _broker.ApplyDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState, cancellationToken);
 				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
 				return -1;
 			}
 
@@ -79,7 +79,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			{
 				JsonDocument.Parse(json);
 			}
-			catch (JsonException)
+			catch (JsonException e)
 			{
 				return false;
 			}

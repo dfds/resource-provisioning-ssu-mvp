@@ -14,7 +14,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 {
 	public class ProgramCommandCanPipeToApplyScenario
 	{
-		private Mock<IBrokerService> _brokerClientMock;
+		private Mock<IBrokerService> _brokerServiceMock;
 		private Guid _environmentId;
 		private DesiredState _payload;
 
@@ -43,16 +43,16 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 		private async Task And_a_rest_client()
 		{
 			var mocker = new AutoMocker();
-			_brokerClientMock = mocker.GetMock<IBrokerService>();
+			_brokerServiceMock = mocker.GetMock<IBrokerService>();
 
-			_brokerClientMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+			_brokerServiceMock.Setup(o => o.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 		}
 
 		private async Task When_terminal_input_apply_and_json()
 		{
 			var serviceCollection = new ServiceCollection();
 
-			serviceCollection.AddTransient(factory => _brokerClientMock.Object);
+			serviceCollection.AddTransient(factory => _brokerServiceMock.Object);
 
 			Program.RuntimeServices = serviceCollection;
 
@@ -61,7 +61,7 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 
 		private async Task Then_rest_client_posts_provisioning_request_to_broker()
 		{
-			_brokerClientMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()), Times.Once());
+			_brokerServiceMock.Verify(mock => mock.ApplyDesiredStateAsync(It.IsAny<Guid>(), It.IsAny<DesiredState>(), It.IsAny<CancellationToken>()), Times.Once());
 		}
 	}
 
