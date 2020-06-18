@@ -7,12 +7,8 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "DomainContext");
-
             migrationBuilder.CreateTable(
                 name: "Status",
-                schema: "DomainContext",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false),
@@ -26,7 +22,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Environment",
-                schema: "DomainContext",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -39,7 +34,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Environment_Status_StatusId",
                         column: x => x.StatusId,
-                        principalSchema: "DomainContext",
                         principalTable: "Status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -47,7 +41,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Resource",
-                schema: "DomainContext",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -60,7 +53,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_Resource_Status_StatusId",
                         column: x => x.StatusId,
-                        principalSchema: "DomainContext",
                         principalTable: "Status",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -68,7 +60,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "EnvironmentResourceReference",
-                schema: "DomainContext",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -84,7 +75,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_EnvironmentResourceReference_Environment_EnvironmentRootId",
                         column: x => x.EnvironmentRootId,
-                        principalSchema: "DomainContext",
                         principalTable: "Environment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -92,7 +82,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "State",
-                schema: "DomainContext",
                 columns: table => new
                 {
                     Name = table.Column<string>(nullable: false),
@@ -106,14 +95,12 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_State_Environment_EnvironmentRootId",
                         column: x => x.EnvironmentRootId,
-                        principalSchema: "DomainContext",
                         principalTable: "Environment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_State_Resource_ResourceRootId",
                         column: x => x.ResourceRootId,
-                        principalSchema: "DomainContext",
                         principalTable: "Resource",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -123,19 +110,16 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                 name: "Label",
                 columns: table => new
                 {
-                    DesiredStateName = table.Column<string>(nullable: false),
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    DesiredStateName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Label", x => new { x.DesiredStateName, x.Id });
+                    table.PrimaryKey("PK_Label", x => x.Name);
                     table.ForeignKey(
                         name: "FK_Label_State_DesiredStateName",
                         column: x => x.DesiredStateName,
-                        principalSchema: "DomainContext",
                         principalTable: "State",
                         principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
@@ -145,19 +129,16 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                 name: "Property",
                 columns: table => new
                 {
-                    DesiredStateName = table.Column<string>(nullable: false),
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Key = table.Column<string>(nullable: true),
-                    Value = table.Column<string>(nullable: true)
+                    Key = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    DesiredStateName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Property", x => new { x.DesiredStateName, x.Id });
+                    table.PrimaryKey("PK_Property", x => x.Key);
                     table.ForeignKey(
                         name: "FK_Property_State_DesiredStateName",
                         column: x => x.DesiredStateName,
-                        principalSchema: "DomainContext",
                         principalTable: "State",
                         principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
@@ -165,32 +146,37 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Environment_StatusId",
-                schema: "DomainContext",
                 table: "Environment",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EnvironmentResourceReference_EnvironmentRootId",
-                schema: "DomainContext",
                 table: "EnvironmentResourceReference",
                 column: "EnvironmentRootId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Label_DesiredStateName",
+                table: "Label",
+                column: "DesiredStateName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Property_DesiredStateName",
+                table: "Property",
+                column: "DesiredStateName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Resource_StatusId",
-                schema: "DomainContext",
                 table: "Resource",
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_State_EnvironmentRootId",
-                schema: "DomainContext",
                 table: "State",
                 column: "EnvironmentRootId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_State_ResourceRootId",
-                schema: "DomainContext",
                 table: "State",
                 column: "ResourceRootId",
                 unique: true);
@@ -199,30 +185,25 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EnvironmentResourceReference");
+
+            migrationBuilder.DropTable(
                 name: "Label");
 
             migrationBuilder.DropTable(
                 name: "Property");
 
             migrationBuilder.DropTable(
-                name: "EnvironmentResourceReference",
-                schema: "DomainContext");
+                name: "State");
 
             migrationBuilder.DropTable(
-                name: "State",
-                schema: "DomainContext");
+                name: "Environment");
 
             migrationBuilder.DropTable(
-                name: "Environment",
-                schema: "DomainContext");
+                name: "Resource");
 
             migrationBuilder.DropTable(
-                name: "Resource",
-                schema: "DomainContext");
-
-            migrationBuilder.DropTable(
-                name: "Status",
-                schema: "DomainContext");
+                name: "Status");
         }
     }
 }

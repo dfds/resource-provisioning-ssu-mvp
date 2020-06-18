@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
 
@@ -10,8 +11,11 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 		{
 			configuration.ToTable("State");
 			configuration.HasKey(o => o.Name);
-			configuration.OwnsMany(e => e.Labels);
-			configuration.OwnsMany(e => e.Properties);
+			configuration.Property(o => o.Name).ValueGeneratedNever();
+			configuration.OwnsMany(e => e.Labels)
+				         .HasKey("Name");
+			configuration.OwnsMany(e => e.Properties)
+						 .HasKey("Key");
 		}
 	}
 }
