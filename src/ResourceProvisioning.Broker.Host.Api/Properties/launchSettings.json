@@ -2,12 +2,12 @@
 	"profiles": {
 		"ResourceProvisioning.Broker.Host.Api": {
 			"commandName": "Project",
-			"launchBrowser": true,
-			"launchUrl": "https://localhost:50901/controlplane",
+			"launchBrowser": false,
+			"launchUrl": "http://localhost:50900/controlplane",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			},
-			"applicationUrl": "https://localhost:50901;http://localhost:50900"
+			"applicationUrl": "http://localhost:50900"
 		}
 	}
 }
