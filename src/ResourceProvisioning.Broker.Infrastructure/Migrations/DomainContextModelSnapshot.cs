@@ -19,8 +19,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
             modelBuilder.Entity("ResourceProvisioning.Abstractions.Grid.GridActorStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()

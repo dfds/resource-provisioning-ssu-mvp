@@ -9,7 +9,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<EnvironmentRoot> configuration)
 		{
-			configuration.ToTable("Environment", DomainContext.DEFAULT_SCHEMA);
+			configuration.ToTable("Environment");
 			configuration.HasKey(o => o.Id);
 			configuration.Ignore(b => b.DomainEvents);
 			configuration.Property<DateTime>("CreateDate").IsRequired();
