@@ -56,7 +56,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseHttpsRedirection();
 			app.UseRouting();
 			app.UseCors("open");
 			app.UseAuthentication();
