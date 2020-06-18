@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<DesiredState> configuration)
 		{
-			configuration.ToTable("State", DomainContext.DEFAULT_SCHEMA);
+			configuration.ToTable("State");
 			configuration.HasKey(o => o.Name);
 			configuration.OwnsMany(e => e.Labels);
 			configuration.OwnsMany(e => e.Properties);

@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 	{
 		public void Configure(EntityTypeBuilder<GridActorStatus> configuration)
 		{
-			configuration.ToTable("Status", DomainContext.DEFAULT_SCHEMA);
+			configuration.ToTable("Status");
 			configuration.HasKey(o => o.Id);
 
 			configuration.Property(o => o.Id)
