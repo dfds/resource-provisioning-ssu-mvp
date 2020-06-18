@@ -105,7 +105,9 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddDbContext<DomainContext>(options =>
 			{
 				var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-				var connectionString = brokerOptions?.ConnectionStrings.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
+				// TODO Tobias it is a dangerous pattern to provide a configuration in case a runner of the system have not chosen the given configuration.
+				// A more explicit approach where it is easy to choose a database meant for testing would prevent future unintended behaviour
+				var connectionString = brokerOptions?.ConnectionStrings?.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
 
 				services.AddSingleton(factory =>
 				{
