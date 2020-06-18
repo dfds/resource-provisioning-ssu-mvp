@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
@@ -41,7 +42,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			var resp = await _httpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/devicecode", new FormUrlEncodedContent(dict));
 			var respPayload = await resp.Content.ReadAsStringAsync();
 			
-			var deviceCodeResponse = JsonConvert.DeserializeObject<DeviceCodeResponse>(respPayload);
+			var deviceCodeResponse = JsonSerializer.Deserialize<DeviceCodeResponse>(respPayload);
 			return deviceCodeResponse;
 		}
 
@@ -69,10 +70,10 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 
 				if (resp.IsSuccessStatusCode)
 				{
-					return JsonConvert.DeserializeObject<TokenValidResponse>(respPayload);
+					return JsonSerializer.Deserialize<TokenValidResponse>(respPayload);
 				}
 
-				var error = JsonConvert.DeserializeObject<TokenErrorResponse>(respPayload);
+				var error = JsonSerializer.Deserialize<TokenErrorResponse>(respPayload);
 				if (error.Error.Equals("authorization_pending"))
 				{
 					//Console.WriteLine($"Sleeping {deviceCodeResponse.Interval}");
@@ -89,51 +90,51 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 	
 	class DeviceCodeResponse
 	{
-		[JsonProperty("user_code")]
+		[JsonPropertyName("user_code")]
 		public string UserCode { get; set; }
-		[JsonProperty("device_code")]
+		[JsonPropertyName("device_code")]
 		public string DeviceCode { get; set; }
-		[JsonProperty("verification_uri")]
+		[JsonPropertyName("verification_uri")]
 		public string VerificationUri { get; set; }
-		[JsonProperty("expires_in")]
+		[JsonPropertyName("expires_in")]
 		public int ExpiresIn { get; set; }
-		[JsonProperty("interval")]
+		[JsonPropertyName("interval")]
 		public int Interval { get; set; }
-		[JsonProperty("message")]
+		[JsonPropertyName("message")]
 		public string Message { get; set; }
 	}
 
 	class TokenValidResponse // 200
 	{
-		[JsonProperty("token_type")]
+		[JsonPropertyName("token_type")]
 		public string TokenType { get; set; }
-		[JsonProperty("scope")]
+		[JsonPropertyName("scope")]
 		public string Scope { get; set; }
-		[JsonProperty("access_token")]
+		[JsonPropertyName("access_token")]
 		public string AccessToken { get; set; }
-		[JsonProperty("id_token")]
+		[JsonPropertyName("id_token")]
 		public string IdToken { get; set; }
-		[JsonProperty("expires_in")]
+		[JsonPropertyName("expires_in")]
 		public int ExpiresIn { get; set; }
-		[JsonProperty("ext_expires_in")]
+		[JsonPropertyName("ext_expires_in")]
 		public int ExtExpiresIn { get; set; }
 	}
 
 	class TokenErrorResponse // 400
 	{
-		[JsonProperty("error")]
+		[JsonPropertyName("error")]
 		public string Error { get; set; }
-		[JsonProperty("error_description")]
+		[JsonPropertyName("error_description")]
 		public string ErrorDescription { get; set; }
-		[JsonProperty("error_codes")]
+		[JsonPropertyName("error_codes")]
 		public IEnumerable<int> ErrorCodes { get; set; }
-		[JsonProperty("timestamp")]
+		[JsonPropertyName("timestamp")]
 		public string Timestamp { get; set; }
-		[JsonProperty("trace_id")]
+		[JsonPropertyName("trace_id")]
 		public string TraceId { get; set; }
-		[JsonProperty("correlation_id")]
+		[JsonPropertyName("correlation_id")]
 		public string CorrelationId { get; set; }
-		[JsonProperty("error_uri")]
+		[JsonPropertyName("error_uri")]
 		public string ErrorUri { get; set; }
 	}
 }
