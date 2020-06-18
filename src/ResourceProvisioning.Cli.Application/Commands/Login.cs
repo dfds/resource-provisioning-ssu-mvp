@@ -19,6 +19,8 @@ namespace ResourceProvisioning.Cli.Application.Commands
 		public bool Interactive { get; }
 		[Option(CommandOptionType.NoValue, LongName = "authorization", ShortName = "aut")]
 		public bool Authorization { get; }
+		[Option(CommandOptionType.NoValue, LongName = "usernamepassword", ShortName = "up")]
+		public bool UsernamePassword { get; }
 		
 		public Login()
 		{
@@ -31,6 +33,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			count = DeviceCode ? count +  1 : count;
 			count = Interactive ? count +  1 : count;
 			count = Authorization ? count +  1 : count;
+			count = UsernamePassword ? count + 1 : count;
 
 			return count;
 		}
@@ -62,6 +65,14 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			if (Interactive)
 			{
 				var interactive = new InteractiveFlow();
+				var response = await interactive.Auth();
+				Console.WriteLine(response.IdToken);
+				return 0;
+			}
+			
+			if (UsernamePassword)
+			{
+				var interactive = new UsernamePasswordFlow();
 				var response = await interactive.Auth();
 				Console.WriteLine(response.IdToken);
 				return 0;
