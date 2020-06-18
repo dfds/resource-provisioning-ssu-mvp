@@ -23,15 +23,12 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			Logger.NoLogging();
 			using (var server = Server.CreateWebServer())
 			{
-				await server.RunAsync().ConfigureAwait(false);
+				var cts = new CancellationTokenSource();
+				Server.cts = cts;
+				await server.RunAsync(cts.Token).ConfigureAwait(false);
 			}
 
-			throw new NotImplementedException();
-		}
-
-		private async Task Login(UserData input)
-		{
-			throw new NotImplementedException();
+			return new AuthenticationToken();
 		}
 
 		private async Task ShowBrowser()
@@ -42,11 +39,6 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 				UseShellExecute = true
 			};
 			browser.Start();
-		}
-
-		private async Task StartServer()
-		{
-			
 		}
 	}
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
@@ -11,7 +10,6 @@ namespace ResourceProvisioning.Cli.Application.Commands
 
 	public sealed class Login : CliCommand
 	{
-		private HttpClient _httpClient;
 
 		[Option(CommandOptionType.NoValue, LongName = "devicecode", ShortName = "dc")]
 		public bool DeviceCode { get; }
@@ -22,11 +20,6 @@ namespace ResourceProvisioning.Cli.Application.Commands
 		[Option(CommandOptionType.NoValue, LongName = "usernamepassword", ShortName = "up")]
 		public bool UsernamePassword { get; }
 		
-		public Login()
-		{
-			_httpClient = new HttpClient();
-		}
-
 		private int AmountOfAuthOptionsSelected()
 		{
 			var count = 0;
@@ -65,8 +58,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			if (Interactive)
 			{
 				var interactive = new InteractiveFlow();
-				var response = await interactive.Auth();
-				Console.WriteLine(response.IdToken);
+				await interactive.Auth();
 				return 0;
 			}
 			
