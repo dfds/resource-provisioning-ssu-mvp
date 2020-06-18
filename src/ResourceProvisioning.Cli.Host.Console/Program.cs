@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using ResourceProvisioning.Cli.Application;
@@ -7,7 +8,24 @@ namespace ResourceProvisioning.Cli.Host.Console
 {
 	public class Program
 	{
-		public static IServiceCollection RuntimeServices { get; set; }
+		private static readonly Mutex _dependencyTracker = new Mutex();
+		private static bool _waiting = false;
+		private static IServiceCollection _services;
+
+		public static IServiceCollection RuntimeServices
+		{
+			get 
+			{
+				return _services;
+			}
+			set
+			{
+				_dependencyTracker.WaitOne();
+				_waiting = true;
+
+				_services = value;
+			} 
+		}
 
 		public static async Task Main(params string[] args)
 		{
@@ -22,6 +40,11 @@ namespace ResourceProvisioning.Cli.Host.Console
 			app.Conventions.UseDefaultConventions().UseConstructorInjection(RuntimeServices.BuildServiceProvider());
 
 			await Task.FromResult(app.ExecuteAsync(args));
+
+			if(_waiting)
+			{ 
+				_dependencyTracker.ReleaseMutex();
+			}
 		}
 	}
 }
