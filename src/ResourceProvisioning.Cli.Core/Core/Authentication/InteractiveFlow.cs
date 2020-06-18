@@ -34,11 +34,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			
 			return new AuthenticationToken();
 		}
-
-		private async Task Login(UserData input)
-		{
-			throw new NotImplementedException();
-		}
+		
 
 		private async Task ShowBrowser()
 		{
