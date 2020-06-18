@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -39,25 +39,26 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.Environment
 
 		public void AddResource(Guid resourceId, DateTime provisioned, string comment)
 		{
-			var existingResource = _resources.Where(o => o.ResourceId == resourceId).SingleOrDefault();
+			var existingResource = _resources.SingleOrDefault(o => o.ResourceId == resourceId);
 
-			if (existingResource == null)
+			if (existingResource != null) { return; }
+
+
+			var resource = new EnvironmentResourceReference(resourceId, provisioned, comment);
+
+			var validationResult = resource.Validate(new ValidationContext(resource));
+
+			if (validationResult.Any())
 			{
-				var resource = new EnvironmentResourceReference(resourceId, provisioned, comment);
+				var innerException =
+					new AggregateException(validationResult.Select(o => new Exception(o.ErrorMessage)));
 
-				var validationResult = resource.Validate(new ValidationContext(resource));
-
-				if (validationResult.Any())
-				{
-					var innerException = new AggregateException(validationResult.Select(o => new Exception(o.ErrorMessage)));
-
-					throw new ProvisioningBrokerDomainException(nameof(resource), innerException);
-				}
-
-				_resources.Add(resource);
-
-				Initialize();
+				throw new ProvisioningBrokerDomainException(nameof(resource), innerException);
 			}
+
+			_resources.Add(resource);
+
+			Initialize();
 		}
 
 		public void SetDesiredState(DesiredState desiredState)
