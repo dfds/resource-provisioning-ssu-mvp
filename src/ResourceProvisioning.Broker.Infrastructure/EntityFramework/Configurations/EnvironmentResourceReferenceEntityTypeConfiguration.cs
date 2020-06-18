@@ -11,7 +11,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 		{
 			configuration.ToTable("EnvironmentResourceReference");
 			configuration.HasKey(o => o.Id);
-			configuration.Ignore(b => b.DomainEvents);
+			configuration.Ignore(o => o.DomainEvents);
 			configuration.Property<Guid>("EnvironmentId").IsRequired();
 			configuration.Property<Guid>("ResourceId").IsRequired();
 			configuration.Property<DateTime>("Provisioned").IsRequired();

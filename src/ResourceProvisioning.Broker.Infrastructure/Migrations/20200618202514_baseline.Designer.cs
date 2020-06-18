@@ -9,7 +9,7 @@ using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 {
     [DbContext(typeof(DomainContext))]
-    [Migration("20200618193256_baseline")]
+    [Migration("20200618202514_baseline")]
     partial class baseline
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,7 +34,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Status","DomainContext");
+                    b.ToTable("Status");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("GridActorStatus");
                 });
@@ -65,7 +65,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.HasIndex("EnvironmentRootId");
 
-                    b.ToTable("EnvironmentResourceReference","DomainContext");
+                    b.ToTable("EnvironmentResourceReference");
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.Aggregates.Environment.EnvironmentRoot", b =>
@@ -84,7 +84,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Environment","DomainContext");
+                    b.ToTable("Environment");
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.Aggregates.Resource.ResourceRoot", b =>
@@ -103,7 +103,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("Resource","DomainContext");
+                    b.ToTable("Resource");
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.ValueObjects.DesiredState", b =>
@@ -128,7 +128,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                     b.HasIndex("ResourceRootId")
                         .IsUnique();
 
-                    b.ToTable("State","DomainContext");
+                    b.ToTable("State");
                 });
 
             modelBuilder.Entity("ResourceProvisioning.Broker.Domain.Aggregates.Environment.EnvironmentStatus", b =>
@@ -182,20 +182,19 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.OwnsMany("ResourceProvisioning.Broker.Domain.ValueObjects.Label", "Labels", b1 =>
                         {
-                            b1.Property<string>("DesiredStateName")
+                            b1.Property<string>("Name")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<string>("Name")
+                            b1.Property<string>("DesiredStateName")
+                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("Value")
                                 .HasColumnType("TEXT");
 
-                            b1.HasKey("DesiredStateName", "Id");
+                            b1.HasKey("Name");
+
+                            b1.HasIndex("DesiredStateName");
 
                             b1.ToTable("Label");
 
@@ -205,20 +204,19 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 
                     b.OwnsMany("ResourceProvisioning.Broker.Domain.ValueObjects.Property", "Properties", b1 =>
                         {
-                            b1.Property<string>("DesiredStateName")
+                            b1.Property<string>("Key")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<string>("Key")
+                            b1.Property<string>("DesiredStateName")
+                                .IsRequired()
                                 .HasColumnType("TEXT");
 
                             b1.Property<string>("Value")
                                 .HasColumnType("TEXT");
 
-                            b1.HasKey("DesiredStateName", "Id");
+                            b1.HasKey("Key");
+
+                            b1.HasIndex("DesiredStateName");
 
                             b1.ToTable("Property");
 
