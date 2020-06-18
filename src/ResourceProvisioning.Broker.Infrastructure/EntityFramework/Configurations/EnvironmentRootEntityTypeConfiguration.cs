@@ -19,11 +19,13 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 				.WithMany()
 				.HasForeignKey("StatusId");
 
-			configuration.OwnsOne(o => o.DesiredState);
+			configuration.HasOne(o => o.DesiredState)
+				.WithOne()
+				.HasForeignKey("DesiredState");
 
-			var navigation = configuration.Metadata.FindNavigation(nameof(EnvironmentRoot.Resources));
+			var resourceNavigation = configuration.Metadata.FindNavigation(nameof(EnvironmentRoot.Resources));
 
-			navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+			resourceNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 		}
 	}
 }

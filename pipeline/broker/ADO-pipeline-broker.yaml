@@ -60,7 +60,7 @@ stages:
         echo "I have an image with name: " + $IMAGE_NAME
     
         echo "Building container image..."
-        docker build -f ./SsuBroker.Dockerfile -t ${IMAGE_NAME} .
+        docker build -f ./src/ResourceProvisioning.Broker.Host.Api/Dockerfile -t ${IMAGE_NAME} .
 
         echo "Pushing container image to ECR..."
         docker push ${IMAGE_NAME}

@@ -1,34 +1,28 @@
-﻿ResourceProvisioning proof-of-concept
+﻿ResourceProvisioning v. 0.1
 ======================================
 
-This repository contains the complete source code for the ResourceProvisioning proof-of-concept and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out DevEx for any questions/comments.
+This repository contains the complete source code for the ResourceProvisioning MVP and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out to DevEx with any questions/comments or create an issue on GitHub.
 
 ## Getting started
 
 The project is split up in quite a few sub-projects that can be found in the "src" directory.
 
 * ResourceProvisioning.Abstractions
-* ResourceProvisioning.Broker.Application
 * ResourceProvisioning.Broker.Domain
+* ResourceProvisioning.Broker.Infrastructure
+* ResourceProvisioning.Broker.Application
 * ResourceProvisioning.Broker.Host.Api
 * ResourceProvisioning.Broker.Host.Worker
-* ResourceProvisioning.Broker.Infrastructure
-* ResourceProvisioning.Cli.AcceptanceTests
+* ResourceProvisioning.Broker.AcceptanceTests
+* ResourceProvisioning.Cli.Domain
+* ResourceProvisioning.Cli.Infrastructure
 * ResourceProvisioning.Cli.Application
-* ResourceProvisioning.Cli.Core
-* ResourceProvisioning.Cli.Core.Tests
-* ResourceProvisioning.Cli.Rest.Api
-* ResourceProvisioning.Cli.Rest.Client
-* ResourceProvisioning.Cli.Rest.Shared
-* ResourceProvisioning.Cli.Tests
-* ResourceProvisioning.Handler.Application
-* ResourceProvisioning.Handler.Domain
-* ResourceProvisioning.Handler.Host.Worker
-
+* ResourceProvisioning.Cli.Host.Console
 
 Of those the following are applications that can be built to an executable:
-* ResourceProvisioning.Broker.Application
-* ResourceProvisioning.Cli.Application
+
+* ResourceProvisioning.Broker.Host.Api
+* ResourceProvisioning.Cli.Host.Console
 
 
 ### Prerequisites
@@ -42,9 +36,11 @@ Of those the following are applications that can be built to an executable:
 * Docker - https://www.docker.com/
 * GitHub Hub - https://hub.github.com/
 
+#### For database migrations
+* Dotnet EF CLI - dotnet tool install --global dotnet-ef
 ### Installing
 
-* **ResourceProvisioning.Broker.Application**
+* **ResourceProvisioning.Broker.Host.Api**
 
   [TODO]
 
@@ -65,22 +61,24 @@ Of those the following are applications that can be built to an executable:
 
 ## Dependencies
 
-The following is non-exhustive list of the various dependencies that is utilized in the repository:
+The following is non-exhustive list of the various third-party dependencies that is utilized in the repository:
 
 * [AutoMapper](https://automapper.readthedocs.io/en/latest/Getting-started.html)
 * [Mediatr](https://github.com/jbogard/MediatR/wiki)
 * [Swashbuckle](https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.2&tabs=visual-studio#add-and-configure-swagger-middleware)
-* [Polly](http://www.thepollyproject.org/)
 
 ## Contributing
 Please read [CONTRIBUTING.md](./docs/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
-* **Tobias Andersen** - *Initial work*
-* **Kim Lindhard** - *Initial work*
-* **Emil H.** - *Initial work*
+* **Emil H.** - *Omnistack-developer-god*
+* **Kim Lindhard** - *DDD-champion-and-quality-assurance-expert*
+* **Tobias Andersen** - *Lazy-guy-on-the-couch*
 
 ## Related information
 
-[TODO]
+* [Microservice Architecture and Design Patterns for Microservices](https://medium.com/@madhukaudantha/microservice-architecture-and-design-patterns-for-microservices-e0e5013fd58a)
+* [Desired state versus actual state in distributed systems](https://downey.io/blog/desired-state-vs-actual-state-in-kubernetes/)
+* [Kubernetes Patterns : The Stateful Service Pattern](https://www.magalix.com/blog/kubernetes-patterns-the-stateful-service-pattern)
+
