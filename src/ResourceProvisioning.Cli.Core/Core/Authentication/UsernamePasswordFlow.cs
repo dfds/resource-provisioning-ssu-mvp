@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace ResourceProvisioning.Cli.Core.Core.Authentication
 {
@@ -78,7 +79,7 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 			
 			if (resp.IsSuccessStatusCode)
 			{
-				var response = JsonConvert.DeserializeObject<InteractiveFlowTokenValidResponse>(respPayload);
+				var response = JsonSerializer.Deserialize<InteractiveFlowTokenValidResponse>(respPayload);
 				return response;
 			}
 			
@@ -90,17 +91,17 @@ namespace ResourceProvisioning.Cli.Core.Core.Authentication
 
 	class InteractiveFlowTokenValidResponse // 200
 	{
-		[JsonProperty("token_type")]
+		[JsonPropertyName("token_type")]
 		public string TokenType { get; set; }
-		[JsonProperty("scope")]
+		[JsonPropertyName("scope")]
 		public string Scope { get; set; }
-		[JsonProperty("access_token")]
+		[JsonPropertyName("access_token")]
 		public string AccessToken { get; set; }
-		[JsonProperty("id_token")]
+		[JsonPropertyName("id_token")]
 		public string IdToken { get; set; }
-		[JsonProperty("expires_in")]
+		[JsonPropertyName("expires_in")]
 		public int ExpiresIn { get; set; }
-		[JsonProperty("refresh_token")]
+		[JsonPropertyName("refresh_token")]
 		public int RefreshToken { get; set; }
 	}
 }
