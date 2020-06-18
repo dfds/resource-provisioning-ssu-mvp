@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace ResourceProvisioning.Broker.Domain.Aggregates.Environment
 			CreateDate = DateTime.Now;
 			_statusId = EnvironmentStatus.Requested.Id;
 			_resources = new List<EnvironmentResourceReference>();
-
+			Status = EnvironmentStatus.Requested;
 			AddDomainEvent(new EnvironmentRequestedEvent(this));
 		}
 
