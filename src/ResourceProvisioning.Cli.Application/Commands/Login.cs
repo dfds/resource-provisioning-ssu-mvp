@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 {
 	[Command(Description = "Login to the SSU broker. Defaults to a device code flow.")]
 
-	public sealed class Login : CliCommand
+	public sealed class Login : CliCommand<Task<int>>
 	{
 
 		[Option(CommandOptionType.NoValue, LongName = "devicecode", ShortName = "dc")]
