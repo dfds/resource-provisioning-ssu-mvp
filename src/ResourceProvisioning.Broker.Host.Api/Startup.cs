@@ -61,7 +61,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 			app.UseCors("open");
 			app.UseHttpsRedirection();
 			app.UseRouting();
-			app.UseAuthorization();
 			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
