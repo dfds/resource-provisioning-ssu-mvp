@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication;
-using ResourceProvisioning.Broker.Host.Api.Infrastructure.Middleware;
 
 namespace ResourceProvisioning.Broker.Host.Api
 {
@@ -58,17 +56,18 @@ namespace ResourceProvisioning.Broker.Host.Api
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseCors("open");
 			app.UseHttpsRedirection();
 			app.UseRouting();
+			app.UseCors("open");
+			app.UseAuthentication();
+			app.UseAuthorization();
 			app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
 			{
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Broker API V1");
 			});
-
-			app.UseMiddleware<CustomExceptionMiddleware>();
 		}
 
 		protected virtual void ConfigureAuth(IServiceCollection services)
@@ -80,17 +79,13 @@ namespace ResourceProvisioning.Broker.Host.Api
 			{
 				options.Authority += "/v2.0";
 
-				// The web API accepts as audiences both the Client ID (options.Audience) and api://{ClientID}.
 				options.TokenValidationParameters.ValidAudiences = new[]
 				{
 					options.Audience,
 					$"api://{options.Audience}"
 				};
-				
-				// Instead of using the default validation (validating against a single tenant,
-				// as we do in line-of-business apps),
-				// we inject our own multitenant validation logic (which even accepts both v1 and v2 tokens).
-				options.TokenValidationParameters.IssuerValidator = AadIssuerValidator.GetIssuerValidator(options.Authority).Validate; ;
+
+				options.TokenValidationParameters.IssuerValidator = AadIssuerValidator.GetIssuerValidator(options.Authority).Validate;
 			});
 		}
 	}
