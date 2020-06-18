@@ -33,8 +33,8 @@ namespace ResourceProvisioning.Cli.Host.Console
 
 			if (RuntimeServices == null)
 			{
-				RuntimeServices = new ServiceCollection();
-				RuntimeServices.AddCli();
+				_services = new ServiceCollection();
+				_services.AddCli();
 			}
 
 			app.Conventions.UseDefaultConventions().UseConstructorInjection(RuntimeServices.BuildServiceProvider());
@@ -42,8 +42,9 @@ namespace ResourceProvisioning.Cli.Host.Console
 			await Task.FromResult(app.ExecuteAsync(args));
 
 			if(_waiting)
-			{ 
-				_dependencyTracker.ReleaseMutex();
+			{
+				_waiting = false;
+				_dependencyTracker.ReleaseMutex();				
 			}
 		}
 	}
