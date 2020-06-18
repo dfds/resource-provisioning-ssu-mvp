@@ -7,11 +7,11 @@ using Newtonsoft.Json;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public class DeviceCode : IAuthentication
+	public class DeviceCodeFlow : IAuthentication
 	{
 		private HttpClient _httpClient;
 
-		public DeviceCode()
+		public DeviceCodeFlow()
 		{
 			_httpClient = new HttpClient();
 		}

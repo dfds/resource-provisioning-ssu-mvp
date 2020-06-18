@@ -45,7 +45,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 
 			if (AmountOfAuthOptionsSelected() == 0)
 			{
-				var deviceCode = new DeviceCode();
+				var deviceCode = new DeviceCodeFlow();
 				var response = await deviceCode.Auth();
 				Console.WriteLine(response.IdToken);
 				return 0;
@@ -53,7 +53,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 
 			if (DeviceCode)
 			{
-				var deviceCode = new DeviceCode();
+				var deviceCode = new DeviceCodeFlow();
 				var response = await deviceCode.Auth();
 				Console.WriteLine(response.IdToken);
 				return 0;
@@ -61,7 +61,10 @@ namespace ResourceProvisioning.Cli.Application.Commands
 
 			if (Interactive)
 			{
-				throw new NotImplementedException();
+				var interactive = new InteractiveFlow();
+				var response = await interactive.Auth();
+				Console.WriteLine(response.IdToken);
+				return 0;
 			}
 
 			if (Authorization)
