@@ -16,9 +16,8 @@ namespace ResourceProvisioning.Cli.Host.Console
 			if (RuntimeServices == null)
 			{
 				RuntimeServices = new ServiceCollection();
+				RuntimeServices.AddCli();
 			}
-
-			RuntimeServices.AddCli();
 
 			app.Conventions.UseDefaultConventions().UseConstructorInjection(RuntimeServices.BuildServiceProvider());
 

@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace ResourceProvisioning.Cli.Application.Commands
@@ -11,7 +10,7 @@ namespace ResourceProvisioning.Cli.Application.Commands
 	/// will automatically support '--help'
 	/// </summary>
 	[HelpOption("--help")]
-	public abstract class CliCommand
+	public abstract class CliCommand<T> : Abstractions.Commands.ICommand<T>
 	{
 		private string _environmentId = Guid.Empty.ToString();
 
@@ -33,6 +32,6 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			}
 		}
 
-		public abstract Task<int> OnExecuteAsync(CancellationToken cancellationToken = default);
+		public abstract T OnExecuteAsync(CancellationToken cancellationToken = default);
 	}
 }

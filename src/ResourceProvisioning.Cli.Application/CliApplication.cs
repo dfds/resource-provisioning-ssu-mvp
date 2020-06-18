@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Cli.Application
 {
 	[VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
 	[Subcommand(typeof(Apply))]
-	public class CliApplication : CliCommand
+	public class CliApplication : CliCommand<Task<int>>
 	{
 		public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
 		{
