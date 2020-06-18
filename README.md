@@ -36,6 +36,8 @@ Of those the following are applications that can be built to an executable:
 * Docker - https://www.docker.com/
 * GitHub Hub - https://hub.github.com/
 
+#### For database migrations
+* Dotnet EF CLI - dotnet tool install --global dotnet-ef
 ### Installing
 
 * **ResourceProvisioning.Broker.Host.Api**
