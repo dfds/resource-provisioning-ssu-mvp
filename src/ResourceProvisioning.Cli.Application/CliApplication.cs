@@ -7,6 +7,7 @@ using ResourceProvisioning.Cli.Application.Commands;
 namespace ResourceProvisioning.Cli.Application
 {
 	[VersionOptionFromMember("--version", MemberName = nameof(GetVersion))]
+	[Subcommand(typeof(Login))]
 	[Subcommand(typeof(Apply))]
 	public class CliApplication : CliCommand
 	{
