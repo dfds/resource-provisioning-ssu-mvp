@@ -7,7 +7,6 @@ using Moq.AutoMock;
 using ResourceProvisioning.Cli.Application.Commands;
 using ResourceProvisioning.Cli.Application.Models;
 using ResourceProvisioning.Cli.Domain.Services;
-using ResourceProvisioning.Cli.Infrastructure.Repositories;
 using Xunit;
 
 namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
@@ -53,7 +52,9 @@ namespace ResourceProvisioning.Cli.AcceptanceTests.Commands
 
 		private async Task When_create_an_apply_command()
 		{
-			_applyCommand = new Apply(_brokerClientMock.Object, new ManifestRepository<DesiredState>()) { DesiredStateSource = JsonSerializer.Serialize(_payload), EnvironmentId = _environmentId.ToString() };
+			_applyCommand = new Apply(_brokerClientMock.Object);
+			_applyCommand.DesiredStateSource = JsonSerializer.Serialize(_payload);
+			_applyCommand.EnvironmentId = _environmentId.ToString();
 		}
 
 		private async Task Then_rest_client_posts_provisioning_request_to_broker()

@@ -13,23 +13,23 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 	public class ManifestRepository<T> : IManifestRepository<T> where T : class, IDesiredState
 	{
 		private readonly JsonSerializerOptions _serializerOptions;
+		private readonly DirectoryInfo _rootDirectory;
 
 		public IUnitOfWork UnitOfWork => throw new NotImplementedException();
 
-		public string RootDirectory { get; set; } = Environment.CurrentDirectory;
-
-		public ManifestRepository(JsonSerializerOptions serializerOptions = default)
+		public ManifestRepository(DirectoryInfo rootDirectory = default, JsonSerializerOptions serializerOptions = default)
 		{
+			_rootDirectory = rootDirectory;
 			_serializerOptions = serializerOptions;
 		}
 
 		public Task<IEnumerable<T>> GetDesiredStatesByIdAsync(Guid environmentId)
 		{
-			var files = Directory.GetFiles(RootDirectory, $"*{environmentId.ToString()}*");
+			var files = _rootDirectory.GetFiles($"*{environmentId.ToString()}*");
 			var desiredStates =
-				files.Select(path =>
+				files.Select(file =>
 					JsonSerializer.Deserialize<T>(
-						File.ReadAllText(path), _serializerOptions)
+						File.ReadAllText(file.FullName), _serializerOptions)
 					);
 
 			return Task.FromResult(desiredStates);
@@ -38,7 +38,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Repositories
 		public Task StoreDesiredStateAsync(Guid environmentId, T desiredState)
 		{
 			var fileName = $"{environmentId.ToString()}.json";
-			var filePath = Path.Combine(RootDirectory, fileName);
+			var filePath = Path.Combine(_rootDirectory.FullName, fileName);
 
 			if (!File.Exists(filePath))
 			{

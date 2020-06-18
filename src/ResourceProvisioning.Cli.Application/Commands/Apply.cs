@@ -6,16 +6,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using ResourceProvisioning.Cli.Application.Models;
-using ResourceProvisioning.Cli.Domain.Repositories;
 using ResourceProvisioning.Cli.Domain.Services;
+using ResourceProvisioning.Cli.Infrastructure.Repositories;
 
 namespace ResourceProvisioning.Cli.Application.Commands
 {
 	[Command(Description = "Applies desired state to the given environment")]
-	public sealed class Apply : CliCommand
+	public sealed class Apply : CliCommand<Task<int>>
 	{
 		private readonly IBrokerService _broker;
-		private readonly IManifestRepository<DesiredState> _manifestRepository;
 
 		[Argument(0)]
 		public string DesiredStateSource
@@ -24,10 +23,9 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			set;
 		}
 
-		public Apply(IBrokerService broker, IManifestRepository<DesiredState> manifestRepository)
+		public Apply(IBrokerService broker)
 		{
 			_broker = broker;
-			_manifestRepository = manifestRepository;
 		}
 
 		public override async Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
@@ -58,6 +56,11 @@ namespace ResourceProvisioning.Cli.Application.Commands
 				return new[] { JsonSerializer.Deserialize<DesiredState>(DesiredStateSource) };
 			}
 
+			if (!Path.IsPathFullyQualified(DesiredStateSource))
+			{
+				DesiredStateSource = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, DesiredStateSource));
+			}
+
 			if (!Directory.Exists(DesiredStateSource))
 			{
 				return File.Exists(DesiredStateSource)
@@ -65,9 +68,9 @@ namespace ResourceProvisioning.Cli.Application.Commands
 					: null;
 			}
 
-			_manifestRepository.RootDirectory = DesiredStateSource;
+			var manifestRepository = new ManifestRepository<DesiredState>(new DirectoryInfo(DesiredStateSource));
 
-			return await _manifestRepository.GetDesiredStatesByIdAsync(Guid.Parse(EnvironmentId));
+			return await manifestRepository.GetDesiredStatesByIdAsync(Guid.Parse(EnvironmentId));
 		}
 
 		private static bool IsValidJson(string json)

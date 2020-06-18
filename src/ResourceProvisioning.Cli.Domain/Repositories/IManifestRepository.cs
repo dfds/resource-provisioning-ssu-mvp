@@ -8,8 +8,6 @@ namespace ResourceProvisioning.Cli.Domain.Repositories
 {
 	public interface IManifestRepository<T> : IRepository where T : class, IDesiredState
 	{
-		string RootDirectory { get; set; }
-
 		Task StoreDesiredStateAsync(
 			Guid environmentId,
 			T desiredState
