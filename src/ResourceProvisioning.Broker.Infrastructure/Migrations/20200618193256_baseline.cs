@@ -15,7 +15,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
                 schema: "DomainContext",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false, defaultValue: 1),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     Discriminator = table.Column<string>(nullable: false)
                 },

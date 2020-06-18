@@ -9,7 +9,7 @@ using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 namespace ResourceProvisioning.Broker.Infrastructure.Migrations
 {
     [DbContext(typeof(DomainContext))]
-    [Migration("20200617194022_baseline")]
+    [Migration("20200618193256_baseline")]
     partial class baseline
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,8 +21,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.Migrations
             modelBuilder.Entity("ResourceProvisioning.Abstractions.Grid.GridActorStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("INTEGER")
-                        .HasDefaultValue(1);
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()

@@ -12,7 +12,6 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework.Configurati
 			configuration.HasKey(o => o.Id);
 
 			configuration.Property(o => o.Id)
-				.HasDefaultValue(1)
 				.ValueGeneratedNever()
 				.IsRequired();
 
