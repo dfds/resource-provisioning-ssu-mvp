@@ -29,11 +29,10 @@ Of those the following are applications that can be built to an executable:
 
 * .Net Core 3.1 SDK - https://dotnet.microsoft.com/download/dotnet-core/3.1
 * Powershell Core - https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell?view=powershell-7
+* Docker - https://www.docker.com/
 
 
 *If you want to release(**Optional**)*
-
-* Docker - https://www.docker.com/
 * GitHub Hub - https://hub.github.com/
 
 #### For database migrations
@@ -42,7 +41,10 @@ Of those the following are applications that can be built to an executable:
 
 * **ResourceProvisioning.Broker.Host.Api**
 
-  [TODO]
+  From the root of the source repo run the following docker commands:
+
+  `docker build -t local-development -f ./src/ResourceProvisioning.Broker.Host.Api/Dockerfile -t .`
+  `docker run -it -p 50900:50900 local-development`
 
 * **ResourceProvisioning.Cli.Application**
 
