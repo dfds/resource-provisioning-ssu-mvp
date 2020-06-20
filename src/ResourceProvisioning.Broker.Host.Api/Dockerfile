@@ -25,6 +25,7 @@ WORKDIR /app
 EXPOSE 50900
 
 ENV ASPNETCORE_URLS="http://*:50900"
+ENV ASPNETCORE_ENVIRONMENT="Development"
 
 #Copy binaries from publish container to final container
 COPY --from=build-env /build/out .

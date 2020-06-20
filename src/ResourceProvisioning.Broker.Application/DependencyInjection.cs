@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using AutoMapper;
 using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using ResourceProvisioning.Abstractions.Commands;
 using ResourceProvisioning.Abstractions.Data;
 using ResourceProvisioning.Abstractions.Events;
@@ -30,16 +30,21 @@ namespace ResourceProvisioning.Broker.Application
 {
 	public static class DependencyInjection
 	{
-		public static void AddProvisioningBroker(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions)
+		public static void AddProvisioningBroker(this IServiceCollection services, Action<ProvisioningBrokerOptions> configureOptions = default)
 		{
-			services.AddAutoMapper(Assembly.GetExecutingAssembly());
+			var options = new ProvisioningBrokerOptions();
+
+			configureOptions?.Invoke(options);
+
 			services.AddLogging();
-			services.AddOptions();
+			services.AddOptions<ProvisioningBrokerOptions>()
+					.Configure(configureOptions);
+			services.AddAutoMapper(Assembly.GetExecutingAssembly());
 			services.AddMediator();
 			services.AddTelemetryProviders();
 			services.AddCommandHandlers();
 			services.AddEventHandlers();
-			services.AddPersistancy(configureOptions);
+			services.AddPersistancy(options);
 			services.AddRepositories();
 			services.AddServices();
 			services.AddBroker();
@@ -94,42 +99,38 @@ namespace ResourceProvisioning.Broker.Application
 			services.AddTransient<IEventHandler<IProvisioningEvent>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 
-		private static void AddPersistancy(this IServiceCollection services, System.Action<ProvisioningBrokerOptions> configureOptions = default)
+		private static void AddPersistancy(this IServiceCollection services, ProvisioningBrokerOptions brokerOptions = default)
 		{
-			using var serviceProvider = services.BuildServiceProvider();
-			var brokerOptions = serviceProvider.GetService<IOptions<ProvisioningBrokerOptions>>()?.Value;
-
-			configureOptions?.Invoke(brokerOptions);
-
 			services.AddDbContext<DomainContext>(options =>
 			{
 				var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-				// TODO Tobias it is a dangerous pattern to provide a configuration in case a runner of the system have not chosen the given configuration.
-				// A more explicit approach where it is easy to choose a database meant for testing would prevent future unintended behaviour
-				var connectionString = brokerOptions?.ConnectionStrings?.GetValue<string>(nameof(DomainContext)) ?? "Filename=:memory:;";
+				var connectionString = brokerOptions?.ConnectionStrings?.GetValue<string>(nameof(DomainContext));
 
-				services.AddSingleton(factory =>
-				{
-					var connection = new SqliteConnection(connectionString);
-
-					connection.Open();
-
-					return connection;
-				});
-
-				var dbOptions = options.UseSqlite(services.BuildServiceProvider().GetService<SqliteConnection>(),
-					sqliteOptions =>
-					{
-						sqliteOptions.MigrationsAssembly(callingAssemblyName);
-						sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
-						
-					}).Options;
-
-				using var context = new DomainContext(dbOptions, new FakeMediator());
-
-				if(context.Database.EnsureCreated() && brokerOptions.EnableAutoMigrations)
+				if(!string.IsNullOrEmpty(connectionString))
 				{ 
-					context.Database.Migrate();
+					services.AddSingleton(factory =>
+					{
+						var connection = new SqliteConnection(connectionString);
+
+						connection.Open();
+
+						return connection;
+					});
+
+					var dbOptions = options.UseSqlite(services.BuildServiceProvider().GetService<SqliteConnection>(),
+						sqliteOptions =>
+						{
+							sqliteOptions.MigrationsAssembly(callingAssemblyName);
+							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+						
+						}).Options;
+
+					using var context = new DomainContext(dbOptions, new FakeMediator());
+
+					if(context.Database.EnsureCreated() && brokerOptions.EnableAutoMigrations)
+					{ 
+						context.Database.Migrate();
+					}
 				}
 			});
 

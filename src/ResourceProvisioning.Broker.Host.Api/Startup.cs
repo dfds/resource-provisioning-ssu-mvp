@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication;
+using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Host.Api
 {
@@ -49,6 +50,12 @@ namespace ResourceProvisioning.Broker.Host.Api
 			Application.DependencyInjection.AddProvisioningBroker(services, options =>
 			{
 				Configuration.Bind(options);
+
+				if (!options.ConnectionStrings.Exists())
+				{
+					options.ConnectionStrings = new ConfigurationSection((IConfigurationRoot)Configuration, "ConnectionStrings");
+					options.ConnectionStrings[nameof(DomainContext)] = "Filename=:memory:;";
+				}
 			});
 
             ConfigureAuth(services);
