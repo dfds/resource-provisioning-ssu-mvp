@@ -64,6 +64,7 @@ namespace ResourceProvisioning.Broker.Application
 
 			services.AddTransient<IRequestHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
 			services.AddTransient<IRequestHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
+			services.AddTransient<IRequestHandler<DeleteEnvironmentCommand, IProvisioningResponse>, DeleteEnvironmentCommandHandler>();
 
 			services.AddTransient<INotificationHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
 			services.AddTransient<INotificationHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
@@ -84,6 +85,7 @@ namespace ResourceProvisioning.Broker.Application
 		{
 			services.AddTransient<ICommandHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
+			services.AddTransient<ICommandHandler<DeleteEnvironmentCommand, IProvisioningResponse>, DeleteEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<IProvisioningRequest, IProvisioningResponse>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 

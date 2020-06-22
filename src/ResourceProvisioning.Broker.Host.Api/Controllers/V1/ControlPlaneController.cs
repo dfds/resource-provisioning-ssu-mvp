@@ -47,5 +47,20 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 
 			return Ok(result);
 		}
+
+		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]
+		[HttpDelete]
+		public async Task<IActionResult> Delete([FromQuery] Guid environmentId)
+		{
+			if (environmentId == Guid.Empty)
+			{
+				return BadRequest();
+			}
+
+			var cmd = new DeleteEnvironmentCommand(environmentId);
+			var result = await _broker.Handle(cmd);
+
+			return Ok(await result?.Content?.ReadAsStringAsync());
+		}
 	}
 }
