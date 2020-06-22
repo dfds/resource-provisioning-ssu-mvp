@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -35,9 +34,6 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			{
 				foreach (var desiredState in await GetDesiredStateData())
 				{
-					Debug.WriteLine(_broker);
-					Debug.WriteLine(desiredState);
-
 					await _broker.ApplyDesiredStateAsync(Guid.Parse(EnvironmentId), desiredState, cancellationToken);
 				}
 			}

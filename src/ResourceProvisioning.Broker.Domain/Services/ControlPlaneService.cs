@@ -55,7 +55,7 @@ namespace ResourceProvisioning.Broker.Domain.Services
 		{
 			var results = await _environmentRepository.GetAsync((env) => env.Resources.Any(res => res.Id == resourceId));
 
-			return results;
+			return results.ToArray();
 		}
 
 		public async Task<EnvironmentRoot> UpdateEnvironmentAsync(Guid environmentId, IDesiredState desiredState, CancellationToken cancellationToken = default)
@@ -120,9 +120,11 @@ namespace ResourceProvisioning.Broker.Domain.Services
 			return resources.Cast<IAggregateRoot>().Concat(environments);
 		}
 
-		public Task<IEnumerable<EnvironmentRoot>> GetEnvironmentsAsync()
+		public async Task<IEnumerable<EnvironmentRoot>> GetEnvironmentsAsync()
 		{
-			return _environmentRepository.GetAsync(o => true);
+			var results = await _environmentRepository.GetAsync(o => true);
+
+			return results.ToArray();
 		}
 	}
 }

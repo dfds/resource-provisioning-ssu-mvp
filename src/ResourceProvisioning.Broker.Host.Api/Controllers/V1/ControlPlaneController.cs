@@ -24,16 +24,17 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Get(Guid id = default)
+		public async Task<IActionResult> Get([FromQuery]Guid environmentId = default)
 		{
-			var cmd = new GetEnvironmentCommand(id);
+			var cmd = new GetEnvironmentCommand(environmentId);
+			var result = await _broker.Handle(cmd);
 
-			return Ok(await _broker.Handle(cmd));
+			return Ok(await result?.Content?.ReadAsStringAsync());
 		}
 
 		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] dynamic payload)
+		public async Task<IActionResult> Post([FromBody] dynamic payload, [FromQuery] Guid environmentId)
 		{
 			dynamic requestWrapper = new ExpandoObject();
 

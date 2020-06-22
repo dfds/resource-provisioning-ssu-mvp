@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Protocols.Http;
@@ -8,7 +7,6 @@ using ResourceProvisioning.Cli.Application.Models;
 using ResourceProvisioning.Cli.Domain.Services;
 using ResourceProvisioning.Cli.Infrastructure.Net.Protocols.Request;
 using ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Request;
-using ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Response;
 
 namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 {
@@ -25,19 +23,34 @@ namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 		}
 
 		public async Task<ActualState> GetCurrentStateByEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
-		{
+		{			
 			var request = new GetEnvironmentRequest(environmentId);
 
-			if (!(await SendAsync(request, cancellationToken) is JsonResponse response))
+			try
 			{
-				return await Task.FromResult(default(ActualState));
+				var r = await new HttpClient().GetAsync(request.RequestUri);
+
+				var x = await r.Content.ReadAsStringAsync();
+				Console.WriteLine(x);
+				//var response = await SendAsync(request, cancellationToken);
+
+				//if (!response.IsSuccessStatusCode)
+				//{
+				//	return await Task.FromResult(default(ActualState));
+				//}
+
+				//var payload = await response.Content.ReadAsStringAsync();
+				//Console.WriteLine("Payload");
+				//Console.WriteLine(payload);
+				//Console.WriteLine(JsonSerializer.Deserialize<ActualState>(payload));
+				//return JsonSerializer.Deserialize<ActualState>(payload);
+			}
+			catch (Exception e) 
+			{
+				throw e;
 			}
 
-			response.EnsureSuccessStatusCode();
-
-			var payload = await response.Content;
-
-			return JsonSerializer.Deserialize<ActualState>(payload.GetRawText());
+			return null;
 		}
 
 		public async Task ApplyDesiredStateAsync(

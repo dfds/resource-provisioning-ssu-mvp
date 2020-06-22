@@ -30,7 +30,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Environment
 			{
 				result = await _controlPlaneService.GetEnvironmentsAsync();
 			}
-
+			
 			return new ProvisioningBrokerResponse(result);
 		}
 	}
