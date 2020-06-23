@@ -17,6 +17,7 @@ using ResourceProvisioning.Broker.Application.Commands.Environment;
 using ResourceProvisioning.Broker.Application.Events.Environment;
 using ResourceProvisioning.Broker.Application.Events.Provisioning;
 using ResourceProvisioning.Broker.Application.Events.Resource;
+using ResourceProvisioning.Broker.Application.Infrastructure.EntityFramework;
 using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 using ResourceProvisioning.Broker.Domain.Events.Environment;
@@ -53,10 +54,7 @@ namespace ResourceProvisioning.Broker.Application
 		private static void AddMediator(this IServiceCollection services)
 		{
 			services.AddTransient<ServiceFactory>(p => p.GetService);
-			services.AddTransient<IMediator>(p =>
-			{
-				return new Mediator(p.GetService<ServiceFactory>());
-			});
+			services.AddTransient<IMediator>(p => new Mediator(p.GetService<ServiceFactory>()));
 			
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
@@ -64,6 +62,7 @@ namespace ResourceProvisioning.Broker.Application
 
 			services.AddTransient<IRequestHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
 			services.AddTransient<IRequestHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
+			services.AddTransient<IRequestHandler<DeleteEnvironmentCommand, IProvisioningResponse>, DeleteEnvironmentCommandHandler>();
 
 			services.AddTransient<INotificationHandler<EnvironmentRequestedEvent>, EnvironmentRequestedEventHandler>();
 			services.AddTransient<INotificationHandler<EnvironmentInitializingEvent>, EnvironmentInitializingEventHandler>();
@@ -84,6 +83,7 @@ namespace ResourceProvisioning.Broker.Application
 		{
 			services.AddTransient<ICommandHandler<GetEnvironmentCommand, IProvisioningResponse>, GetEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<CreateEnvironmentCommand, IProvisioningResponse>, CreateEnvironmentCommandHandler>();
+			services.AddTransient<ICommandHandler<DeleteEnvironmentCommand, IProvisioningResponse>, DeleteEnvironmentCommandHandler>();
 			services.AddTransient<ICommandHandler<IProvisioningRequest, IProvisioningResponse>>(factory => factory.GetRequiredService<IProvisioningBroker>());
 		}
 
@@ -106,32 +106,43 @@ namespace ResourceProvisioning.Broker.Application
 				var callingAssemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 				var connectionString = brokerOptions?.ConnectionStrings?.GetValue<string>(nameof(DomainContext));
 
-				if(!string.IsNullOrEmpty(connectionString))
-				{ 
-					services.AddSingleton(factory =>
-					{
-						var connection = new SqliteConnection(connectionString);
-
-						connection.Open();
-
-						return connection;
-					});
-
-					var dbOptions = options.UseSqlite(services.BuildServiceProvider().GetService<SqliteConnection>(),
-						sqliteOptions =>
-						{
-							sqliteOptions.MigrationsAssembly(callingAssemblyName);
-							sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
-						
-						}).Options;
-
-					using var context = new DomainContext(dbOptions, new FakeMediator());
-
-					if(context.Database.EnsureCreated() && brokerOptions.EnableAutoMigrations)
-					{ 
-						context.Database.Migrate();
-					}
+				if (string.IsNullOrEmpty(connectionString))
+				{
+					return;
 				}
+
+				services.AddSingleton(factory =>
+				{
+					var connection = new SqliteConnection(connectionString);
+
+					connection.Open();
+
+					return connection;
+				});
+
+				var dbOptions = options.UseSqlite(services.BuildServiceProvider().GetService<SqliteConnection>(),
+					sqliteOptions =>
+					{
+						sqliteOptions.MigrationsAssembly(callingAssemblyName);
+						sqliteOptions.MigrationsHistoryTable(callingAssemblyName + "_MigrationHistory");
+						
+					}).Options;
+
+				using var context = new DomainContext(dbOptions, new FakeMediator());
+
+				if (!context.Database.EnsureCreated())
+				{
+					return;
+				}
+
+				if (brokerOptions.EnableAutoMigrations)
+				{ 
+					context.Database.Migrate();
+				}
+
+				var seedingTask = DomainContextSeeder.SeedAsync(context);
+
+				seedingTask.Wait();
 			});
 
 			services.AddScoped<IUnitOfWork>(factory => factory.GetRequiredService<DomainContext>());

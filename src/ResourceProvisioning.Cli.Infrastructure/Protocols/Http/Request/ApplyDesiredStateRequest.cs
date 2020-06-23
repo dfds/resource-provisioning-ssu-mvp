@@ -10,7 +10,7 @@ namespace ResourceProvisioning.Cli.Infrastructure.Net.Protocols.Request
 		public ApplyDesiredStateRequest(Guid environmentId, dynamic desiredState)
 		{
 			Method = HttpMethod.Post;
-			RequestUri = new Uri("DECIDE_ON_CONTROLLERS_WITH_EMIL", UriKind.Relative);
+			RequestUri = new Uri($"http://localhost:50900/controlplane?environmentId={environmentId}", UriKind.Absolute);
 			Content = new JsonContent(JsonSerializer.Serialize(desiredState));
 		}
 	}

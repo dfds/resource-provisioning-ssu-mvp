@@ -7,10 +7,8 @@ namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http.Request
 	{
 		public GetEnvironmentRequest(Guid environmentId = default)
 		{
-			var targetUri = (environmentId != Guid.Empty) ? "DECIDE_ON_CONTROLLERS_WITH_EMIL" : $"DECIDE_ON_CONTROLLERS_WITH_EMIL/{environmentId}";
-
 			Method = HttpMethod.Get;
-			RequestUri = new Uri(targetUri, UriKind.Relative);
+			RequestUri = new Uri($"http://localhost:50900/controlplane?environmentId={environmentId}", UriKind.Absolute);
 		}
 	}
 }

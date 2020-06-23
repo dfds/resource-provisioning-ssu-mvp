@@ -2,7 +2,7 @@
 
 namespace ResourceProvisioning.Abstractions.Grid.Provisioning
 {
-	public interface IProvisioningProvider : ICommandHandler<IProvisioningRequest, IProvisioningResponse>, IGridActor
+	public interface IProvisioningHandler : ICommandHandler<IProvisioningRequest, IProvisioningResponse>, IGridActor
 	{
 
 	}

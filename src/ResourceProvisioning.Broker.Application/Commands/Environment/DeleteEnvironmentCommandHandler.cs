@@ -9,29 +9,31 @@ using ResourceProvisioning.Broker.Domain.Services;
 
 namespace ResourceProvisioning.Broker.Application.Commands.Environment
 {
-	public sealed class GetEnvironmentCommandHandler : CommandHandler<GetEnvironmentCommand, IProvisioningResponse>
+	public sealed class DeleteEnvironmentCommandHandler : CommandHandler<DeleteEnvironmentCommand, IProvisioningResponse>
 	{
 		private readonly IControlPlaneService _controlPlaneService;
 
-		public GetEnvironmentCommandHandler(IMediator mediator, IControlPlaneService controlPlaneService) : base(mediator)
+		public DeleteEnvironmentCommandHandler(IMediator mediator, IControlPlaneService controlPlaneService) : base(mediator)
 		{
 			_controlPlaneService = controlPlaneService ?? throw new ArgumentNullException(nameof(controlPlaneService));
 		}
 
-		public override async Task<IProvisioningResponse> Handle(GetEnvironmentCommand command, CancellationToken cancellationToken = default)
+		public override async Task<IProvisioningResponse> Handle(DeleteEnvironmentCommand command, CancellationToken cancellationToken = default)
 		{
-			dynamic result;
-
 			if (command.EnvironmentId != Guid.Empty)
 			{
-				result = await _controlPlaneService.GetEnvironmentByIdAsync(command.EnvironmentId);
-			}
-			else 
-			{
-				result = await _controlPlaneService.GetEnvironmentsAsync();
+				try
+				{
+					await _controlPlaneService.DeleteEnvironmentAsync(command.EnvironmentId, cancellationToken);
+				}
+				catch
+				{
+					return new ProvisioningBrokerResponse(true);
+				}
+				
 			}
 			
-			return new ProvisioningBrokerResponse(result);
+			return new ProvisioningBrokerResponse(true);
 		}
 	}
 }

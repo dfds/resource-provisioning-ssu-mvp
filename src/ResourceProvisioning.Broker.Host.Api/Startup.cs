@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication;
+using ResourceProvisioning.Broker.Host.Api.Infrastructure.Filters;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Host.Api
@@ -51,14 +52,20 @@ namespace ResourceProvisioning.Broker.Host.Api
 			{
 				Configuration.Bind(options);
 
-				if (!options.ConnectionStrings.Exists())
+				if (options.ConnectionStrings.Exists())
 				{
-					options.ConnectionStrings = new ConfigurationSection((IConfigurationRoot)Configuration, "ConnectionStrings");
-					options.ConnectionStrings[nameof(DomainContext)] = "Filename=:memory:;";
+					return;
 				}
+
+				options.ConnectionStrings = new ConfigurationSection((IConfigurationRoot)Configuration, "ConnectionStrings")
+				{
+					[nameof(DomainContext)] = "Filename=:memory:;"
+				};
 			});
 
-            ConfigureAuth(services);
+			services.AddTransient<IStartupFilter, DomainContextStartupFilter>();
+
+			ConfigureAuth(services);
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
