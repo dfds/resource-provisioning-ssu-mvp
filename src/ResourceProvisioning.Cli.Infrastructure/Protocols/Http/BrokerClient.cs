@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
@@ -25,28 +23,25 @@ namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 			return await GetCurrentStateByEnvironmentAsync(Guid.Empty, cancellationToken);
 		}
 
-		//TODO: Make to list.
 		public async Task<ActualState> GetCurrentStateByEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
-		{			
+		{
+			if (environmentId == Guid.Empty)
+			{
+				throw new ArgumentException("environmentId");
+			}
+
 			var request = new GetEnvironmentRequest(environmentId);
 
-			try
+			var response = await SendAsync(request, cancellationToken);
+
+			if (!response.IsSuccessStatusCode)
 			{
-				var response = await SendAsync(request, cancellationToken);
-
-				if (!response.IsSuccessStatusCode)
-				{
-					return await Task.FromResult(default(ActualState));
-				}
-
-				var payload = JsonSerializer.Deserialize<List<ActualState>>(await response.Content.ReadAsStringAsync());
-
-				return payload.FirstOrDefault();
+				return await Task.FromResult(default(ActualState));
 			}
-			catch (Exception e) 
-			{
-				throw e;
-			}
+
+			var payload = JsonSerializer.Deserialize<ActualState>(await response.Content.ReadAsStringAsync());
+
+			return payload;
 		}
 
 		public async Task ApplyDesiredStateAsync(
