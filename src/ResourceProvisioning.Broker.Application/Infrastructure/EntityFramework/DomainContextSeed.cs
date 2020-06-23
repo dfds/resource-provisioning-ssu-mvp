@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
+using ResourceProvisioning.Abstractions.Grid;
 using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
@@ -18,17 +20,16 @@ namespace ResourceProvisioning.Broker.Application.Infrastructure.EntityFramework
 
 			await policy.ExecuteAsync(async () =>
 			{
-				logger.LogInformation("Seeding database.");
+				logger?.LogInformation("Seeding database.");
 
 				await using (context)
 				{
-					context.Status.AddRange(EnvironmentStatus.List());
-					context.Status.AddRange(ResourceStatus.List());
+					context.Status.AddRange(GridActorStatus.List());
 
 					await context.SaveChangesAsync();
 				}
 
-				logger.LogInformation("Done seeding database.");
+				logger?.LogInformation("Done seeding database.");
 			});
 		}
 
