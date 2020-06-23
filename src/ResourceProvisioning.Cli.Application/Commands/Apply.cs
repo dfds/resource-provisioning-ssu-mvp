@@ -39,10 +39,10 @@ namespace ResourceProvisioning.Cli.Application.Commands
 			}
 			catch (Exception e)
 			{
-				return -1;
+				return await Task.FromResult(-1);
 			}
 
-			return 0;
+			return await Task.FromResult(0);
 		}
 
 		private async Task<IEnumerable<DesiredState>> GetDesiredStateData()

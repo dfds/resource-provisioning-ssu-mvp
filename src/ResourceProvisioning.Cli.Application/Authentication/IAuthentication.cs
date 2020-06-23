@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
 	public interface IAuthentication
 	{
-		public Task<AuthenticationToken> Auth();
+		Task<AuthenticationToken> Auth();
 	}
 }

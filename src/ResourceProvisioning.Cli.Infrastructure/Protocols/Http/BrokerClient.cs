@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using ResourceProvisioning.Abstractions.Protocols.Http;
@@ -22,35 +25,28 @@ namespace ResourceProvisioning.Cli.Infrastructure.Protocols.Http
 			return await GetCurrentStateByEnvironmentAsync(Guid.Empty, cancellationToken);
 		}
 
+		//TODO: Make to list.
 		public async Task<ActualState> GetCurrentStateByEnvironmentAsync(Guid environmentId, CancellationToken cancellationToken = default)
 		{			
 			var request = new GetEnvironmentRequest(environmentId);
 
 			try
 			{
-				var r = await new HttpClient().GetAsync(request.RequestUri);
+				var response = await SendAsync(request, cancellationToken);
 
-				var x = await r.Content.ReadAsStringAsync();
-				Console.WriteLine(x);
-				//var response = await SendAsync(request, cancellationToken);
+				if (!response.IsSuccessStatusCode)
+				{
+					return await Task.FromResult(default(ActualState));
+				}
 
-				//if (!response.IsSuccessStatusCode)
-				//{
-				//	return await Task.FromResult(default(ActualState));
-				//}
+				var payload = JsonSerializer.Deserialize<List<ActualState>>(await response.Content.ReadAsStringAsync());
 
-				//var payload = await response.Content.ReadAsStringAsync();
-				//Console.WriteLine("Payload");
-				//Console.WriteLine(payload);
-				//Console.WriteLine(JsonSerializer.Deserialize<ActualState>(payload));
-				//return JsonSerializer.Deserialize<ActualState>(payload);
+				return payload.FirstOrDefault();
 			}
 			catch (Exception e) 
 			{
 				throw e;
 			}
-
-			return null;
 		}
 
 		public async Task ApplyDesiredStateAsync(

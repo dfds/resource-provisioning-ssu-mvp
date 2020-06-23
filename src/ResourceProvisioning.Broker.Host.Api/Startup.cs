@@ -51,14 +51,18 @@ namespace ResourceProvisioning.Broker.Host.Api
 			{
 				Configuration.Bind(options);
 
-				if (!options.ConnectionStrings.Exists())
+				if (options.ConnectionStrings.Exists())
 				{
-					options.ConnectionStrings = new ConfigurationSection((IConfigurationRoot)Configuration, "ConnectionStrings");
-					options.ConnectionStrings[nameof(DomainContext)] = "Filename=:memory:;";
+					return;
 				}
+
+				options.ConnectionStrings = new ConfigurationSection((IConfigurationRoot)Configuration, "ConnectionStrings")
+				{
+					[nameof(DomainContext)] = "Filename=:memory:;"
+				};
 			});
 
-            ConfigureAuth(services);
+			ConfigureAuth(services);
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

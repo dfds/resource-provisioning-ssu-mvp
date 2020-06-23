@@ -29,7 +29,12 @@ namespace ResourceProvisioning.Broker.Host.Api.Controllers.V1
 			var cmd = new GetEnvironmentCommand(environmentId);
 			var result = await _broker.Handle(cmd);
 
-			return Ok(await result?.Content?.ReadAsStringAsync());
+			if (result?.Content != null)
+			{
+				return Ok(await result.Content.ReadAsStringAsync());
+			}
+
+			return Ok();
 		}
 
 		[Authorize(AuthenticationSchemes = AzureADDefaults.JwtBearerAuthenticationScheme)]

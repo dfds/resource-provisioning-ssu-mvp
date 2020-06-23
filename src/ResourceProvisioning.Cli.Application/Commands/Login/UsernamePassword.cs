@@ -3,8 +3,8 @@ using ResourceProvisioning.Cli.Application.Authentication;
 
 namespace ResourceProvisioning.Cli.Application.Commands.Login
 {
-	[Command()]
-	public sealed class Interactive : AuthenticationCommand<InteractiveFlow>
-	{	
+	[Command(Name="up")]
+	public sealed class UsernamePassword : AuthenticationCommand<UsernamePasswordFlow>
+	{		
 	}
 }
