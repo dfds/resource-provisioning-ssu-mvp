@@ -22,7 +22,7 @@ $publishedFileName
 $fileToCheck = $publishOutputFolder + "/ResourceProvisioning.Cli.Host.Console.exe"
 $destinationFile
 
-## windows path
+## Windows path
 if (Test-Path $fileToCheck -PathType leaf)
 {
   $publishedFileName = "ResourceProvisioning.Cli.Host.Console.exe"
