@@ -15,7 +15,7 @@ param(
 
 )
 $publishOutputFolder  = "./publish-output"
-dotnet publish -p:Version="$appVersion" ../../src/ResourceProvisioning.Cli.Application -c release /p:PublishSingleFile=true  --output $publishOutputFolder --runtime $runtime
+dotnet publish -p:Version="$appVersion" ../../src/ResourceProvisioning.Cli.Host.Console -c release /p:PublishSingleFile=true  --output $publishOutputFolder --runtime $runtime
 
 $publishedFileName
 
