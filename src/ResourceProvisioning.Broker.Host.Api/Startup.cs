@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ResourceProvisioning.Broker.Host.Api.Infrastructure.Authentication;
-using ResourceProvisioning.Broker.Host.Api.Infrastructure.Filters;
 using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 
 namespace ResourceProvisioning.Broker.Host.Api
@@ -62,8 +61,6 @@ namespace ResourceProvisioning.Broker.Host.Api
 					[nameof(DomainContext)] = "Filename=:memory:;"
 				};
 			});
-
-			services.AddTransient<IStartupFilter, DomainContextStartupFilter>();
 
 			ConfigureAuth(services);
 		}
