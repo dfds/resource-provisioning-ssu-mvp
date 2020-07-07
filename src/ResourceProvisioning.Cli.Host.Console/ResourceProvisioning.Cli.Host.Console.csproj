@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,12 @@
     <AssemblyName>ResourceProvisioning.Cli.Host.Console</AssemblyName>
     <RootNamespace>ResourceProvisioning.Cli.Host.Console</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ResourceProvisioning.Cli.Application\ResourceProvisioning.Cli.Application.csproj" />
