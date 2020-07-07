@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResourceProvisioning.Cli.Domain.Services;
@@ -11,9 +13,10 @@ namespace ResourceProvisioning.Cli.Application
 		public static void AddCli(this IServiceCollection services)
 		{
 			var configuration = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
+				.SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
 				.AddEnvironmentVariables()
-				.AddJsonFile("appsettings.json")
+				.AddJsonFile("appsettings.json", true, true)
+				.AddUserSecrets(Assembly.GetExecutingAssembly(), true)
 				.Build();
 			
 			services.ConfigureCli(configuration);

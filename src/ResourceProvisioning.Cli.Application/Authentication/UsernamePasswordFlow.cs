@@ -17,9 +17,9 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			_httpClient = new HttpClient();
 		}
 
-		public async Task<AuthenticationToken> Auth()
+		public async Task<AuthenticationToken> Auth(CliApplicationOptions cliApplicationOptions)
 		{
-			var userData = GetUserData();
+			var userData = GetUserData(cliApplicationOptions);
 			var response = await Login(userData);
 
 			return new AuthenticationToken
@@ -32,10 +32,10 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			};
 		}
 
-		private UserData GetUserData()
+		private UserData GetUserData(CliApplicationOptions cliApplicationOptions)
 		{
-			var envUser = Environment.GetEnvironmentVariable("SSU_USER");
-			var envPass = Environment.GetEnvironmentVariable("SSU_PASSWORD");
+			var envUser = cliApplicationOptions.Username;
+			var envPass = cliApplicationOptions.Password;
 
 			if (envUser != null && envPass != null)
 			{

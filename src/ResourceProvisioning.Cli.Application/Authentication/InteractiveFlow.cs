@@ -8,7 +8,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 	//TODO: Ensure EmbedIO server doesn't screw the user's terminal
 	public class InteractiveFlow : IAuthentication
 	{
-		public async Task<AuthenticationToken> Auth()
+		public async Task<AuthenticationToken> Auth(CliApplicationOptions cliApplicationOptions)
 		{
 			var launchBrowser = new Thread(async () =>
 			{

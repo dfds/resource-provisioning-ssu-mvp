@@ -17,7 +17,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			_httpClient = new HttpClient();
 		}
 
-		public async Task<AuthenticationToken> Auth()
+		public async Task<AuthenticationToken> Auth(CliApplicationOptions cliApplicationOptions)
 		{
 			var response = await InitialiseFlow();
 			var tokenResponse = await Poll(response);
