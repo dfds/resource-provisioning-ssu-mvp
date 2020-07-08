@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public interface IAuthenticationProvider<in TArgs>
+	public interface IAuthenticationProvider
 	{
-		ValueTask<AuthenticationToken> Auth(TArgs args = default);
+		ValueTask<SecurityToken> Auth(SecurityTokenDescriptor descriptor = default);
 	}
 }

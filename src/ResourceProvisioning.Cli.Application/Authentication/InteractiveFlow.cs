@@ -1,19 +1,21 @@
 ﻿using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Swan.Logging;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
 	//TODO: Ensure EmbedIO server doesn't screw the user's terminal
-	public class InteractiveFlow : AuthenticationProvider<>
+	public partial class InteractiveFlow : AuthenticationProvider
 	{
 		public InteractiveFlow(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
 		{
 		}
 
-		public override async ValueTask<AuthenticationToken> Auth(dynamic[] args)
+		public override async ValueTask<SecurityToken> Auth(SecurityTokenDescriptor descriptor = default)
 		{
 			var launchBrowser = new Thread(async () =>
 			{
@@ -34,10 +36,11 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 				await server.RunAsync(cts.Token).ConfigureAwait(false);
 			}
 
-			return new AuthenticationToken();
+			//TODO: Fix these values later.
+			return new JwtSecurityToken(issuer: "ssucli", audience: "serviceBroker");
 		}
 
-		private async Task ShowBrowser()
+		private Task ShowBrowser()
 		{
 			var browser = new Process
 			{
@@ -49,6 +52,8 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			};
 
 			browser.Start();
+
+			return Task.CompletedTask;
 		}
 	}
 }

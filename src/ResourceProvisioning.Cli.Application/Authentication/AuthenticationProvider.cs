@@ -1,10 +1,11 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public abstract class AuthenticationProvider<TArgs> : IAuthenticationProvider<TArgs>
+	public abstract class AuthenticationProvider : IAuthenticationProvider
 	{
 		protected HttpClient HttpClient;
 		protected CliApplicationOptions CliApplicationOptions;
@@ -15,6 +16,6 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			CliApplicationOptions = cliApplicationOptions?.Value;
 		}
 
-		public abstract ValueTask<AuthenticationToken> Auth(TArgs args = default);
+		public abstract ValueTask<SecurityToken> Auth(SecurityTokenDescriptor descriptor = default);
 	}
 }
