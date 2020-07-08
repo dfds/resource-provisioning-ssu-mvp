@@ -1,4 +1,4 @@
-namespace ResourceProvisioning.Cli.Application
+﻿namespace ResourceProvisioning.Cli.Application
 {
 	public sealed class CliApplicationOptions
 	{

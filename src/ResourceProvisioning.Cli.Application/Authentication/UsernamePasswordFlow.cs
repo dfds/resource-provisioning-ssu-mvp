@@ -1,25 +1,23 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
 	// Doesn't work with MFA. Intended for legacy ServiceAccount usage.
-	public class UsernamePasswordFlow : IAuthentication
+	public class UsernamePasswordFlow : AuthenticationProvider
 	{
-		private HttpClient _httpClient;
-
-		public UsernamePasswordFlow()
+		public UsernamePasswordFlow(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
 		{
-			_httpClient = new HttpClient();
 		}
 
-		public async Task<AuthenticationToken> Auth(CliApplicationOptions cliApplicationOptions)
+		public override async Task<AuthenticationToken> Auth(params dynamic[] args)
 		{
-			var userData = GetUserData(cliApplicationOptions);
+			var userData = GetUserData(CliApplicationOptions);
 			var response = await Login(userData);
 
 			return new AuthenticationToken
@@ -32,7 +30,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			};
 		}
 
-		private UserData GetUserData(CliApplicationOptions cliApplicationOptions)
+		private static UserData GetUserData(CliApplicationOptions cliApplicationOptions)
 		{
 			var envUser = cliApplicationOptions.Username;
 			var envPass = cliApplicationOptions.Password;
@@ -74,7 +72,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			dict.Add("password", input.Password);
 			dict.Add("grant_type", "password");
 			// TODO: Don't hardcode URI
-			var resp = await _httpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
+			var resp = await HttpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
 			var respPayload = await resp.Content.ReadAsStringAsync();
 			
 			if (resp.IsSuccessStatusCode)

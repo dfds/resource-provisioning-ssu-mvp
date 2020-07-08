@@ -1,23 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public class DeviceCodeFlow : IAuthentication
+	public class DeviceCodeFlow : AuthenticationProvider
 	{
-		private HttpClient _httpClient;
-
-		public DeviceCodeFlow()
+		public DeviceCodeFlow(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
 		{
-			_httpClient = new HttpClient();
 		}
 
-		public async Task<AuthenticationToken> Auth(CliApplicationOptions cliApplicationOptions)
+		public override async Task<AuthenticationToken> Auth(params dynamic[] args)
 		{
 			var response = await InitialiseFlow();
 			var tokenResponse = await Poll(response);
@@ -39,7 +37,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			dict.Add("client_id", "72d0443b-ff34-4568-8eb9-1d81849c5462");
 			dict.Add("scope", "user.read openid profile");
 			// TODO: Don't hardcode URI
-			var resp = await _httpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/devicecode", new FormUrlEncodedContent(dict));
+			var resp = await HttpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/devicecode", new FormUrlEncodedContent(dict));
 			var respPayload = await resp.Content.ReadAsStringAsync();
 			
 			var deviceCodeResponse = JsonSerializer.Deserialize<DeviceCodeResponse>(respPayload);
@@ -65,7 +63,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 				};
 				req.Headers.Add("Origin", "localhost");
 				
-				var resp = await _httpClient.SendAsync(req);
+				var resp = await HttpClient.SendAsync(req);
 				var respPayload = await resp.Content.ReadAsStringAsync();
 
 				if (resp.IsSuccessStatusCode)
