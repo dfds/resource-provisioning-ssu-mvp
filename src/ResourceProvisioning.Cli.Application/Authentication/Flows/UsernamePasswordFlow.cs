@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ResourceProvisioning.Cli.Application.Authentication
+namespace ResourceProvisioning.Cli.Application.Authentication.Flows
 {
 	// Doesn't work with MFA. Intended for legacy ServiceAccount usage.
-	public partial class UsernamePasswordFlow : AuthenticationProvider
+	public partial class UsernamePasswordFlow : AuthenticationFlow
 	{
 		public UsernamePasswordFlow(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
 		{
@@ -21,22 +21,13 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			var userData = GetUserData(CliApplicationOptions);
 			var tokenResponse = await Login(userData);
 
-			//TODO: Talk about this with Emil.
 			return new JwtSecurityToken(tokenResponse.IdToken);
-			//return new AuthenticationToken
-			//{
-			//	AccessToken = tokenResponse.AccessToken,
-			//	IdToken = tokenResponse.IdToken,
-			//	Scope = tokenResponse.Scope,
-			//	ExpiresIn = tokenResponse.ExpiresIn,
-			//	TokenType = tokenResponse.TokenType
-			//};
 		}
 
 		private static UserData GetUserData(CliApplicationOptions cliApplicationOptions)
 		{
-			var envUser = cliApplicationOptions.Username;
-			var envPass = cliApplicationOptions.Password;
+			var envUser = cliApplicationOptions.Authentication.Username;
+			var envPass = cliApplicationOptions.Authentication.Password;
 
 			if (envUser != null && envPass != null)
 			{
@@ -68,15 +59,13 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 		private ValueTask<TokenValidResponse> Login(UserData input)
 		{
 			var dict = new Dictionary<string, string>();
-			// TODO: Don't hardcode client_id 
-			dict.Add("client_id", "72d0443b-ff34-4568-8eb9-1d81849c5462");
+			dict.Add("client_id", CliApplicationOptions.Authentication.ClientId);
 			dict.Add("scope", "user.read openid profile");
 			dict.Add("username", input.Username);
 			dict.Add("password", input.Password);
 			dict.Add("grant_type", "password");
 
-			// TODO: Don't hardcode URI
-			var getTokenTask = HttpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
+			var getTokenTask = HttpClient.PostAsync($"{CliApplicationOptions.Authentication.Instance}/{CliApplicationOptions.Authentication.TenantId}/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
 
 			getTokenTask.Wait();
 

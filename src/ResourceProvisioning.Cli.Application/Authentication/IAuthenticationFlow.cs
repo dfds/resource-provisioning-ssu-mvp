@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public interface IAuthenticationProvider
+	public interface IAuthenticationFlow
 	{
 		ValueTask<SecurityToken> Auth(SecurityTokenDescriptor descriptor = default);
 	}

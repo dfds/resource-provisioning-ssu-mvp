@@ -5,12 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ResourceProvisioning.Cli.Application.Authentication
 {
-	public abstract class AuthenticationProvider : IAuthenticationProvider
+	public abstract class AuthenticationFlow : IAuthenticationFlow
 	{
 		protected HttpClient HttpClient;
 		protected CliApplicationOptions CliApplicationOptions;
 
-		protected AuthenticationProvider(IOptions<CliApplicationOptions> cliApplicationOptions = default)
+		protected AuthenticationFlow(IOptions<CliApplicationOptions> cliApplicationOptions = default)
 		{
 			HttpClient = new HttpClient();
 			CliApplicationOptions = cliApplicationOptions?.Value;

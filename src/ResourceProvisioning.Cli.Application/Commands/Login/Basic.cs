@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Options;
-using ResourceProvisioning.Cli.Application.Authentication;
+using ResourceProvisioning.Cli.Application.Authentication.Flows;
 
 namespace ResourceProvisioning.Cli.Application.Commands.Login
 {

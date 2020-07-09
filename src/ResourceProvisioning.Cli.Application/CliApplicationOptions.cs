@@ -1,8 +1,11 @@
-﻿namespace ResourceProvisioning.Cli.Application
+﻿using ResourceProvisioning.Cli.Application.Configuration;
+
+namespace ResourceProvisioning.Cli.Application
 {
 	public sealed class CliApplicationOptions
 	{
-		public string Username { get; set; }
-		public string Password { get; set; }
+		public const string Position = "SsuCli";
+
+		public AuthenticationSection Authentication { get; set; }
 	}
 }

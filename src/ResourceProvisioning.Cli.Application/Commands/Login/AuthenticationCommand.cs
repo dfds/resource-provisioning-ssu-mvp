@@ -7,7 +7,7 @@ using ResourceProvisioning.Cli.Application.Authentication;
 
 namespace ResourceProvisioning.Cli.Application.Commands.Login
 {
-	public abstract class AuthenticationCommand<T> : CliCommand<Task<int>> where T : class, IAuthenticationProvider
+	public abstract class AuthenticationCommand<T> : CliCommand<Task<int>> where T : class, IAuthenticationFlow
 	{		
 		protected T AuthenticationProvider { get; }
 

@@ -30,7 +30,7 @@ namespace ResourceProvisioning.Cli.Application
 
 		private static void ConfigureCli(this IServiceCollection services, IConfiguration configuration)
 		{
-			services.Configure<CliApplicationOptions>(configuration.GetSection("SsuCli:Authentication"));
+			services.Configure<CliApplicationOptions>(configuration.GetSection(CliApplicationOptions.Position));
 		}
 	}
 }

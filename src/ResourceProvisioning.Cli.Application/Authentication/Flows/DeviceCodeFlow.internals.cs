@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ResourceProvisioning.Cli.Application.Authentication
+namespace ResourceProvisioning.Cli.Application.Authentication.Flows
 {
-	public partial class DeviceCodeFlow : AuthenticationProvider
+	public partial class DeviceCodeFlow : AuthenticationFlow
 	{
 		class DeviceCodeResponse
 		{

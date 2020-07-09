@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ResourceProvisioning.Cli.Application.Authentication
+namespace ResourceProvisioning.Cli.Application.Authentication.Flows
 {
-	public class PassThruFlow : AuthenticationProvider
+	public class PassThruFlow : AuthenticationFlow
 	{
 		public PassThruFlow(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
 		{
@@ -14,8 +14,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 
 		public override ValueTask<SecurityToken> Auth(SecurityTokenDescriptor descriptor = default)
 		{
-			//TODO: Fix these values later.
-			var jwt = new JwtSecurityToken("ssucli", "audience").Convert(new JwtSecurityTokenHandler(), descriptor);
+			var jwt = new JwtSecurityToken().Convert(new JwtSecurityTokenHandler(), descriptor);
 
 			HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(jwt.GetAuthenticationScheme(), jwt.ToBase64String());
 

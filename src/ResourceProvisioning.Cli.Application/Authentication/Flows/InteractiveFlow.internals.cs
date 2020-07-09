@@ -6,9 +6,9 @@ using EmbedIO;
 using EmbedIO.Routing;
 using EmbedIO.WebApi;
 
-namespace ResourceProvisioning.Cli.Application.Authentication
+namespace ResourceProvisioning.Cli.Application.Authentication.Flows
 {
-	public partial class InteractiveFlow : AuthenticationProvider
+	public partial class InteractiveFlow : AuthenticationFlow
 	{
 		class Server
 		{
