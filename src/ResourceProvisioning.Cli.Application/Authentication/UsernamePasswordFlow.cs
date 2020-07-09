@@ -65,7 +65,7 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			return userData;
 		}
 
-		private async Task<TokenValidResponse> Login(UserData input)
+		private ValueTask<TokenValidResponse> Login(UserData input)
 		{
 			var dict = new Dictionary<string, string>();
 			// TODO: Don't hardcode client_id 
@@ -74,55 +74,27 @@ namespace ResourceProvisioning.Cli.Application.Authentication
 			dict.Add("username", input.Username);
 			dict.Add("password", input.Password);
 			dict.Add("grant_type", "password");
-			//TODO: Not sure why this is breaking at the moment? Response seems to never get fired according to fiddler:
-			//SESSION STATE: Aborted.
-			//Response Entity Size: 0 bytes.
-
-			//== FLAGS ==================
-			//BitFlags: [ResponseGeneratedByFiddler] 0x100
-			//X-ABORTED-WHEN: SendingResponse
-			//X-CLIENTIP: 127.0.0.1
-			//X-CLIENTPORT: 51039
-			//X-EGRESSPORT: 51040
-			//X-HOSTIP: 40.126.1.135
-			//X-PROCESSINFO: resourceprovisioning.cli.host.console:28092
-			//X-RESPONSEBODYTRANSFERLENGTH: 0
-
-			//== TIMING INFO ============
-			//ClientConnected:	19:38:31.441
-			//ClientBeginRequest:	19:38:31.456
-			//GotRequestHeaders:	19:38:31.457
-			//ClientDoneRequest:	19:38:31.457
-			//Determine Gateway:	0ms
-			//DNS Lookup: 		0ms
-			//TCP/IP Connect:	35ms
-			//HTTPS Handshake:	0ms
-			//ServerConnected:	19:38:31.492
-			//FiddlerBeginRequest:	19:38:31.492
-			//ServerGotRequest:	19:38:31.492
-			//ServerBeginResponse:	00:00:00.000
-			//GotResponseHeaders:	00:00:00.000
-			//ServerDoneResponse:	00:00:00.000
-			//ClientBeginResponse:	19:38:31.492
-			//ClientDoneResponse:	19:38:31.492
-
-			//	Overall Elapsed:	0:00:00.036
-
-			//The response was buffered before delivery to the client.
 
 			// TODO: Don't hardcode URI
-			var resp = await HttpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
-			var respPayload = await resp.Content.ReadAsStringAsync();
+			var getTokenTask = HttpClient.PostAsync("https://login.microsoftonline.com/73a99466-ad05-4221-9f90-e7142aa2f6c1/oauth2/v2.0/token", new FormUrlEncodedContent(dict));
+
+			getTokenTask.Wait();
+
+			var resp = getTokenTask.Result;
+			var parsePayloadTask = resp.Content.ReadAsStringAsync();
 			
 			if (resp.IsSuccessStatusCode)
 			{
-				var response = JsonSerializer.Deserialize<TokenValidResponse>(respPayload);
-				return response;
+				parsePayloadTask.Wait();
+
+				Console.WriteLine(parsePayloadTask.Result);
+
+				var response = JsonSerializer.Deserialize<TokenValidResponse>(parsePayloadTask.Result);
+
+				return new ValueTask<TokenValidResponse>(response);
 			}
 			
-			Console.WriteLine(respPayload);
-			throw new Exception(respPayload);
-
+			throw new HttpRequestException();
 		}
 	}
 }
