@@ -43,7 +43,7 @@ Of those the following are applications that can be built to an executable:
 
   From the root of the source repo run the following docker commands:
 
-  `docker build -t local-development -f ./src/ResourceProvisioning.Broker.Host.Api/Dockerfile -t .`
+  `docker build -t local-development -f ./src/ResourceProvisioning.Broker.Host.Api/Dockerfile .`
   `docker run -it -p 50900:50900 local-development`
 
 * **ResourceProvisioning.Cli.Application**
