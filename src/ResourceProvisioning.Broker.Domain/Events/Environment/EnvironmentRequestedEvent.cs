@@ -3,7 +3,7 @@ using ResourceProvisioning.Broker.Domain.Aggregates.Environment;
 
 namespace ResourceProvisioning.Broker.Domain.Events.Environment
 {
-	public sealed class EnvironmentRequestedEvent : IPivotEvent
+	public sealed class EnvironmentRequestedEvent : IDomainEvent
 	{
 		public EnvironmentRoot Environment { get; }
 
