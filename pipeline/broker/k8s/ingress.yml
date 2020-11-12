@@ -4,7 +4,6 @@ metadata:
   name: ssp-resource-poc
   namespace: $(kubernetes-namespace)
   annotations:
-    kubernetes.io/ingress.class: traefik
     traefik.frontend.rule.type: PathPrefixStrip
   labels:
     project: SSU
