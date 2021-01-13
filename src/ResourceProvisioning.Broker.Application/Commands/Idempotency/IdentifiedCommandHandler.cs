@@ -12,13 +12,15 @@ namespace ResourceProvisioning.Broker.Application.Commands.Idempotency
 	/// </summary>
 	/// <typeparam name="T">Type of the command handler that performs the operation if request is not duplicated</typeparam>
 	/// <typeparam name="R">Return value of the inner command handler</typeparam>
-	public class IdentifiedCommandHandler<T, R> : CommandHandler<IdentifiedCommand<T, R>, R> where T : ICommand<R>
+	public class IdentifiedCommandHandler<T, R> : ICommandHandler<IdentifiedCommand<T, R>, R> where T : ICommand<R>
 	{
 		private readonly IRequestManager _requestManager;
+		private readonly IMediator _mediator;
 
-		public IdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager) : base(mediator)
+		public IdentifiedCommandHandler(IMediator mediator, IRequestManager requestManager)
 		{
 			_requestManager = requestManager;
+			_mediator = mediator;
 		}
 
 		/// <summary>
@@ -36,7 +38,7 @@ namespace ResourceProvisioning.Broker.Application.Commands.Idempotency
 		/// </summary>
 		/// <param name="message">IdentifiedCommand which contains both original command & request ID</param>
 		/// <returns>Return value of inner command or default value if request same ID was found</returns>
-		public override async Task<R> Handle(IdentifiedCommand<T, R> message, CancellationToken cancellationToken)
+		public async Task<R> Handle(IdentifiedCommand<T, R> message, CancellationToken cancellationToken)
 		{
 			var alreadyExists = await _requestManager.ExistAsync(message.Id);
 
