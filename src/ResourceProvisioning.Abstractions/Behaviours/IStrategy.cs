@@ -4,6 +4,6 @@ namespace ResourceProvisioning.Abstractions.Behaviours
 {
 	public interface IStrategy<T>
 	{
-		Task Apply(T target);
+		Task Apply(T target = default);
 	}
 }
