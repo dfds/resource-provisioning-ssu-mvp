@@ -2,8 +2,8 @@
 
 namespace ResourceProvisioning.Abstractions.Behaviours
 {
-	public interface IStrategy<T>
+	public interface IStrategy
 	{
-		ValueTask<T> Apply(T target);
+		ValueTask<T> Apply<T>(T target);
 	}
 }
