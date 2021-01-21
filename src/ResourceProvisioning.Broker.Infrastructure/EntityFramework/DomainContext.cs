@@ -41,7 +41,7 @@ namespace ResourceProvisioning.Broker.Infrastructure.EntityFramework
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
+		{			
 			modelBuilder.ApplyConfiguration(new GridActorStatusEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new DesiredStateEntityTypeConfiguration());
 			modelBuilder.ApplyConfiguration(new ResourceRootEntityTypeConfiguration());
