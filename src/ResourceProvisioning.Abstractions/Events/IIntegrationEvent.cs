@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
@@ -14,6 +15,8 @@ namespace ResourceProvisioning.Abstractions.Events
 		int SchemaVersion { get; }
 
 		string Type { get; }
+
+		IEnumerable<string> Topics { get; }
 
 		JsonElement? Payload { get; }
 	}

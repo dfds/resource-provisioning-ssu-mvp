@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
@@ -19,10 +20,13 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public JsonElement? Payload { get; protected set; }
 
-		protected IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default)
+		public IEnumerable<string> Topics { get; protected set; }
+
+		protected IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default, IEnumerable<string> topics = default)
 		{
 			Type = type;
 			Payload = payload;
+			Topics = topics;
 
 			if (id.HasValue)
 			{
