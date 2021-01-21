@@ -15,6 +15,6 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		string Type { get; }
 
-		JsonElement Payload { get; }
+		JsonElement? Payload { get; }
 	}
 }

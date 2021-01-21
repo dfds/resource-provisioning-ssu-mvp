@@ -17,7 +17,7 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public string Type { get; protected set; }
 
-		public JsonElement Payload { get; protected set; }
+		public JsonElement? Payload { get; protected set; }
 
 		protected IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default)
 		{
