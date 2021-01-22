@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace ResourceProvisioning.Abstractions.Behaviours
+namespace ResourceProvisioning.Abstractions.Strategies
 {
 	public interface IStrategy<T>
 	{
