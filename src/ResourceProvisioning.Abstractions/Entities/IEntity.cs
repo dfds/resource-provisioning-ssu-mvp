@@ -12,7 +12,7 @@ namespace ResourceProvisioning.Abstractions.Entities
 		bool IsTransient();
 	}
 
-	public interface IEntity : IMaterializedView, IValidatableObject
+	public interface IEntity : IView, IValidatableObject
 	{
 		IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
 

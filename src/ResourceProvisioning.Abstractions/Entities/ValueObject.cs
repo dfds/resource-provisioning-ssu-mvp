@@ -4,7 +4,7 @@ using ResourceProvisioning.Abstractions.Data;
 
 namespace ResourceProvisioning.Abstractions.Entities
 {
-	public abstract class ValueObject : IMaterializedView
+	public abstract class ValueObject : IView
 	{
 		protected static bool EqualOperator(ValueObject left, ValueObject right)
 		{
