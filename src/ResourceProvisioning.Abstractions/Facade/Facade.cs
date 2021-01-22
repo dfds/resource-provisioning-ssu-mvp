@@ -7,7 +7,7 @@ using ResourceProvisioning.Abstractions.Commands;
 
 namespace ResourceProvisioning.Abstractions.Facade
 {
-	public abstract class Facade
+	public abstract class Facade : IFacade
 	{
 		protected readonly IMediator _mediator;
 		protected readonly ILogger<Facade> _logger;
