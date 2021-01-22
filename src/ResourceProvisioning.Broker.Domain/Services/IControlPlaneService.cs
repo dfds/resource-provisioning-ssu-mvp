@@ -10,7 +10,7 @@ using ResourceProvisioning.Broker.Domain.Aggregates.Resource;
 
 namespace ResourceProvisioning.Broker.Domain.Services
 {
-	public interface IControlPlaneService : IDomainService
+	public interface IControlPlaneService : IService
 	{
 		Task<IEnumerable<IAggregateRoot>> GetAggregatesByState(IDesiredState desiredState);
 		

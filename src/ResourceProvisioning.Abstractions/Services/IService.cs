@@ -1,6 +1,6 @@
 ﻿namespace ResourceProvisioning.Abstractions.Services
 {
-	public interface IDomainService
+	public interface IService
 	{
 
 	}
