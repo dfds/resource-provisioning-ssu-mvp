@@ -9,8 +9,8 @@ namespace ResourceProvisioning.Abstractions.Facade
 {
 	public abstract class Facade
 	{
-		private readonly IMediator _mediator;
-		private readonly ILogger<Facade> _logger;
+		protected readonly IMediator _mediator;
+		protected readonly ILogger<Facade> _logger;
 
 		protected Facade(IMediator mediator, ILogger<Facade> logger)
 		{
@@ -18,7 +18,7 @@ namespace ResourceProvisioning.Abstractions.Facade
 			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 		}
 
-		public async Task<T> Execute<T>(ICommand<T> command, CancellationToken cancellationToken = default)
+		public virtual async Task<T> Execute<T>(ICommand<T> command, CancellationToken cancellationToken = default)
 		{
 			_logger.LogInformation($"Processing {command.GetType().FullName}");
 
