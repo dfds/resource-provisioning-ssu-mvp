@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public abstract class IntegrationEvent : IIntegrationEvent
+	public class IntegrationEvent : IIntegrationEvent
 	{
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
@@ -22,7 +22,7 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public IEnumerable<string> Topics { get; protected set; }
 
-		protected IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default, IEnumerable<string> topics = default)
+		public IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default, IEnumerable<string> topics = default)
 		{
 			Type = type;
 			Payload = payload;
