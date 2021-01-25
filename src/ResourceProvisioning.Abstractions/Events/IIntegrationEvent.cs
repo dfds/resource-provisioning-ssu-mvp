@@ -16,8 +16,6 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		string Type { get; }
 
-		IEnumerable<string> Topics { get; }
-
 		JsonElement? Payload { get; }
 	}
 }

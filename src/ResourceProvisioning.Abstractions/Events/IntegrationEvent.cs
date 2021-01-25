@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public class IntegrationEvent : IIntegrationEvent
+	public abstract class IntegrationEvent : IIntegrationEvent
 	{
 		public Guid Id { get; private set; } = Guid.NewGuid();
 
@@ -20,13 +19,10 @@ namespace ResourceProvisioning.Abstractions.Events
 
 		public JsonElement? Payload { get; protected set; }
 
-		public IEnumerable<string> Topics { get; protected set; }
-
-		public IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default, IEnumerable<string> topics = default)
+		public IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default)
 		{
 			Type = type;
 			Payload = payload;
-			Topics = topics;
 
 			if (id.HasValue)
 			{
