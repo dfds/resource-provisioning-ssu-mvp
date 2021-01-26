@@ -1,53 +1,31 @@
 ﻿using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ResourceProvisioning.Abstractions.Events
 {
-	public abstract class IntegrationEvent : IIntegrationEvent
+	//TODO: Factor this to use JsonConstructor + init and not set accessors once we have migrated to .net 5.0
+	public class IntegrationEvent : IIntegrationEvent
 	{
-		public Guid Id { get; private set; } = Guid.NewGuid();
+		[JsonPropertyName("id")]
+		public Guid Id { get; set; } = Guid.NewGuid();
 
-		public DateTime CreationDate { get; protected set; } = DateTime.UtcNow;
+		[JsonPropertyName("creationDate")]
+		public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
-		public int Version { get; protected set; } = 1;
+		[JsonPropertyName("version")]
+		public int Version { get; set; } = 1;
 
-		public Guid CorrelationId { get; private set; } = Guid.NewGuid();
+		[JsonPropertyName("correlationId")]
+		public Guid CorrelationId { get; set; } = Guid.NewGuid();
 
-		public int SchemaVersion => 1;
+		[JsonPropertyName("schemaVersion")]
+		public int SchemaVersion { get; set; } = 1;
 
-		public string Type { get; protected set; }
+		[JsonPropertyName("type")]
+		public string Type { get; set; }
 
-		public JsonElement? Payload { get; protected set; }
-
-		public IntegrationEvent(string type, JsonElement payload, Guid? id = default, Guid? correlationId = default, DateTime? createDate = default, int? version = default)
-		{
-			Type = type;
-			Payload = payload;
-
-			if (id.HasValue)
-			{
-				Id = id.Value;
-			}
-
-			if (correlationId.HasValue)
-			{
-				CorrelationId = correlationId.Value;
-			}
-
-			if (createDate.HasValue)
-			{
-				CreationDate = createDate.Value;
-			}
-
-			if (createDate.HasValue)
-			{
-				CreationDate = createDate.Value;
-			}
-
-			if (version.HasValue)
-			{
-				Version = version.Value;
-			}
-		}
+		[JsonPropertyName("payload")]
+		public JsonElement? Payload { get; set; }
 	}
 }
