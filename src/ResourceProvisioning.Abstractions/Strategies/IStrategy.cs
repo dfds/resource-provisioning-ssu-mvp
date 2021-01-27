@@ -1,9 +1,10 @@
 ﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace ResourceProvisioning.Abstractions.Strategies
 {
 	public interface IStrategy<T>
 	{
-		void Apply(T target, CancellationToken cancellationToken = default);
+		Task Apply(T target, CancellationToken cancellationToken = default);
 	}
 }
