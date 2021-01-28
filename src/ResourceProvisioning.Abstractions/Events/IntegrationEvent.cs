@@ -13,9 +13,6 @@ namespace ResourceProvisioning.Abstractions.Events
 		[JsonPropertyName("creationDate")]
 		public DateTime CreationDate { get; set; } = DateTime.UtcNow;
 
-		[JsonPropertyName("version")]
-		public int Version { get; set; } = 1;
-
 		[JsonPropertyName("correlationId")]
 		public Guid CorrelationId { get; set; } = Guid.NewGuid();
 
