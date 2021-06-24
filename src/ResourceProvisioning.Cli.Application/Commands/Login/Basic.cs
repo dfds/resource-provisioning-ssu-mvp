@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using McMaster.Extensions.CommandLineUtils;
-using ResourceProvisioning.Cli.Application.Authentication;
+using Microsoft.Extensions.Options;
+using ResourceProvisioning.Cli.Application.Authentication.Flows;
 
 namespace ResourceProvisioning.Cli.Application.Commands.Login
 {
@@ -11,6 +12,10 @@ namespace ResourceProvisioning.Cli.Application.Commands.Login
 		public async override Task<int> OnExecuteAsync(CancellationToken cancellationToken = default)
 		{
 			return await base.OnExecuteAsync(cancellationToken);
+		}
+
+		public Basic(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
+		{
 		}
 	}
 }

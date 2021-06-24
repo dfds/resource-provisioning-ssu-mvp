@@ -2,7 +2,10 @@
   "profiles": {
     "ResourceProvisioning.Cli.Host.Console": {
       "commandName": "Project",
-      "commandLineArgs": "get environment"
-    }
+      "commandLineArgs": "login up",
+	  "environmentVariables": {
+		  "SSUCLI__AUTHENTICATION__USERNAME": "Works from environment variable"
+	  }
+	}
   }
 }

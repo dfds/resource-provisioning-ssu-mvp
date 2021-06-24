@@ -1,9 +1,11 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResourceProvisioning.Abstractions.Grid.Provisioning;
 using ResourceProvisioning.Broker.Application.Commands.Environment;
 using ResourceProvisioning.Broker.Domain.ValueObjects;
+using ResourceProvisioning.Broker.Infrastructure.EntityFramework;
 using Xunit;
 
 namespace ResourceProvisioning.Broker.AcceptanceTests.Scenarios
@@ -51,7 +53,6 @@ namespace ResourceProvisioning.Broker.AcceptanceTests.Scenarios
 			
 			Application.DependencyInjection.AddProvisioningBroker(_services, options =>
 			{
-				
 			});
 		}
 	}

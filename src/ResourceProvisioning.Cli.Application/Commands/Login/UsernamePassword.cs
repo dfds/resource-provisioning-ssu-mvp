@@ -1,10 +1,14 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
-using ResourceProvisioning.Cli.Application.Authentication;
+using Microsoft.Extensions.Options;
+using ResourceProvisioning.Cli.Application.Authentication.Flows;
 
 namespace ResourceProvisioning.Cli.Application.Commands.Login
 {
 	[Command(Name="up")]
 	public sealed class UsernamePassword : AuthenticationCommand<UsernamePasswordFlow>
-	{		
+	{
+		public UsernamePassword(IOptions<CliApplicationOptions> cliApplicationOptions) : base(cliApplicationOptions)
+		{
+		}
 	}
 }
