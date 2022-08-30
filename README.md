@@ -1,4 +1,13 @@
-﻿ResourceProvisioning v. 0.1
+# :warning: Repository not maintained :warning:
+
+Please note that this repository is currently archived, and is no longer being maintained.
+
+- It may contain code, or reference dependencies, with known vulnerabilities
+- It may contain out-dated advice, how-to's or other forms of documentation
+
+The contents might still serve as a source of inspiration, but please review any contents before reusing elsewhere.
+
+ResourceProvisioning v. 0.1
 ======================================
 
 This repository contains the complete source code for the ResourceProvisioning MVP and serves as a starting point for .NET Core developers looking to onboard the resource provisioning bandwagon. While the sample code is provided "AS-IS" it is possible to reach out to DevEx with any questions/comments or create an issue on GitHub.
